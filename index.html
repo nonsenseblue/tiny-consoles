@@ -8,120 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #f3f2ef;
-    --ink: #1b1a19;
-    --muted: #77736d;
-    --line: rgba(27, 26, 25, 0.12);
-    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  }
-  * { box-sizing: border-box; margin: 0; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 40px; }
-  @media (max-width: 640px) { .wrap { padding: 0 16px; } }
-
-  /* ---------- header ---------- */
-  header { padding: 96px 0 72px; }
-  .owner { font-family: var(--mono); font-size: 14px; color: var(--muted); }
-  .owner a { text-decoration: none; }
-  .owner a:hover { text-decoration: underline; }
-  h1 {
-    margin-top: 14px;
-    font-size: clamp(48px, 9vw, 112px);
-    font-weight: 500;
-    letter-spacing: -0.045em;
-    line-height: 0.95;
-  }
-  .lede { margin-top: 22px; max-width: 520px; font-size: 19px; line-height: 1.55; color: var(--muted); }
-  .index {
-    margin-top: 56px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    border-top: 1px solid var(--line);
-  }
-  .index a {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--line);
-    text-decoration: none;
-    font-family: var(--mono);
-    font-size: 15px;
-  }
-  .index a span { color: var(--muted); }
-  .index a:hover b { text-decoration: underline; }
-  .index b { font-weight: 500; }
-
-  /* ---------- pieces ---------- */
-  .piece { padding: 88px 0 96px; background: var(--bg); color: var(--fg); }
-  .piece + .piece { border-top: 1px solid var(--line); }
-  .piece.dark { --line: rgba(242, 239, 230, 0.14); --muted: #9a968e; }
-  .meta {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 24px 40px;
-    align-items: end;
-    margin-bottom: 40px;
-  }
-  @media (max-width: 720px) { .meta { grid-template-columns: 1fr; } }
-  .num { font-family: var(--mono); font-size: 14px; color: var(--muted); }
-  h2 { margin-top: 10px; font-family: var(--mono); font-size: clamp(26px, 3.4vw, 36px); font-weight: 500; letter-spacing: -0.02em; }
-  .meta p { margin-top: 12px; max-width: 560px; font-size: 17px; line-height: 1.6; color: var(--muted); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chips span {
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 6px 12px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    color: var(--muted);
-  }
-  .stage { margin: 0 auto; max-width: 1080px; }
-
-  .use {
-    margin-top: 40px;
-    display: flex;
-    align-items: stretch;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    overflow: hidden;
-  }
-  .use pre {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    padding: 18px 20px;
-    font-family: var(--mono);
-    font-size: 13.5px;
-    line-height: 1.7;
-  }
-  .use pre .c { color: var(--muted); }
-  .use button {
-    flex: none;
-    width: 92px;
-    border: 0;
-    border-left: 1px solid var(--line);
-    background: transparent;
-    color: inherit;
-    font-family: var(--mono);
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .use button:hover { background: rgba(127, 127, 127, 0.08); }
-
-  footer { padding: 56px 0 72px; font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 1.9; }
-  footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
-</style>
+<link rel="stylesheet" href="styles/gallery.css">
+<script type="module" src="scripts/gallery.js"></script>
 </head>
 <body>
 
@@ -141,71 +29,31 @@
   </div>
 </footer>
 
-<script type="module">
-  /* Add a new piece: drop the component into /components and add one entry here. */
-  const PIECES = [
-    {
-      tag: 'soft-grain',
-      text: 'Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.',
-      chips: ['grain', 'gradient', 'line art', 'ripple'],
-      bg: '#f3f2ef', fg: '#1b1a19',
-    },
-    {
-      tag: 'deep-space',
-      text: 'Six tiny 1-bit screens. Every scene is live-dithered through an 8×8 Bayer matrix at 30 fps, with spring parallax under the cursor.',
-      chips: ['1-bit', 'dither', 'generative', 'parallax'],
-      bg: '#070707', fg: '#f2efe6', dark: true,
-    },
-  ];
+<!-- one entry in the index -->
+<template id="index-item">
+  <a><span></span><b></b></a>
+</template>
 
-  const BASE = new URL('./components/', import.meta.url).href;
-  const index = document.getElementById('index');
-  const main = document.getElementById('pieces');
-
-  PIECES.forEach((p, i) => {
-    const n = String(i + 1).padStart(2, '0');
-    index.insertAdjacentHTML('beforeend', `<a href="#${p.tag}"><span>${n}</span><b>${p.tag}</b></a>`);
-
-    const snippet =
-      `<span class="c">&lt;!-- ${p.tag} --&gt;</span>\n` +
-      `&lt;script type="module" src="${BASE}${p.tag}.js"&gt;&lt;/script&gt;\n` +
-      `&lt;${p.tag}&gt;&lt;/${p.tag}&gt;`;
-
-    main.insertAdjacentHTML('beforeend', `
-      <section class="piece${p.dark ? ' dark' : ''}" id="${p.tag}" style="--bg:${p.bg};--fg:${p.fg}">
-        <div class="wrap">
-          <div class="meta">
-            <div>
-              <div class="num">${n}</div>
-              <h2>&lt;${p.tag}&gt;</h2>
-              <p>${p.text}</p>
-            </div>
-            <div class="chips">${p.chips.map(c => `<span>${c}</span>`).join('')}</div>
-          </div>
-          <div class="stage"><${p.tag}></${p.tag}></div>
-          <div class="use">
-            <pre>${snippet}</pre>
-            <button type="button" data-copy="${p.tag}">Copy</button>
-          </div>
+<!-- one piece: filled in from pieces.json -->
+<template id="piece">
+  <section class="piece">
+    <div class="wrap">
+      <div class="meta">
+        <div>
+          <div class="num"></div>
+          <h2></h2>
+          <p></p>
         </div>
-      </section>`);
+        <div class="chips"></div>
+      </div>
+      <div class="stage"></div>
+      <div class="use">
+        <pre></pre>
+        <button type="button">Copy</button>
+      </div>
+    </div>
+  </section>
+</template>
 
-    import(`${BASE}${p.tag}.js`);
-  });
-
-  main.addEventListener('click', async e => {
-    const btn = e.target.closest('button[data-copy]');
-    if (!btn) return;
-    const tag = btn.dataset.copy;
-    const code = `<script type="module" src="${BASE}${tag}.js"><\/script>\n<${tag}></${tag}>`;
-    try {
-      await navigator.clipboard.writeText(code);
-      btn.textContent = 'Copied';
-    } catch {
-      btn.textContent = 'Select';
-    }
-    setTimeout(() => { btn.textContent = 'Copy'; }, 1600);
-  });
-</script>
 </body>
 </html>
