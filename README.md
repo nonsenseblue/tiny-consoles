@@ -15,7 +15,7 @@ Each one is a Web Component you can drop into any page with a single tag.
 
 <a href="https://nonsenseblue.github.io/tiny-consoles/#soft-grain"><img src=".github/assets/soft-grain.webp" alt="soft-grain: six grainy gradient covers drifting slowly" width="100%"></a>
 
-Six grainy gradient covers. Color blobs drift slowly, fine white line patterns sit behind the type, and everything leans gently toward the cursor.
+Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.
 
 ```html
 <script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/soft-grain.js"></script>
