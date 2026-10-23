@@ -39,7 +39,7 @@ Six tiny 1-bit screens. Every scene is live-dithered through an 8×8 Bayer matri
 
 ## Notes
 
-- **No dependencies, no build step.** Each component is one self-contained file in [`components/`](components).
+- **No dependencies, no build step.** Logic lives in [`components/`](components), styles in [`styles/`](styles). Each component loads its own stylesheet, resolved from its own URL, so the one-line embed keeps working anywhere.
 - **Responsive.** Cards reflow from three columns to two to one based on the width of the element, not the page.
 - **Calm by default.** All motion stops when `prefers-reduced-motion` is set.
 - **Isolated.** Styles live inside Shadow DOM, so nothing leaks in or out.

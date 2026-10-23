@@ -1,0 +1,192 @@
+/* <soft-grain> · tiny-consoles · loaded by components/soft-grain.js into its shadow root */
+
+:host { display: block; container-type: inline-size; font-family: Inter, "Inter Variable", "Helvetica Neue", Arial, sans-serif; }
+* { box-sizing: border-box; margin: 0; }
+
+.wall {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 2.2vw, 28px);
+}
+@container (max-width: 760px) { .wall { grid-template-columns: repeat(2, 1fr); } }
+@container (max-width: 460px) { .wall { grid-template-columns: 1fr; } }
+
+/* ---------- card ---------- */
+.card {
+  --ox: 0;               /* spring offset, -1..1, driven by JS */
+  --oy: 0;
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  background: linear-gradient(180deg, var(--top) 0%, var(--bottom) 100%);
+  transform: translateZ(0);
+}
+.card::after {             /* 0.5px inner hairline */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* ---------- color blobs ---------- */
+.blobs { position: absolute; inset: -12%; z-index: 0; }
+.blob {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  left: calc(var(--x) - var(--s) / 2);
+  top: calc(var(--y) - var(--s) / 2);
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    var(--c) 0%,
+    color-mix(in srgb, var(--c) 55%, transparent) 42%,
+    transparent 100%);
+  /* spring offset toward the cursor (composes with the drift animation) */
+  translate: calc(var(--ox) * var(--d) * 1cqw) calc(var(--oy) * var(--d) * 1cqw);
+  animation: var(--anim) var(--dur) ease-in-out var(--delay) infinite alternate;
+  will-change: transform, translate;
+}
+@keyframes drift-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(7%, 5%) scale(1.07); }
+  100% { transform: translate(-4%, 8%) scale(0.96); }
+}
+@keyframes drift-b {
+  0%   { transform: translate(0, 0) scale(1.03); }
+  50%  { transform: translate(-8%, 4%) scale(0.95); }
+  100% { transform: translate(-3%, -6%) scale(1.06); }
+}
+@keyframes drift-c {
+  0%   { transform: translate(0, 0) scale(0.97); }
+  50%  { transform: translate(6%, -7%) scale(1.05); }
+  100% { transform: translate(9%, 2%) scale(1); }
+}
+@keyframes drift-d {
+  0%   { transform: translate(0, 0) scale(1.05); }
+  50%  { transform: translate(-6%, -5%) scale(0.98); }
+  100% { transform: translate(4%, -8%) scale(1.08); }
+}
+
+/* ---------- line pattern ---------- */
+.pattern {
+  position: absolute;
+  left: -5%;
+  top: -5%;
+  width: 110%;
+  height: 110%;
+  z-index: 1;
+  opacity: 0.42;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 19%, #000 56%);
+          mask-image: radial-gradient(circle at 50% 50%, transparent 0 19%, #000 56%);
+}
+.pattern path, .pattern line {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+.pattern circle { fill: #fff; }
+/* each line draws itself in, then a slow brightness wave travels along the pattern */
+.pattern .seg {
+  opacity: var(--base, 0.7);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    draw 2.8s cubic-bezier(.45, 0, .2, 1) var(--dl) forwards,
+    breathe 9s ease-in-out var(--bd) infinite;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.pattern .seg.dot {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  animation:
+    pop 1.6s cubic-bezier(.45, 0, .2, 1) var(--dl) backwards,
+    breathe 9s ease-in-out var(--bd) infinite;
+}
+@keyframes pop { from { opacity: 0; } }
+@keyframes breathe {
+  0%, 100% { stroke-opacity: 1; }
+  50%      { stroke-opacity: 0.4; }
+}
+.pattern circle.ln { fill: none; stroke: #fff; stroke-width: 0.8; vector-effect: non-scaling-stroke; }
+
+/* ---------- shading: darker on the side away from the light ---------- */
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(120% 120% at calc(50% + var(--ox) * 22%) calc(42% + var(--oy) * 22%),
+      rgba(0, 0, 0, 0) 42%, rgba(4, 10, 18, 0.30) 100%);
+}
+
+/* ---------- cursor glow ---------- */
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  mix-blend-mode: screen;
+  background: radial-gradient(circle at
+    calc(50% + var(--ox) * 50%) calc(50% + var(--oy) * 50%),
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.10) 20%,
+    rgba(255, 255, 255, 0) 46%);
+}
+.card.is-hover .glow { opacity: 1; }
+
+/* ---------- grain ---------- */
+.noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* ---------- title ---------- */
+.title {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: #fff;
+  font-weight: 400;
+  font-size: 8cqw;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+  translate: calc(var(--ox) * -1.4cqw) calc(var(--oy) * -1.4cqw);
+  text-shadow:
+    calc(var(--ox) * -0.4cqw) calc(0.5cqw + var(--oy) * -0.4cqw) 2.2cqw rgba(0, 10, 20, 0.22);
+}
+.title span { display: block; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none !important; }
+  .blob { translate: none !important; }
+  .pattern .seg { animation: none !important; stroke-dasharray: none; stroke-dashoffset: 0; }
+  .glow { display: none; }
+  .title { translate: none; }
+}

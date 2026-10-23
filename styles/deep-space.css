@@ -1,0 +1,73 @@
+/* <deep-space> · tiny-consoles · loaded by components/deep-space.js into its shadow root */
+
+:host { display: block; container-type: inline-size; font-family: "DejaVu Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+* { box-sizing: border-box; margin: 0; }
+:host { --ink: #f2efe6; --void: #0e0e0e; }
+.wall {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 2.2vw, 28px);
+}
+@container (max-width: 760px) { .wall { grid-template-columns: repeat(2, 1fr); } }
+@container (max-width: 460px) { .wall { grid-template-columns: 1fr; } }
+
+.card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--void);
+  container-type: inline-size;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px rgba(242, 239, 230, 0.22);
+  pointer-events: none;
+}
+.card canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.idx {
+  position: absolute;
+  left: 6cqw;
+  top: 5.5cqw;
+  font-size: 3.6cqw;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  background: var(--void);
+  padding: 0.4cqw 1.2cqw;
+  pointer-events: none;
+}
+.title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 1.6cqw;
+  pointer-events: none;
+}
+.title span {
+  justify-self: center;
+  font-size: 6.4cqw;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--void);
+  padding: 1cqw 1.8cqw;
+}
+.title span:last-child::after { content: "_"; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .title span:last-child::after { animation: none; }
+}
