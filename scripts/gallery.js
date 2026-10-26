@@ -25,9 +25,6 @@ function renderIndexItem(piece, num) {
 function renderPiece(piece, num) {
   const section = document.getElementById('piece').content.firstElementChild.cloneNode(true);
   section.id = piece.tag;
-  section.classList.toggle('dark', Boolean(piece.dark));
-  section.style.setProperty('--bg', piece.bg);
-  section.style.setProperty('--fg', piece.fg);
 
   section.querySelector('.num').textContent = `Plate ${num}`;
   section.querySelector('h2').textContent = piece.tag;
@@ -162,19 +159,9 @@ const main = document.getElementById('pieces');
 pieces.forEach((piece, i) => {
   const num = String(i + 1).padStart(2, '0');
   index.append(renderIndexItem(piece, num));
-  const section = renderPiece(piece, num);
-  if (i > 0) section.style.setProperty('--prev', pieces[i - 1].bg);
-  main.append(section);
+  main.append(renderPiece(piece, num));
   import(`${COMPONENTS}${piece.tag}.js`);
 });
-
-/* the colophon stays in the last piece's light, so the page ends where it ends */
-{
-  const last = pieces[pieces.length - 1], foot = document.querySelector('body > footer');
-  foot.style.setProperty('--end-bg', last.bg);
-  foot.style.setProperty('--end-fg', last.fg);
-  foot.classList.toggle('dark', Boolean(last.dark));
-}
 
 /* plate, figure and caption come up one after another as each piece scrolls in */
 const reveal = [...main.querySelectorAll('.plate, .stage, .foot')];

@@ -91,22 +91,11 @@ h1 {
 }
 
 /* ---------- pieces: each one set like a plate in a catalogue ---------- */
-.piece { padding: 28px 0 96px; background: var(--bg); color: var(--fg); }
-/* light flows into dark instead of switching at a hard edge */
-.piece.dark {
-  padding-top: 300px;
-  background: linear-gradient(to bottom,
-    var(--prev, var(--paper)) 0,
-    color-mix(in srgb, var(--prev, var(--paper)) 82%, var(--bg)) 70px,
-    color-mix(in srgb, var(--prev, var(--paper)) 45%, var(--bg)) 150px,
-    color-mix(in srgb, var(--prev, var(--paper)) 14%, var(--bg)) 220px,
-    var(--bg) 280px);
-}
+.piece { padding: 28px 0 96px; }
 /* each plate rises in as it scrolls into view */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.2s ease, transform 1.4s cubic-bezier(.2, .7, .2, 1); }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
-.piece.dark { --line: rgba(242, 239, 230, 0.16); --muted: #96928a; --ink: #f2efe6; }
 .plate {
   padding-top: 14px; margin-bottom: 56px;
   border-top: 1px solid var(--ink);
@@ -132,7 +121,7 @@ h2 {
 
 .foot { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--line); align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
-.fig b { font-weight: 500; color: var(--fg, var(--ink)); }
+.fig b { font-weight: 500; color: var(--ink); }
 .use { grid-column: 6 / 13; display: flex; align-items: flex-start; gap: 20px; }
 .use pre {
   flex: 1; min-width: 0; overflow-x: auto;
@@ -153,8 +142,6 @@ h2 {
 }
 
 /* ---------- colophon ---------- */
-body > footer { background: var(--end-bg, var(--paper)); color: var(--end-fg, var(--ink)); box-shadow: 0 0 0 100vmax var(--end-bg, var(--paper)); clip-path: inset(0 -100vmax); }
-body > footer.dark { --ink: #f2efe6; --muted: #96928a; }
 footer { position: relative; padding-top: 18px; padding-bottom: 72px; font-size: 12px; line-height: 1.6; border-top: 1px solid var(--ink); margin-top: -1px; }
 footer > div { color: var(--muted); }
 footer .f1 { grid-column: 1 / 4; color: var(--ink); font-weight: 500; }
