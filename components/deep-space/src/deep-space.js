@@ -3,16 +3,18 @@
  * Six tiny 1-bit screens, each a live-dithered space scene.
  *
  * Usage:
- *   <script type="module" src="components/deep-space.js"></script>
+ *   <script type="module" src="components/deep-space/src/deep-space.js"></script>
  *   <deep-space></deep-space>
  *
- * Styles: styles/deep-space.css (loaded automatically).
+ * Styles: deep-space.css, next to this file (loaded automatically).
+ * Design notes: ../DESIGN.md.
  * No dependencies. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-/* Styles live in ../styles/deep-space.css; resolved from this file's own URL so it works anywhere it is embedded */
-const STYLE = new URL('../styles/deep-space.css', import.meta.url).href;
+/* Styles live next to this file in deep-space.css; resolved from this file's own URL so it works anywhere it is embedded */
+/* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
+const STYLE = new URL('./deep-space.css', import.meta.url).href + new URL(import.meta.url).search;
 
 function run(root) {
   const TAU = Math.PI * 2;

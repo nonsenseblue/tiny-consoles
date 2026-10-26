@@ -28,6 +28,9 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Stamp asset URLs with the commit
+        # the page, its script and its styles always arrive as one version, so a cached old script never meets a new page
+        run: sed -i -E "s#(styles/gallery\.css|scripts/gallery\.js)\"#\1?v=${GITHUB_SHA::7}\"#g" index.html && grep -n "?v=" index.html
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:

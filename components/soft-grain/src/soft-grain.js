@@ -4,16 +4,18 @@
  * breathe slowly, and ripple outward line by line from the cursor.
  *
  * Usage:
- *   <script type="module" src="components/soft-grain.js"></script>
+ *   <script type="module" src="components/soft-grain/src/soft-grain.js"></script>
  *   <soft-grain></soft-grain>
  *
- * Styles: styles/soft-grain.css (loaded automatically).
+ * Styles: soft-grain.css, next to this file (loaded automatically).
+ * Design notes: ../DESIGN.md.
  * No dependencies. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-/* Styles live in ../styles/soft-grain.css; resolved from this file's own URL so it works anywhere it is embedded */
-const STYLE = new URL('../styles/soft-grain.css', import.meta.url).href;
+/* Styles live next to this file in soft-grain.css; resolved from this file's own URL so it works anywhere it is embedded */
+/* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
+const STYLE = new URL('./soft-grain.css', import.meta.url).href + new URL(import.meta.url).search;
 
 function run(root) {
   /* ---------- data: one adjacent-hue family per card ---------- */

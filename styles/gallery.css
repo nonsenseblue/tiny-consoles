@@ -22,8 +22,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* no underline or fade on hover: the cursor does the work */
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus:not(:focus-visible) { outline: none; }
+@media (hover: none) { button:focus, a:focus { outline: none; } }  /* touch screens: no ring left behind after a tap */  /* no ring after a mouse click, keep it for the keyboard */
 .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 40px; }
 .grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 20px; }
 @media (max-width: 720px) {
@@ -39,15 +41,22 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .bar .grid { height: 100%; display: flex; align-items: center; }
 .bar .c1 { margin-right: auto; font-weight: 500; }
+.bar .brand { display: inline-flex; align-items: center; gap: 9px; }
+.bar .mark { width: 17px; height: 17px; flex: none; }
 .bar .c3 { display: flex; align-items: center; gap: 14px; }
 .bar #where { text-align: center; color: var(--muted); }
 .bar { line-height: 1; }
 .bar .c3 a, .bar .c3 button { display: flex; align-items: center; height: 20px; }
 .bar .c3 button { padding: 0 4px; }
 .bar .c3 svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-.bar .c3 button:hover { opacity: 0.55; }
 @media (max-width: 720px) {
   .bar .c1 { grid-column: 1 / 3; } .bar .c3 { grid-column: 3 / 5; }
+  /* on phones the bar sits next to 15px body text, so it grows to match */
+  .bar { font-size: 14.5px; }
+  .bar .mark { width: 19px; height: 19px; }
+  .bar .c3 { gap: 10px; }
+  .bar .c3 button { padding: 8px 6px; height: auto; }
+  .bar .c3 svg { width: 7px; height: 12px; }
 }
 
 /* ---------- pager: every page fills the view and slides sideways ---------- */
@@ -78,9 +87,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .guides { display: none; }
 }
 #field { position: absolute; left: 0; top: 0; width: 100%; height: 60%; display: block; pointer-events: none; }
-.home-in { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 100%; padding-top: 120px; padding-bottom: clamp(56px, 14vh, 140px); }
+.home-in { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100%; padding-top: 56px; padding-bottom: clamp(48px, 12vh, 120px); }
 /* on phones the title sits lower so the contour field has its own space above it */
-@media (max-width: 720px) { .home-in { padding-top: 30vh; padding-bottom: 72px; } }
+@media (max-width: 720px) { .home-in { padding-top: 30vh; padding-bottom: calc(36px + env(safe-area-inset-bottom)); } }
+/* phones: the piece pages also get room below their last line */
+@media (max-width: 720px) { .piece .wrap { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } }
 .hero { align-items: end; margin-top: auto; }  /* pushes the title down when there is room, scrolls instead of clipping when there is not */
 h1 {
   grid-column: 1 / 9;
@@ -102,7 +113,6 @@ h1 {
 .entry:hover img { transform: scale(1.08); filter: none; }
 .entry .n { color: var(--muted); font-feature-settings: "tnum" 1; }
 .entry b { font-size: 16px; font-weight: 500; letter-spacing: -0.015em; }
-.entry:hover b { text-decoration: underline; text-underline-offset: 3px; }
 .entry .about, .entry .made { color: var(--muted); }
 @media (max-width: 960px) { .entry { grid-column: span 6; } }
 @media (max-width: 720px) { .entry { grid-column: span 4; } }
@@ -112,38 +122,50 @@ h1 {
 .colophon > div:nth-child(2) { grid-column: 5 / 9; }
 .colophon > div:nth-child(3) { grid-column: 9 / 13; text-align: right; }
 .colophon a { color: var(--ink); }
-@media (max-width: 720px) { .colophon > div { grid-column: 1 / 5 !important; text-align: left !important; } }
+@media (max-width: 720px) {
+  /* phones: licence across the top, then credit on the left and source on the right, like the desktop row folded once */
+  .colophon { margin-top: 48px; row-gap: 8px; grid-template-columns: auto auto; justify-content: space-between; column-gap: 16px; }
+  .colophon > div:nth-child(1) { grid-column: 1 / 3; }
+  .colophon > div:nth-child(2) { grid-column: 1; white-space: nowrap; }
+  .colophon > div:nth-child(3) { grid-column: 2; text-align: right; white-space: nowrap; }
+}
 
 /* ---------- a piece page: set like a plate in a catalogue ---------- */
 /* the caption and code sit at the bottom of the page, however tall the piece is */
 .piece .wrap { display: flex; flex-direction: column; min-height: 100%; padding-top: 24px; padding-bottom: 24px; }
 .piece .stage { width: 100%; }
 .piece .foot { margin-top: auto; padding-top: 24px; }
-.plate { padding-top: 28px; margin-bottom: 32px; align-items: baseline; }
-.num { grid-column: 1 / 3; font-size: 16px; color: var(--muted); font-feature-settings: "tnum" 1; }
-h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; letter-spacing: -0.035em; line-height: 1; }
+.plate { padding-top: 28px; margin-bottom: 32px; align-items: start; }
+/* every column starts on the same line: the top of the capitals */
+.plate > * { text-box: trim-start cap alphabetic; }
+h2 { grid-column: 1 / 7; font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; }
+h2 .lead { font-size: 24px; font-weight: 500; font-feature-settings: "tnum" 1; }
+h2 .name { font-size: 20px; color: var(--muted); }
 .plate p { grid-column: 7 / 11; font-size: 14px; line-height: 1.6; color: var(--muted); }
-.chips { grid-column: 11 / 13; list-style: none; font-size: 12px; line-height: 1.75; color: var(--muted); text-align: right; }
+.chips { grid-column: 11 / 13; list-style: none; display: flex; flex-wrap: wrap; justify-content: flex-end; align-content: flex-start; gap: 6px; font-size: 11.5px; color: var(--muted); }
+/* tags read as tags: a hairline pill around each one */
+.chips li { border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 3px 10px; line-height: 1.4; white-space: nowrap; }
 @media (max-width: 720px) {
-  .num { grid-column: 1 / 5; }
-  h2 { grid-column: 1 / 5; margin-top: 18px; }
+  h2 { grid-column: 1 / 5; }
   .plate p { grid-column: 1 / 5; margin-top: 14px; }
-  .chips { grid-column: 1 / 5; margin-top: 14px; text-align: left; display: flex; flex-wrap: wrap; gap: 0 14px; }
+  .chips { grid-column: 1 / 5; margin-top: 14px; justify-content: flex-start; }
 }
-.stage { margin: 0 auto; max-width: 704px; }
+.stage { margin: 0 auto; max-width: var(--max, 704px); }
 /* on wide screens the pieces shrink with the window height, so a piece page never needs scrolling */
-@media (min-width: 721px) { .stage { max-width: clamp(400px, calc((100dvh - var(--bar) - 320px) / 0.66), 704px); } }
+@media (min-width: 721px) { .stage { max-width: clamp(400px, calc((100dvh - var(--bar) - 320px) / var(--ratio, 0.66)), var(--max, 704px)); } }
 .foot { margin-top: 40px; align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }
 .use { grid-column: 6 / 13; display: flex; align-items: flex-start; gap: 20px; }
-.use pre { flex: 1; min-width: 0; overflow-x: auto; font-family: var(--mono); font-size: 12px; line-height: 1.75; }
-.use pre .c { color: var(--muted); }
-.use button { flex: none; border-bottom: 1px solid currentColor; font-size: 12px; padding: 0 0 2px; }
-.use button:hover { opacity: 0.6; }
+.use pre { flex: 1; min-width: 0; overflow-x: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; color: var(--muted); }
+.use button { flex: none; font-size: 12px; color: var(--muted); transition: color .25s ease; }
 @media (max-width: 720px) {
   .fig, .use { grid-column: 1 / 5; }
-  .use { margin-top: 18px; }
+  /* phones: a small header row, "Embed" on the left and Copy on the right, then the code wrapped in full */
+  .use { margin-top: 18px; display: grid; grid-template-columns: 1fr auto; row-gap: 8px; }
+  .use::before { content: "Embed"; font-size: 12px; color: var(--muted); }
+  .use button { grid-column: 2; grid-row: 1; }
+  .use pre { grid-column: 1 / 3; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
 }
 
 /* the plate, the piece and its caption arrive one after another when the page comes in */
@@ -161,3 +183,22 @@ h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; 
 .index, .plate { background: var(--trace); }
 .index { padding-top: 22px; }
 .plate { padding-top: 22px; }
+
+/* ---------- cursor: a small dot that swells into a lens over anything clickable ---------- */
+.cursor { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.has-cursor, html.has-cursor * { cursor: none !important; }
+  .cursor {
+    display: block;
+    position: fixed; left: 0; top: 0; z-index: 100;
+    width: 34px; height: 34px; margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    background: #fff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    transform: translate3d(var(--x, -100px), var(--y, -100px), 0) scale(var(--s, 0.24));
+    transition: opacity .3s ease;
+    will-change: transform;
+  }
+  .cursor.hidden { opacity: 0; }
+}

@@ -20,5 +20,31 @@
       "parallax"
     ],
     "hint": "Move across a screen to shift its layers."
+  },
+  {
+    "tag": "soundings-board",
+    "text": "An identity board for an imagined coastal listening station. Seabed sections, a card on a visible grid and a depth readout that surfaces words on the way down.",
+    "chips": [
+      "identity",
+      "swiss grid",
+      "edge trace",
+      "engraving"
+    ],
+    "hint": "Watch the sounding line drop and the words surface.",
+    "ratio": 0.42,
+    "max": 1080
+  },
+  {
+    "tag": "rerun-board",
+    "text": "An identity board for an imagined institute that runs the same small life again and again. Colonies of cells grow in, the clock counts down, and at zero everything grows back almost the same.",
+    "chips": [
+      "identity",
+      "liquid pixels",
+      "generative",
+      "loop"
+    ],
+    "hint": "Wait for the clock to reach zero, or move across a colony to make it sprout.",
+    "ratio": 0.42,
+    "max": 1080
   }
 ]
