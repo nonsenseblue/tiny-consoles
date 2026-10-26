@@ -121,7 +121,7 @@ h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; 
   .plate p { grid-column: 1 / 5; margin-top: 14px; }
   .chips { grid-column: 1 / 5; margin-top: 14px; text-align: left; display: flex; flex-wrap: wrap; gap: 0 14px; }
 }
-.stage { margin: 0 auto; max-width: 880px; }
+.stage { margin: 0 auto; max-width: 704px; }
 .foot { margin-top: 40px; align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }
