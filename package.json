@@ -1,0 +1,39 @@
+{
+  "name": "tiny-consoles",
+  "version": "0.1.0",
+  "description": "Small design experiments, collected over time. Each one is a Web Component, with a React wrapper.",
+  "license": "MIT",
+  "author": "nonsenseblue",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nonsenseblue/tiny-consoles.git"
+  },
+  "homepage": "https://nonsenseblue.github.io/tiny-consoles/",
+  "exports": {
+    "./react": "./react/index.js",
+    "./react/*": "./react/*.js",
+    "./components/*": "./components/*"
+  },
+  "files": [
+    "components",
+    "react"
+  ],
+  "sideEffects": [
+    "./components/*/src/*.js"
+  ],
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "web-components",
+    "react",
+    "creative-coding",
+    "generative-art"
+  ]
+}

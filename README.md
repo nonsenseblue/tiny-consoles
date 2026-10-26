@@ -71,6 +71,26 @@ Design notes: [`components/rerun-board/DESIGN.md`](components/rerun-board/DESIGN
 
 <br>
 
+## Use with React
+
+Every piece also comes as a React component. They render the same Web Components, so both stay in step.
+
+```sh
+npm install github:nonsenseblue/tiny-consoles
+```
+
+```jsx
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard } from 'tiny-consoles/react';
+
+export default function Page() {
+  return <RerunBoard style={{ maxWidth: 1080 }} />;
+}
+```
+
+The wrappers live in [`react/`](react), load their piece in the browser only, and work with server rendering. Tested with Vite and React 19.
+
+<br>
+
 ## Notes
 
 - **No dependencies, no build step.** Each piece is one folder in [`components/`](components). Each component loads the stylesheet next to it, resolved from its own URL, so the one-line embed keeps working anywhere.
