@@ -3,14 +3,16 @@
  * Six tiny 1-bit screens, each a live-dithered space scene.
  *
  * Usage:
- *   <script type="module" src="deep-space.js"></script>
+ *   <script type="module" src="components/deep-space.js"></script>
  *   <deep-space></deep-space>
  *
+ * Styles: styles/deep-space.css (loaded automatically).
  * No dependencies. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-const CSS = ":host { display: block; container-type: inline-size; font-family: \"DejaVu Sans Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace; }\n  * { box-sizing: border-box; margin: 0; }\n  :host { --ink: #f2efe6; --void: #0e0e0e; }\n  .wall {\n    width: 100%;\n    max-width: 1080px;\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: clamp(12px, 2.2vw, 28px);\n  }\n  @container (max-width: 760px) { .wall { grid-template-columns: repeat(2, 1fr); } }\n  @container (max-width: 460px) { .wall { grid-template-columns: 1fr; } }\n\n  .card {\n    position: relative;\n    aspect-ratio: 1;\n    border-radius: 20px;\n    overflow: hidden;\n    background: var(--void);\n    container-type: inline-size;\n  }\n  .card::after {\n    content: \"\";\n    position: absolute;\n    inset: 0;\n    border-radius: inherit;\n    box-shadow: inset 0 0 0 0.5px rgba(242, 239, 230, 0.22);\n    pointer-events: none;\n  }\n  .card canvas {\n    position: absolute;\n    inset: 0;\n    width: 100%;\n    height: 100%;\n    image-rendering: pixelated;\n  }\n  .idx {\n    position: absolute;\n    left: 6cqw;\n    top: 5.5cqw;\n    font-size: 3.6cqw;\n    letter-spacing: 0.08em;\n    color: var(--ink);\n    background: var(--void);\n    padding: 0.4cqw 1.2cqw;\n    pointer-events: none;\n  }\n  .title {\n    position: absolute;\n    inset: 0;\n    display: grid;\n    place-content: center;\n    text-align: center;\n    gap: 1.6cqw;\n    pointer-events: none;\n  }\n  .title span {\n    justify-self: center;\n    font-size: 6.4cqw;\n    font-weight: 700;\n    letter-spacing: 0.06em;\n    line-height: 1;\n    color: var(--ink);\n    background: var(--void);\n    padding: 1cqw 1.8cqw;\n  }\n  .title span:last-child::after { content: \"_\"; animation: blink 1.1s steps(1) infinite; }\n  @keyframes blink { 50% { opacity: 0; } }\n  @media (prefers-reduced-motion: reduce) {\n    .title span:last-child::after { animation: none; }\n  }\n";
+/* Styles live in ../styles/deep-space.css; resolved from this file's own URL so it works anywhere it is embedded */
+const STYLE = new URL('../styles/deep-space.css', import.meta.url).href;
 
 function run(root) {
   const TAU = Math.PI * 2;
@@ -217,8 +219,12 @@ class DeepSpace extends HTMLElement {
   connectedCallback() {
     if (this.shadowRoot) return;
     const root = this.attachShadow({ mode: 'open' });
-    root.innerHTML = `<style>${CSS}</style><div class="wall" id="wall" part="wall"></div>`;
-    run(root);
+    root.innerHTML = `<link rel="stylesheet" href="${STYLE}"><div class="wall" id="wall" part="wall" style="visibility:hidden"></div>`;
+    /* start only once the stylesheet is in, so the cards measure their real size and never flash unstyled */
+    const link = root.querySelector('link');
+    const start = () => { root.getElementById('wall').style.visibility = ''; run(root); };
+    link.addEventListener('load', start, { once: true });
+    link.addEventListener('error', start, { once: true });
   }
 }
 

@@ -13,9 +13,9 @@ Each one is a Web Component you can drop into any page with a single tag.
 
 ## 01 · `<soft-grain>`
 
-<a href="https://nonsenseblue.github.io/tiny-consoles/#soft-grain"><img src=".github/assets/soft-grain.webp" alt="soft-grain: six grainy gradient covers drifting slowly" width="100%"></a>
+<a href="https://nonsenseblue.github.io/tiny-consoles/#soft-grain"><img src=".github/assets/soft-grain.webp" alt="soft-grain: six grainy gradient covers with fine line patterns" width="100%"></a>
 
-Six grainy gradient covers. Color blobs drift slowly, fine white line patterns sit behind the type, and everything leans gently toward the cursor.
+Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.
 
 ```html
 <script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/soft-grain.js"></script>
@@ -39,7 +39,8 @@ Six tiny 1-bit screens. Every scene is live-dithered through an 8×8 Bayer matri
 
 ## Notes
 
-- **No dependencies, no build step.** Each component is one self-contained file in [`components/`](components).
+- **No dependencies, no build step.** Logic lives in [`components/`](components), styles in [`styles/`](styles). Each component loads its own stylesheet, resolved from its own URL, so the one-line embed keeps working anywhere.
+- **Adding a piece.** Put the component in `components/`, its stylesheet in `styles/`, and add one entry to [`pieces.json`](pieces.json). The gallery builds itself from that list.
 - **Responsive.** Cards reflow from three columns to two to one based on the width of the element, not the page.
 - **Calm by default.** All motion stops when `prefers-reduced-motion` is set.
 - **Isolated.** Styles live inside Shadow DOM, so nothing leaks in or out.

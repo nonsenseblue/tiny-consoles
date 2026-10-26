@@ -1,0 +1,27 @@
+[
+  {
+    "tag": "soft-grain",
+    "text": "Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.",
+    "chips": [
+      "grain",
+      "gradient",
+      "line art",
+      "ripple"
+    ],
+    "bg": "#f3f2ef",
+    "fg": "#1b1a19"
+  },
+  {
+    "tag": "deep-space",
+    "text": "Six tiny 1-bit screens. Every scene is live-dithered through an 8×8 Bayer matrix at 30 fps, with spring parallax under the cursor.",
+    "chips": [
+      "1-bit",
+      "dither",
+      "generative",
+      "parallax"
+    ],
+    "bg": "#070707",
+    "fg": "#f2efe6",
+    "dark": true
+  }
+]
