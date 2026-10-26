@@ -11,13 +11,15 @@
   },
   "homepage": "https://nonsenseblue.github.io/tiny-consoles/",
   "exports": {
-    "./react": "./react/index.js",
-    "./react/*": "./react/*.js",
+    "./react": {
+      "types": "./react/dist/index.d.ts",
+      "default": "./react/dist/index.js"
+    },
     "./components/*": "./components/*"
   },
   "files": [
     "components",
-    "react"
+    "react/dist"
   ],
   "sideEffects": [
     "./components/*/src/*.js"
@@ -35,5 +37,14 @@
     "react",
     "creative-coding",
     "generative-art"
-  ]
+  ],
+  "scripts": {
+    "build": "tsc -p react",
+    "prepare": "tsc -p react"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0"
+  }
 }

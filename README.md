@@ -87,7 +87,7 @@ export default function Page() {
 }
 ```
 
-The wrappers live in [`react/`](react), load their piece in the browser only, and work with server rendering. Tested with Vite and React 19.
+The components are written in TypeScript ([`react/src/`](react/src)) and ship with types, so props are checked in your editor. Installing from GitHub builds them automatically. Each one loads its piece in the browser only, so server rendering is safe. Tested with Vite, TypeScript and React 19.
 
 <br>
 
@@ -104,6 +104,8 @@ The wrappers live in [`react/`](react), load their piece in the browser only, an
     assets/thumb.webp    the small still in the index
     assets/preview.webp  the image in this README
   ```
+
+  Then add a small wrapper in `react/src/` and export it from `react/src/index.ts`.
 - **Responsive.** Cards reflow from three columns to two to one based on the width of the element, not the page.
 - **Calm by default.** All motion stops when `prefers-reduced-motion` is set.
 - **Isolated.** Styles live inside Shadow DOM, so nothing leaks in or out.
