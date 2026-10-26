@@ -3,53 +3,75 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>tiny-consoles</title>
+<title>tiny consoles</title>
 <meta name="description" content="Small design experiments, collected over time. By nonsenseblue.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/gallery.css">
 <script type="module" src="scripts/gallery.js"></script>
 </head>
 <body>
 
-<header class="wrap">
-  <div class="owner"><a href="https://github.com/nonsenseblue">nonsenseblue</a> / <a href="https://github.com/nonsenseblue/tiny-consoles">tiny-consoles</a></div>
-  <h1>tiny-consoles</h1>
-  <p class="lede">Small design experiments, collected over time. Each one is a Web Component you can drop into any page with a single tag.</p>
-  <nav class="index" id="index"></nav>
+<header class="bar">
+  <div class="wrap grid">
+    <div class="c1"><a href="#" data-go="index">tiny consoles</a></div>
+    <nav class="c3" aria-label="Pages">
+      <button type="button" data-step="-1" aria-label="Previous"><svg width="6" height="10" viewBox="0 0 6 10" aria-hidden="true"><path d="M5 1L1 5l4 4"/></svg></button>
+      <span id="where">Index</span>
+      <button type="button" data-step="1" aria-label="Next"><svg width="6" height="10" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg></button>
+    </nav>
+  </div>
 </header>
 
-<main id="pieces"></main>
-
-<footer class="wrap">
-  <div class="row">
-    <span>Code: MIT · Visual design: CC BY 4.0</span>
-    <span>Made by <a href="https://github.com/nonsenseblue">nonsenseblue</a> with Claude</span>
-  </div>
-</footer>
+<main class="pager" id="pager">
+  <!-- the home page: an index, nothing else -->
+  <section class="page home" data-key="index" aria-label="Index">
+    <div class="guides wrap" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="home-in wrap">
+      <div class="hero grid">
+        <h1>tiny<br>consoles</h1>
+        <p class="lede">Small design experiments, collected over time. Each one is a Web Component you can drop into any page with a single tag. Swipe or use the arrows to move between them.</p>
+      </div>
+      <nav class="index grid" id="index" aria-label="Pieces"></nav>
+      <footer class="colophon grid">
+        <div>Code: MIT · Visual design: CC BY 4.0</div>
+        <div>Made by <a href="https://github.com/nonsenseblue">nonsenseblue</a> with Claude</div>
+        <div><a href="https://github.com/nonsenseblue/tiny-consoles">Source on GitHub</a></div>
+      </footer>
+    </div>
+  </section>
+</main>
 
 <!-- one entry in the index -->
 <template id="index-item">
-  <a><span></span><b></b></a>
+  <a class="entry">
+    <span class="thumb"><img alt="" loading="lazy" decoding="async"></span>
+    <span class="n"></span>
+    <b></b>
+    <span class="about"></span>
+    <span class="made"></span>
+  </a>
 </template>
 
-<!-- one piece: filled in from pieces.json -->
+<!-- one piece: its own page -->
 <template id="piece">
-  <section class="piece">
+  <section class="page piece">
     <div class="wrap">
-      <div class="meta">
-        <div>
-          <div class="num"></div>
-          <h2></h2>
-          <p></p>
-        </div>
-        <div class="chips"></div>
+      <div class="plate grid">
+        <div class="num"></div>
+        <h2></h2>
+        <p></p>
+        <ul class="chips"></ul>
       </div>
       <div class="stage"></div>
-      <div class="use">
-        <pre></pre>
-        <button type="button">Copy</button>
+      <div class="foot grid">
+        <div class="fig"></div>
+        <div class="use">
+          <pre></pre>
+          <button type="button">Copy</button>
+        </div>
       </div>
     </div>
   </section>

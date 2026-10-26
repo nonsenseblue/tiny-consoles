@@ -10,8 +10,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(12px, 2.2vw, 28px);
 }
-@container (max-width: 760px) { .wall { grid-template-columns: repeat(2, 1fr); } }
-@container (max-width: 460px) { .wall { grid-template-columns: 1fr; } }
+@container (max-width: 400px) { .wall { grid-template-columns: repeat(2, 1fr); } }
+@container (max-width: 380px) { .wall { grid-template-columns: 1fr; } }
 
 /* ---------- card ---------- */
 .card {

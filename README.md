@@ -40,7 +40,7 @@ Six tiny 1-bit screens. Every scene is live-dithered through an 8×8 Bayer matri
 ## Notes
 
 - **No dependencies, no build step.** Logic lives in [`components/`](components), styles in [`styles/`](styles). Each component loads its own stylesheet, resolved from its own URL, so the one-line embed keeps working anywhere.
-- **Adding a piece.** Put the component in `components/`, its stylesheet in `styles/`, and add one entry to [`pieces.json`](pieces.json). The gallery builds itself from that list.
+- **Adding a piece.** Put the component in `components/`, its stylesheet in `styles/`, a small still in `assets/thumbs/<tag>.webp`, and add one entry to [`pieces.json`](pieces.json). The gallery builds itself from that list.
 - **Responsive.** Cards reflow from three columns to two to one based on the width of the element, not the page.
 - **Calm by default.** All motion stops when `prefers-reduced-motion` is set.
 - **Isolated.** Styles live inside Shadow DOM, so nothing leaks in or out.

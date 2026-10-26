@@ -8,8 +8,7 @@
       "line art",
       "ripple"
     ],
-    "bg": "#f3f2ef",
-    "fg": "#1b1a19"
+    "hint": "Hover a cover and the lines ripple out from the cursor."
   },
   {
     "tag": "deep-space",
@@ -20,8 +19,6 @@
       "generative",
       "parallax"
     ],
-    "bg": "#070707",
-    "fg": "#f2efe6",
-    "dark": true
+    "hint": "Move across a screen to shift its layers."
   }
 ]
