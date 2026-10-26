@@ -111,7 +111,7 @@ h1 {
 /* ---------- a piece page: set like a plate in a catalogue ---------- */
 .piece .wrap { padding-top: 28px; padding-bottom: 72px; }
 .plate { padding-top: 28px; margin-bottom: 48px; align-items: start; }
-.num { grid-column: 1 / 3; font-size: 12px; color: var(--muted); font-feature-settings: "tnum" 1; }
+.num { grid-column: 1 / 3; font-size: 16px; padding-top: 4px; color: var(--muted); font-feature-settings: "tnum" 1; }
 h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; letter-spacing: -0.035em; line-height: 1; }
 .plate p { grid-column: 7 / 11; font-size: 14px; line-height: 1.6; color: var(--muted); }
 .chips { grid-column: 11 / 13; list-style: none; font-size: 12px; line-height: 1.75; color: var(--muted); text-align: right; }
@@ -121,7 +121,7 @@ h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; 
   .plate p { grid-column: 1 / 5; margin-top: 14px; }
   .chips { grid-column: 1 / 5; margin-top: 14px; text-align: left; display: flex; flex-wrap: wrap; gap: 0 14px; }
 }
-.stage { margin: 0 auto; max-width: 1080px; }
+.stage { margin: 0 auto; max-width: 880px; }
 .foot { margin-top: 40px; align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }
@@ -144,3 +144,9 @@ h2 { grid-column: 3 / 7; font-size: clamp(30px, 3.6vw, 48px); font-weight: 500; 
 @media (prefers-reduced-motion: reduce) {
   .piece .plate, .piece .stage, .piece .foot { opacity: 1; transform: none; transition: none; }
 }
+
+/* one divider per page: a broken trace, like the contours on the index */
+:root { --trace: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='3'%3E%3Cpath d='M0.0 1.10h5.0M9.0 1.15h12.0M27.0 1.40h3.0M32.0 1.22h8.0M42.0 1.28h18.0M64.0 1.26h5.0M71.0 1.80h3.0M78.0 1.31h5.0M86.0 1.09h26.0M116.0 1.67h18.0M138.0 1.18h18.0M159.0 1.09h12.0M175.0 1.84h34.0M218.0 1.57h3.0M225.0 1.20h8.0M242.0 1.29h12.0M263.0 1.23h12.0M278.0 1.08h8.0M288.0 1.52h12.0' stroke='%231b1a19' stroke-opacity='.6' stroke-width='1' fill='none'/%3E%3C/svg%3E") left top / 300px 3px repeat-x; }
+.index, .plate { background: var(--trace); }
+.index { padding-top: 22px; }
+.plate { padding-top: 22px; }
