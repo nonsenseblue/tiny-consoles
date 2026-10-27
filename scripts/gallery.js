@@ -8,6 +8,7 @@
  * pager.js   moving between pages
  * field.js   the contour lines behind the title
  * cursor.js  the lens cursor
+ * menu.js    the page list behind the menu button on phones
  */
 
 const ROOT = new URL('../', import.meta.url);
@@ -16,8 +17,8 @@ const V = new URL(import.meta.url).search;
 const COMPONENTS = new URL('components/', ROOT).href;
 const load = name => import(new URL(`${name}.js${V}`, import.meta.url).href);
 
-const [{ setup }, { pager }, { field }, { cursor }, pieces] = await Promise.all([
-  load('pages'), load('pager'), load('field'), load('cursor'),
+const [{ setup }, { pager }, { field }, { cursor }, { menu }, pieces] = await Promise.all([
+  load('pages'), load('pager'), load('field'), load('cursor'), load('menu'),
   fetch(new URL(`pieces.json${V}`, ROOT)).then(r => r.json()),
 ]);
 const { renderIndexItem, renderPiece, copyEmbed } = setup({ components: COMPONENTS, version: V });
@@ -38,6 +39,7 @@ const built = pieces.map((piece, i) => {
 /* ring order: index, then newest first, back round to 01 */
 const ring = [{ page: home, label: 'Index' }, ...built.slice().reverse()];
 pager(ring.map(r => r.page), ring.map(r => r.label));
+menu(ring.map(r => r.page), ring.map(r => r.label));
 
 area.addEventListener('click', e => {
   const button = e.target.closest('button[data-copy]');

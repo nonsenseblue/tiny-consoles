@@ -58,10 +58,16 @@ export function pager(pages, labels) {
     if (e.key === 'ArrowLeft') step(-1);
   });
 
-  /* trackpad: a sideways swipe turns one page */
-  let acc = 0, locked = false;
+  /* trackpad: a sideways swipe turns one page.
+     Each gesture picks its direction from its first movement and keeps it until the fingers
+     (and the momentum after them) stop, so a sideways swipe never scrolls the page up or down. */
+  let acc = 0, locked = false, axis = null, idle = 0;
   addEventListener('wheel', e => {
-    if (Math.abs(e.deltaX) < Math.abs(e.deltaY) * 1.2) return;
+    if (e.ctrlKey) return;
+    if (!axis) axis = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? 'x' : 'y';
+    clearTimeout(idle);
+    idle = setTimeout(() => { axis = null; acc = 0; }, 200);
+    if (axis === 'y') return;
     e.preventDefault();
     if (locked) return;
     acc += e.deltaX;
@@ -83,10 +89,12 @@ export function pager(pages, labels) {
     if (!mode && Math.hypot(mx, my) > 10) mode = Math.abs(mx) > Math.abs(my) ? 'x' : 'y';
     if (mode !== 'x') return;
     e.preventDefault();
+    area.classList.add('sliding');
     dx = mx;
     pages.forEach(p => { p.classList.add('still'); p.classList.remove('away'); p.style.setProperty('--drag', `${dx}px`); });
   }, { passive: false });
   area.addEventListener('touchend', () => {
+    area.classList.remove('sliding');
     if (mode !== 'x') return;
     const fast = Math.abs(dx) / (performance.now() - t0) > 0.4;
     pages.forEach(p => p.style.setProperty('--drag', '0px'));

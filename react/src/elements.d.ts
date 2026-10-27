@@ -2,7 +2,7 @@ import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 
 type PieceElement = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
-// the four custom elements, so they can be written as JSX tags
+// the custom elements, so they can be written as JSX tags
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
@@ -10,6 +10,7 @@ declare module 'react' {
       'deep-space': PieceElement;
       'soundings-board': PieceElement;
       'rerun-board': PieceElement;
+      'lost-and-found': PieceElement;
     }
   }
 }

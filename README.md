@@ -71,6 +71,21 @@ Design notes: [`components/rerun-board/DESIGN.md`](components/rerun-board/DESIGN
 
 <br>
 
+## 05 · `<lost-and-found>`
+
+<a href="https://nonsenseblue.github.io/tiny-consoles/#lost-and-found"><img src="components/lost-and-found/assets/preview.webp" alt="lost-and-found: four sheets from a lost property register lying on a desk" width="100%"></a>
+
+Four sheets from the register of an imagined lost property office, left on a desk. One by one, what was written into them types itself in, the highlighter goes across and the stamp comes down.
+
+```html
+<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/lost-and-found/src/lost-and-found.js"></script>
+<lost-and-found></lost-and-found>
+```
+
+Design notes: [`components/lost-and-found/DESIGN.md`](components/lost-and-found/DESIGN.md)
+
+<br>
+
 ## Use with React
 
 Every piece also comes as a React component. They render the same Web Components, so both stay in step.
@@ -80,7 +95,7 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound } from 'tiny-consoles/react';
 
 export default function Page() {
   return <RerunBoard style={{ maxWidth: 1080 }} />;

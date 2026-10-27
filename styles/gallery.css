@@ -40,24 +40,60 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 12px;
 }
 .bar .grid { height: 100%; display: flex; align-items: center; }
-.bar .c1 { margin-right: auto; font-weight: 500; }
-.bar .brand { display: inline-flex; align-items: center; gap: 9px; }
-.bar .mark { width: 17px; height: 17px; flex: none; }
-.bar .c3 { display: flex; align-items: center; gap: 14px; }
+.bar .c1 { margin-right: auto; font-weight: 500; font-size: 16px; }   /* the name is the larger voice in the bar; the page controls stay small */
+.bar .brand { display: inline-flex; align-items: center; gap: 10px; }
+.bar .mark { width: 21px; height: 21px; flex: none; }
+.bar .c3 { display: flex; align-items: center; gap: 18px; }   /* Prev, where you are, Next */
 .bar #where { text-align: center; color: var(--muted); }
 .bar { line-height: 1; }
-.bar .c3 a, .bar .c3 button { display: flex; align-items: center; height: 20px; }
-.bar .c3 button { padding: 0 4px; }
+.bar .c3 a, .bar .c3 button { display: flex; align-items: center; height: 28px; }
+.bar .c3 button { padding: 0; color: var(--ink); }
 .bar .c3 svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 720px) {
   .bar .c1 { grid-column: 1 / 3; } .bar .c3 { grid-column: 3 / 5; }
   /* on phones the bar sits next to 15px body text, so it grows to match */
-  .bar { font-size: 14.5px; }
-  .bar .mark { width: 19px; height: 19px; }
-  .bar .c3 { gap: 10px; }
-  .bar .c3 button { padding: 8px 6px; height: auto; }
+  :root { --bar: 64px; }
+  .bar { font-size: 18px; }
+  .bar .mark { width: 23px; height: 23px; }
+  .bar .brand { gap: 11px; }
+  .bar .c1 { white-space: nowrap; font-size: 18px; }
+  .bar .c3 { display: none; }   /* phones use the menu button instead */
   .bar .c3 svg { width: 7px; height: 12px; }
 }
+
+/* ---------- menu: phones only, a button in the bar and a full page list behind it ---------- */
+.menu-btn, .menu { display: none; }
+@media (max-width: 720px) {
+  /* three equal lines on whole pixels, so none of them renders thicker than the others */
+  .menu-btn { display: block; position: relative; width: 40px; height: 40px; margin: 0 -10px 0 auto; }
+  .menu-btn i { position: absolute; left: 9px; width: 22px; height: 2px; border-radius: 1px; background: currentColor; transition: transform .35s var(--ease), opacity .2s ease; }
+  .menu-btn i:nth-child(1) { top: 11px; } .menu-btn i:nth-child(2) { top: 18px; } .menu-btn i:nth-child(3) { top: 25px; }
+  .menu-btn[aria-expanded="true"] i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .menu { position: fixed; inset: var(--bar) 0 0; z-index: 9; background: var(--paper); padding-top: 12px; overflow-y: auto;
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility 0s .3s; }
+  .menu.open { opacity: 1; visibility: visible; transition: opacity .3s ease; }
+  .menu { display: flex; flex-direction: column; }
+  .menu .wrap { position: relative; z-index: 1; }
+  .menu ol { list-style: none; padding-top: 22px; background: var(--trace); }   /* the same hand-drawn trace as the index and plates */
+  .menu canvas { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 46%; pointer-events: none; }
+  .menu a { display: flex; align-items: baseline; gap: 12px; padding: 11px 0; font-size: 17px; letter-spacing: -0.01em; color: var(--muted); }
+  .menu a span { flex: none; width: 22px; font-size: 12px; letter-spacing: 0; font-feature-settings: "tnum" 1; }
+  .menu a[aria-current] { color: var(--ink); }
+  /* the way home is a button, set apart from the numbered pieces below it */
+  .menu li:first-child { margin-bottom: 10px; }
+  .menu li:first-child a { display: inline-flex; padding: 7px 18px; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; font-size: 15px; }
+  .menu li:first-child a span { display: none; }
+  .menu li:first-child a[aria-current] { border-color: var(--ink); }
+  .menu li:first-child a[aria-current]::after { content: none; }
+  .menu a[aria-current]::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-left: auto; align-self: center; }
+  .menu.open a { animation: menu-in .5s var(--ease) both; }
+  .menu.open li:nth-child(2) a { animation-delay: .03s; } .menu.open li:nth-child(3) a { animation-delay: .06s; }
+  .menu.open li:nth-child(4) a { animation-delay: .09s; } .menu.open li:nth-child(5) a { animation-delay: .12s; } .menu.open li:nth-child(n+6) a { animation-delay: .15s; }
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .menu.open a { animation: none; } }
 
 /* ---------- pager: every page fills the view and slides sideways ---------- */
 .pager { position: fixed; inset: var(--bar) 0 0; overflow: hidden; touch-action: pan-y; }
@@ -70,6 +106,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   will-change: transform;
 }
 .page.still { transition: none; }
+/* while a finger drags the pages sideways, they cannot scroll up or down */
+.pager.sliding .page { overflow-y: hidden; }
 .page.away { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .page { transition: none; } }
 
@@ -87,7 +125,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .guides { display: none; }
 }
 #field { position: absolute; left: 0; top: 0; width: 100%; height: 60%; display: block; pointer-events: none; }
-.home-in { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100%; padding-top: 56px; padding-bottom: clamp(48px, 12vh, 120px); }
+.home-in { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100%; padding-top: 56px; padding-bottom: clamp(32px, 6vh, 56px); }
 /* on phones the title sits lower so the contour field has its own space above it */
 @media (max-width: 720px) { .home-in { padding-top: 30vh; padding-bottom: calc(36px + env(safe-area-inset-bottom)); } }
 /* phones: the piece pages also get room below their last line */
@@ -117,7 +155,7 @@ h1 {
 @media (max-width: 960px) { .entry { grid-column: span 6; } }
 @media (max-width: 720px) { .entry { grid-column: span 4; } }
 
-.colophon { margin-top: 64px; padding: 0; font-size: 11px; color: var(--muted); row-gap: 6px; }
+.colophon { margin-top: clamp(64px, 13vh, 130px); padding: 0; font-size: 11px; color: var(--muted); row-gap: 6px; }
 .colophon > div:nth-child(1) { grid-column: 1 / 5; }
 .colophon > div:nth-child(2) { grid-column: 5 / 9; }
 .colophon > div:nth-child(3) { grid-column: 9 / 13; text-align: right; }
@@ -135,6 +173,8 @@ h1 {
 .piece .wrap { display: flex; flex-direction: column; min-height: 100%; padding-top: 24px; padding-bottom: 24px; }
 .piece .stage { width: 100%; }
 .piece .foot { margin-top: auto; padding-top: 24px; }
+/* on wide screens each piece sits in the middle of the space between its plate and its caption */
+@media (min-width: 721px) { .piece .stage { margin-top: auto; } }
 .plate { padding-top: 28px; margin-bottom: 32px; align-items: start; }
 /* every column starts on the same line: the top of the capitals */
 .plate > * { text-box: trim-start cap alphabetic; }
@@ -147,6 +187,7 @@ h2 .name { font-size: 20px; color: var(--muted); }
 .chips li { border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 3px 10px; line-height: 1.4; white-space: nowrap; }
 @media (max-width: 720px) {
   h2 { grid-column: 1 / 5; }
+  h2 .lead { font-size: 18px; } h2 .name { font-size: 15px; }   /* phones: the title stays above the text without shouting over it */
   .plate p { grid-column: 1 / 5; margin-top: 14px; }
   .chips { grid-column: 1 / 5; margin-top: 14px; justify-content: flex-start; }
 }
@@ -158,7 +199,13 @@ h2 .name { font-size: 20px; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }
 .use { grid-column: 6 / 13; display: flex; align-items: flex-start; gap: 20px; }
 .use pre { flex: 1; min-width: 0; overflow-x: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; color: var(--muted); }
-.use button { flex: none; font-size: 12px; color: var(--muted); transition: color .25s ease; }
+.use button {
+  flex: none; font-size: 11.5px; line-height: 1.4; color: var(--muted);
+  border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 3px 12px;
+  margin-top: -1px; min-width: 64px; text-align: center;   /* sits on the first line of code, keeps its width when it says Copied */
+  transition: color .25s ease, background-color .25s ease, border-color .25s ease;
+}
+.use button:hover { color: var(--ink); border-color: var(--ink); }
 @media (max-width: 720px) {
   .fig, .use { grid-column: 1 / 5; }
   /* phones: a small header row, "Embed" on the left and Copy on the right, then the code wrapped in full */
@@ -201,4 +248,9 @@ h2 .name { font-size: 20px; color: var(--muted); }
     will-change: transform;
   }
   .cursor.hidden { opacity: 0; }
+  /* over a picture: a magnifier, the picture under it shown larger (set by cursor.js) */
+  .cursor.loupe {
+    background-color: var(--line); background-repeat: no-repeat; mix-blend-mode: normal;
+    box-shadow: 0 1px 2px rgba(0,0,0,.18), 0 4px 14px rgba(0,0,0,.16);
+  }
 }
