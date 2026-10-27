@@ -13,9 +13,9 @@ Each one is a Web Component you can drop into any page with a single tag.
 
 ## 01 · `<soft-grain>`
 
-<a href="https://nonsenseblue.github.io/tiny-consoles/#soft-grain"><img src="components/soft-grain/assets/preview.webp" alt="soft-grain: six grainy gradient covers with fine line patterns" width="100%"></a>
+<a href="https://nonsenseblue.github.io/tiny-consoles/#soft-grain"><img src="components/soft-grain/assets/preview.webp" alt="soft-grain: six record sleeves, each grainy gradient cut into its own shape" width="100%"></a>
 
-Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.
+Six record sleeves from an imagined label, Slow Weather Records. Each grainy gradient is cut into its own shape, a flower, an arch, the sea, moss, a record, rain on iron, and its fine lines draw themselves in and ripple slowly, all six at once.
 
 ```html
 <script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/soft-grain/src/soft-grain.js"></script>

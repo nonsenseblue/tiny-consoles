@@ -1,14 +1,15 @@
 [
   {
     "tag": "soft-grain",
-    "text": "Six grainy gradient covers. Fine line patterns draw themselves in, a slow brightness wave travels along them, and on hover the motion ripples outward line by line.",
+    "text": "Six record sleeves from an imagined label, Slow Weather Records. Each grainy gradient is cut into its own shape, and its fine lines draw themselves in and ripple slowly, all six at once.",
     "chips": [
       "grain",
-      "gradient",
+      "record sleeve",
       "line art",
       "ripple"
     ],
-    "hint": "Hover a cover and the lines ripple out from the cursor."
+    "hint": "Hover a sleeve and its lines follow the cursor.",
+    "about": "Six sleeves for a quiet label."
   },
   {
     "tag": "deep-space",

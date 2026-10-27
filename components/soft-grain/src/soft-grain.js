@@ -1,7 +1,9 @@
 /**
  * <soft-grain> · tiny-consoles
- * Six grainy gradient covers. Fine line patterns draw themselves in,
- * breathe slowly, and ripple outward line by line from the cursor.
+ * Six record sleeves from Slow Weather Records, an imagined label. On each, a grainy gradient
+ * is cut into its own shape: a flower, an arch, the sea, moss, a record, rain on iron.
+ * Fine line patterns draw themselves in, breathe slowly, and ripple outward line by line,
+ * all six at once while idle, and from the cursor when it is over a sleeve.
  *
  * Usage:
  *   <script type="module" src="components/soft-grain/src/soft-grain.js"></script>
@@ -16,23 +18,65 @@
 /* Styles live next to this file in soft-grain.css; resolved from this file's own URL so it works anywhere it is embedded */
 /* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
 const STYLE = new URL('./soft-grain.css', import.meta.url).href + new URL(import.meta.url).search;
+const FONT = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap';
 
 function run(root) {
   /* ---------- data: one adjacent-hue family per card ---------- */
   const CARDS = [
-    { lines: ['Slow Light', 'in Bloom'],  top: '#efe4f3', bottom: '#d6884c',
-      blobs: ['#c98bd6', '#ee9fbf', '#f1a86f', '#e6b247'], pattern: 'rays' },
-    { lines: ['Dust and', 'Driftwood'],   top: '#d3dbe2', bottom: '#4b3628',
-      blobs: ['#9fb0c0', '#8e8b87', '#76563f', '#3e2a1d'], pattern: 'dots' },
-    { lines: ['Under', 'Deep Water'],     top: '#dbe6ef', bottom: '#0e2747',
-      blobs: ['#adc5d9', '#6d93ba', '#2c5a8c', '#122f57'], pattern: 'wave' },
-    { lines: ['Moss', 'and Mist'],        top: '#d8e4e8', bottom: '#1d382f',
-      blobs: ['#a8c4cc', '#7ca7a2', '#3f6e5f', '#21423a'], pattern: 'contour' },
-    { lines: ['Lavender', 'Midnight'],    top: '#e8e1f5', bottom: '#20183d',
-      blobs: ['#c6b6ea', '#9b86d3', '#5c479b', '#2c205a'], pattern: 'lens' },
-    { lines: ['Rust', 'Weather'],         top: '#e1e5e8', bottom: '#6b2819',
-      blobs: ['#bfc8ce', '#c99c8b', '#ab5639', '#7b2d1c'], pattern: null },
+    { title: 'Slow Light in Bloom', no: 'SWR-001 · LP', top: '#efe4f3', bottom: '#d6884c',
+      blobs: ['#c98bd6', '#ee9fbf', '#f1a86f', '#e6b247'], pattern: 'rays', full: true,
+      cut: 'left:30px;top:-110px;width:440px;height:440px', clip: 'bloom',
+      at: 'left:16px;bottom:44px', meta: 'left:16px;bottom:14px' },
+    { title: 'Dust and<br>Driftwood', no: 'SWR-002 · LP', top: '#d3dbe2', bottom: '#4b3628',
+      blobs: ['#9fb0c0', '#8e8b87', '#76563f', '#3e2a1d'], pattern: 'dots', full: true,
+      cut: 'left:150px;top:40px;width:180px;height:320px;border-radius:90px 90px 0 0',
+      at: 'left:16px;top:16px', meta: 'left:16px;bottom:14px' },
+    { title: 'Under Deep Water', no: 'SWR-003 · 2LP', top: '#dbe6ef', bottom: '#0e2747',
+      blobs: ['#adc5d9', '#6d93ba', '#2c5a8c', '#122f57'], pattern: 'wave',
+      cut: 'left:-60px;top:-60px;width:480px;height:480px', sticker: true,
+      at: 'left:30px;bottom:52px', meta: 'left:30px;bottom:28px' },
+    { title: 'Moss and Mist', no: 'SWR-004 · EP', top: '#d8e4e8', bottom: '#1d382f',
+      blobs: ['#a8c4cc', '#7ca7a2', '#3f6e5f', '#21423a'], pattern: 'contour', full: true,
+      cut: 'left:-50px;top:10px;width:340px;height:380px', clip: 'blob',
+      at: 'right:16px;top:16px;text-align:right', meta: 'right:16px;bottom:14px;text-align:right' },
+    { title: 'Lavender Midnight', no: 'SWR-005 · LP', top: '#e8e1f5', bottom: '#20183d',
+      blobs: ['#c6b6ea', '#9b86d3', '#5c479b', '#2c205a'], pattern: 'lens', full: true,
+      cut: 'left:30px;top:56px;width:250px;height:250px;border-radius:50%',
+      at: 'left:16px;bottom:16px', meta: 'right:16px;top:18px;text-align:right' },
+    { title: 'Rust Weather', no: 'SWR-006 · LP', top: '#e1e5e8', bottom: '#6b2819',
+      blobs: ['#bfc8ce', '#c99c8b', '#ab5639', '#7b2d1c'], pattern: null,
+      cut: 'left:0;top:0;width:360px;height:360px', clip: 'rain',
+      at: 'left:16px;bottom:44px', meta: 'left:16px;bottom:14px' },
   ];
+
+  /* ---------- the shapes the covers are cut into, in sleeve units (a sleeve is 360 across) ---------- */
+  const CLIPS = {
+    /* eight rounded petals around a small heart */
+    bloom() {
+      const cx = 220, cy = 220, n = 8, R = 214, r0 = 67;
+      let d = '';
+      for (let k = 0; k < n; k++) {
+        const a = k / n * Math.PI * 2 - Math.PI / 2, a1 = a - Math.PI / n * 0.92, a2 = a + Math.PI / n * 0.92;
+        const P = (ang, r) => `${(cx + Math.cos(ang) * r).toFixed(1)},${(cy + Math.sin(ang) * r).toFixed(1)}`;
+        d += `${k ? ' L' : 'M'}${P(a1, r0)} C${P(a - 0.32, R * 1.12)} ${P(a + 0.32, R * 1.12)} ${P(a2, r0)}`;
+      }
+      return d + ' Z';
+    },
+    /* a soft, lopsided patch of moss */
+    blob() {
+      let d = '';
+      for (let k = 0; k <= 64; k++) {
+        const a = k / 64 * Math.PI * 2, r = 140 + Math.sin(a * 3 + 1) * 16 + Math.sin(a * 5) * 9;
+        d += `${k ? ' L' : 'M'}${(165 + Math.cos(a) * r).toFixed(1)},${(190 + Math.sin(a) * r * 1.12).toFixed(1)}`;
+      }
+      return d + ' Z';
+    },
+    /* rain running down rusted iron: bars of uneven length, rounded at the foot */
+    rain() {
+      return [[150, 26, 250], [184, 22, 300], [214, 30, 214], [252, 18, 330], [278, 34, 270], [320, 22, 224]]
+        .map(([x, w, h]) => `M${x},0 L${x + w},0 L${x + w},${h - w / 2} A${w / 2},${w / 2} 0 0 1 ${x},${h - w / 2} Z`).join(' ');
+    },
+  };
 
   /* blob layout inside the (inset -12%) blob layer: corners and edges */
   const SLOTS = [
@@ -177,10 +221,25 @@ function run(root) {
       pattern +
       `<div class="shade" aria-hidden="true"></div>` +
       `<div class="glow" aria-hidden="true"></div>` +
-      `<canvas class="noise" aria-hidden="true"></canvas>` +
-      `<h2 class="title">${c.lines.map(l => `<span>${l}</span>`).join('')}</h2>`;
-    wall.appendChild(card);
+      `<canvas class="noise" aria-hidden="true"></canvas>`;
+    /* the full patterns keep their lines right into the middle; the sea keeps its soft, misty centre */
+    if (c.full) card.classList.add('full');
+
+    const sleeve = document.createElement('article');
+    sleeve.className = 'sleeve';
+    sleeve.innerHTML =
+      `<div class="stage"><div class="cut" style="${c.cut}${c.clip ? `;clip-path:path('${CLIPS[c.clip]()}')` : ''}"></div>` +
+      (c.sticker ? '<div class="sticker" aria-hidden="true"></div>' : '') +
+      `<h2 class="title" style="${c.at}">${c.title}</h2>` +
+      `<p class="meta" style="${c.meta}">Slow Weather Records<br>${c.no}</p></div>`;
+    sleeve.querySelector('.cut').appendChild(card);
+    wall.appendChild(sleeve);
   }
+  const sleeves = [...wall.querySelectorAll('.sleeve')];
+  /* every sleeve is drawn at 360 units and scaled to its cell */
+  const fit = () => sleeves.forEach(sl => sl.style.setProperty('--k', sl.getBoundingClientRect().width / 360));
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(wall);
+  fit();
   const cards = [...wall.querySelectorAll('.card')];
 
   /* ---------- grain: 128x128 grayscale tile, 1 noise px = 1 device px ---------- */
@@ -237,6 +296,7 @@ function run(root) {
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const resets = [];
+  const drifters = [];
   const DELAY_PER_UNIT = 11;   /* ms of lag per viewBox unit of distance from the cursor */
   const SHIFT = 2.6;           /* max line shift, viewBox units */
   const sampleAt = (hist, t) => {
@@ -335,24 +395,31 @@ function run(root) {
       if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
     };
 
-    card.addEventListener('pointermove', e => {
-      if (reduce.matches) return;
-      const r = card.getBoundingClientRect();
-      const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
+    /* aim the pattern at a point on the card (u, v in 0..1): from the cursor, or from the slow idle drift */
+    const aim = (u, v) => {
       const nx = Math.min(1, Math.max(-1, u * 2 - 1));
       const ny = Math.min(1, Math.max(-1, v * 2 - 1));
       sx.t = nx; sy.t = ny;
-      /* cursor in pattern coordinates (svg spans -5%..105% of the card) */
+      /* the point in pattern coordinates (svg spans -5%..105% of the card) */
       measure((u * 100 + 5) / 1.1, (v * 100 + 5) / 1.1);
       push(nx, ny, 1);
-      card.classList.add('is-hover');
       kick();
+    };
+    let hovering = false;
+    card.addEventListener('pointermove', e => {
+      if (reduce.matches) return;
+      const r = card.getBoundingClientRect();
+      hovering = true;
+      card.classList.add('is-hover');
+      aim((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
     });
     card.addEventListener('pointerleave', () => {
-      sx.t = sy.t = 0;
-      push(0, 0, 0);   /* the return also ripples outward from where the cursor left */
+      hovering = false;
       card.classList.remove('is-hover');
-      if (!reduce.matches) kick();
+    });
+    drifters.push((t, i) => {
+      if (hovering) return;
+      aim(0.5 + 0.38 * Math.sin(t * 0.45 + i * 1.7), 0.5 + 0.38 * Math.sin(t * 0.31 + i * 2.3 + 1));
     });
 
     resets.push(() => {
@@ -366,12 +433,29 @@ function run(root) {
   });
 
   reduce.addEventListener('change', () => { if (reduce.matches) resets.forEach(fn => fn()); });
+
+  /* idle: once the lines are drawn, all six sleeves breathe together, each on its own slow path.
+     Only while the wall is on screen, and never with reduced motion. */
+  let onScreen = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }).observe(wall);
+  let t0 = 0;
+  const drift = now => {
+    if (!t0) t0 = now;
+    if (onScreen && !reduce.matches && document.visibilityState === 'visible') {
+      const t = (now - t0) / 1000;
+      drifters.forEach((fn, i) => fn(t, i));
+    }
+    setTimeout(() => requestAnimationFrame(drift), 66);
+  };
+  setTimeout(() => requestAnimationFrame(drift), 3400);
 }
 
 class SoftGrain extends HTMLElement {
   connectedCallback() {
     if (this.shadowRoot) return;
     const root = this.attachShadow({ mode: 'open' });
+    /* the titles' serif lives in the document so the shadow root can use it */
+    if (!document.querySelector(`link[href="${FONT}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${FONT}">`);
     root.innerHTML = `<link rel="stylesheet" href="${STYLE}"><div class="wall" id="wall" part="wall" style="visibility:hidden"></div>`;
     /* start only once the stylesheet is in, so the cards measure their real size and never flash unstyled */
     const link = root.querySelector('link');

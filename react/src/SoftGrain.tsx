@@ -5,7 +5,7 @@ import { useEffect, type HTMLAttributes } from 'react';
 export type SoftGrainProps = HTMLAttributes<HTMLElement>;
 
 /**
- * Six grainy gradient covers with fine line patterns.
+ * Six record sleeves for an imagined label, each grainy gradient cut into its own shape.
  * Renders the <soft-grain> Web Component; the piece itself lives in components/soft-grain/.
  */
 export function SoftGrain(props: SoftGrainProps) {
