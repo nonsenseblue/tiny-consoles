@@ -17,7 +17,7 @@ export function setup({ components, version }) {
     item.querySelector('img').src = `${folder(piece.tag)}assets/thumb.webp${version}`;
     item.querySelector('.n').textContent = num;
     item.querySelector('b').textContent = piece.tag;
-    item.querySelector('.about').textContent = firstSentence(piece.text);
+    item.querySelector('.about').textContent = piece.about || firstSentence(piece.text);   /* a short line for the index; the plate keeps the full text */
     item.querySelector('.made').textContent = piece.chips.join(', ');
     return item;
   }
