@@ -217,3 +217,12 @@ canvas[data-kind].shown { clip-path: inset(0 0 0 0); }
   .v mark, .xref .on, .idx tr.hl b > span, .book tr.hl { background-size: 100% 115% !important; transition: none; }
   .sheet { transition: none; }
 }
+
+/* opened full size, the punched holes go right through the sheet */
+.sheet.zopen .card {
+  -webkit-mask: radial-gradient(circle at 24.5px 197px, #000 6.5px, transparent 7px), radial-gradient(circle at 24.5px 380px, #000 6.5px, transparent 7px), radial-gradient(circle at 24.5px 563px, #000 6.5px, transparent 7px), linear-gradient(#000, #000);
+  -webkit-mask-composite: xor;
+  mask: radial-gradient(circle at 24.5px 197px, #000 6.5px, transparent 7px), radial-gradient(circle at 24.5px 380px, #000 6.5px, transparent 7px), radial-gradient(circle at 24.5px 563px, #000 6.5px, transparent 7px), linear-gradient(#000, #000);
+  mask-composite: exclude;
+}
+.sheet.zopen .holes b { background: none; box-shadow: none; }

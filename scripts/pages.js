@@ -6,6 +6,8 @@
 export function setup({ components, version }) {
   /* every piece lives in its own folder: components/<tag>/ with src/ for code and assets/ for images */
   const folder = tag => `${components}${tag}/`;
+  /* what people read: the tag with spaces, so soundings-board shows as soundings board */
+  const title = tag => tag.replace(/-/g, ' ');
   const embedCode = tag =>
     `<script type="module" src="${folder(tag)}src/${tag}.js"></script>\n<${tag}></${tag}>`;
   const firstSentence = text => (text.match(/^.*?[.!?](\s|$)/) || [text])[0].trim();
@@ -16,7 +18,7 @@ export function setup({ components, version }) {
     item.dataset.go = piece.tag;
     item.querySelector('img').src = `${folder(piece.tag)}assets/thumb.webp${version}`;
     item.querySelector('.n').textContent = num;
-    item.querySelector('b').textContent = piece.tag;
+    item.querySelector('b').textContent = title(piece.tag);
     item.querySelector('.about').textContent = piece.about || firstSentence(piece.text);   /* a short line for the index; the plate keeps the full text */
     item.querySelector('.made').textContent = piece.chips.join(', ');
     return item;
@@ -25,7 +27,7 @@ export function setup({ components, version }) {
   function renderPiece(piece, num) {
     const section = document.getElementById('piece').content.firstElementChild.cloneNode(true);
     section.dataset.key = piece.tag;
-    section.setAttribute('aria-label', piece.tag);
+    section.setAttribute('aria-label', title(piece.tag));
 
     /* one line: "Plate 01 /" in ink, the piece name after it in grey */
     const lead = document.createElement('span');
@@ -33,7 +35,7 @@ export function setup({ components, version }) {
     lead.textContent = `Plate ${num} /`;
     const name = document.createElement('span');
     name.className = 'name';
-    name.textContent = piece.tag;
+    name.textContent = title(piece.tag);
     section.querySelector('h2').append(lead, ' ', name);
     section.querySelector('.plate p').textContent = piece.text;
     section.querySelector('.chips').append(...piece.chips.map(text => {
@@ -43,9 +45,10 @@ export function setup({ components, version }) {
     }));
     const stage = section.querySelector('.stage');
     stage.append(document.createElement(piece.tag));
-    /* wide pieces can say how tall they are for their width, so they still fit on one screen */
+    /* pieces can say how tall they are for their width, and how wide they may grow or shrink, so they still fit on one screen */
     if (piece.ratio) stage.style.setProperty('--ratio', piece.ratio);
     if (piece.max) stage.style.setProperty('--max', `${piece.max}px`);
+    if (piece.min) stage.style.setProperty('--min', `${piece.min}px`);
 
     const fig = section.querySelector('.fig');
     const label = document.createElement('b');

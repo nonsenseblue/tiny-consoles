@@ -33,7 +33,7 @@ const built = pieces.map((piece, i) => {
   const page = renderPiece(piece, num);
   area.append(page);
   import(`${COMPONENTS}${piece.tag}/src/${piece.tag}.js${V}`);
-  return { page, label: `${num} · ${piece.tag}` };
+  return { page, label: `${num} · ${piece.tag.replace(/-/g, ' ')}` };
 });
 
 /* ring order: index, then newest first, back round to 01 */

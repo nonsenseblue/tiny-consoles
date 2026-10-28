@@ -16,6 +16,91 @@
 /* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
 const STYLE = new URL('./deep-space.css', import.meta.url).href + new URL(import.meta.url).search;
 
+/* ---------- full size: a tile can be lifted out and looked at on its own ----------
+   Click a tile to open it over a dimmed page; Prev, Next, the arrow keys or a swipe go through the others,
+   Esc, Close or a click outside puts it back. The tile itself is moved, so it keeps running.
+   mode 'scale' enlarges the tile as drawn; mode 'resize' gives it more room and lets it lay out again. */
+const ZOOM_CSS = `
+.zoom { margin: auto; padding: 0; border: 0; background: none; overflow: visible; max-width: none; max-height: none; cursor: default; color: #f3f2ef; }
+.zoom::backdrop { background: rgba(18, 17, 16, .8); backdrop-filter: blur(3px); }
+.zoom .zbox { position: relative; }
+.zoom .zopen { position: absolute !important; left: 0 !important; top: 0 !important; margin: 0 !important; transform-origin: 0 0 !important; box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .7); }
+.zoom .zopen.scaled { transform: scale(var(--zoom, 1)) !important; }
+.zoom .zopen.resized { transform: none !important; width: 100% !important; height: 100% !important; }
+.zoom .zcap { margin-top: 14px; font: 500 11px/1.4 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.zoom button { font: 400 13px system-ui, sans-serif; color: inherit; background: none; border: 1px solid rgba(243, 242, 239, .4); border-radius: 999px; padding: 6px 16px; cursor: pointer; transition: padding .25s cubic-bezier(.2,.8,.2,1), border-color .2s; }
+.zoom button:hover, .zoom button:focus-visible { padding: 6px 22px; border-color: rgba(243, 242, 239, .85); outline: none; }
+.zoom .zclose { position: fixed; top: 22px; right: 26px; }
+.zoom .zprev, .zoom .znext { position: fixed; top: 50%; transform: translateY(-50%); }
+.zoom .zprev { left: 26px; } .zoom .znext { right: 26px; }
+@media (max-width: 720px) { .zoom .zprev, .zoom .znext { top: auto; bottom: 22px; transform: none; } }
+.zhold { visibility: hidden; }
+`;
+function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('aria-label') || '', skip = () => false, after = () => {}, ignore = 'a, button, input' } = {}) {
+  if (typeof HTMLDialogElement === 'undefined' || !('showModal' in HTMLDialogElement.prototype)) return null;
+  root.append(Object.assign(document.createElement('style'), { textContent: ZOOM_CSS }));
+  const dialog = document.createElement('dialog');
+  dialog.className = 'zoom';
+  dialog.innerHTML = '<div class="zbox"></div><p class="zcap"></p><button class="zclose" type="button">Close</button><button class="zprev" type="button">Prev</button><button class="znext" type="button">Next</button>';
+  root.append(dialog);
+  const box = dialog.querySelector('.zbox'), cap = dialog.querySelector('.zcap');
+  let open = null, hold = null, size = null;
+
+  const fit = () => {
+    const k = Math.min(innerWidth * .86 / size.w, innerHeight * .78 / size.h);
+    box.style.width = `${size.w * k}px`; box.style.height = `${size.h * k}px`;
+    if (mode === 'scale') open.style.setProperty('--zoom', k);
+    after(open);
+  };
+  const put = () => {
+    hold.replaceWith(open);
+    open.classList.remove('zopen', 'scaled', 'resized');
+    open.style.removeProperty('--zoom'); open.style.removeProperty('width'); open.style.removeProperty('height');
+    const el = open; open = null; after(el);
+  };
+  const show = el => {
+    if (open) put();
+    size = { w: el.offsetWidth, h: el.offsetHeight };
+    hold = document.createElement('div');
+    hold.className = 'zhold';
+    hold.style.cssText = `aspect-ratio:${size.w} / ${size.h}`;
+    el.replaceWith(hold);
+    open = el;
+    el.classList.add('zopen', mode === 'scale' ? 'scaled' : 'resized');
+    if (mode === 'scale') { el.style.width = `${size.w}px`; el.style.height = `${size.h}px`; }
+    box.append(el);
+    cap.textContent = `${items.indexOf(el) + 1} / ${items.length}${label(el) ? ' · ' + label(el) : ''}`;
+    if (!dialog.open) dialog.showModal();
+    fit();
+  };
+
+  dialog.addEventListener('close', () => { if (open) put(); });
+  const step = d => { if (open) { const n = items.length; show(items[(items.indexOf(open) + d + n) % n]); } };
+  dialog.addEventListener('click', e => {
+    if (e.target.closest('.zprev')) return step(-1);
+    if (e.target.closest('.znext')) return step(1);
+    if (e.target === dialog || e.target.closest('.zclose')) dialog.close();
+  });
+  /* keep the gallery's own keys and swipes from turning the page behind */
+  dialog.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+  /* a sideways swipe on a phone goes to the next or previous one */
+  let sx = null;
+  dialog.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  dialog.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); });
+  dialog.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+  dialog.addEventListener('wheel', e => e.stopPropagation());
+  addEventListener('resize', () => { if (open) fit(); });
+  items.forEach(el => el.addEventListener('click', e => {
+    if (open || skip() || e.target.closest(ignore)) return;
+    show(el);
+  }));
+  return { isOpen: el => el === open, scale: () => (open && mode === 'scale' ? parseFloat(open.style.getPropertyValue('--zoom')) : 1) };
+}
+
 function run(root) {
   const TAU = Math.PI * 2;
   const clamp = v => Math.min(1, Math.max(0, v));
@@ -189,6 +274,7 @@ function run(root) {
   }
 
   const resizeAll = () => cards.forEach(size);
+  zoomable(root, cards.map(c => c.el), { label: el => [...el.querySelectorAll('.title span')].map(s => s.textContent).join(' ') });
   if ('ResizeObserver' in window) {
     const ro = new ResizeObserver(() => { resizeAll(); if (reduce.matches) cards.forEach(c => draw(c, 0)); });
     cards.forEach(c => ro.observe(c.el));

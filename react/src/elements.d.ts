@@ -11,6 +11,7 @@ declare module 'react' {
       'soundings-board': PieceElement;
       'rerun-board': PieceElement;
       'lost-and-found': PieceElement;
+      'day-for-night': PieceElement;
     }
   }
 }

@@ -193,7 +193,7 @@ h2 .name { font-size: 20px; color: var(--muted); }
 }
 .stage { margin: 0 auto; max-width: var(--max, 704px); }
 /* on wide screens the pieces shrink with the window height, so a piece page never needs scrolling */
-@media (min-width: 721px) { .stage { max-width: clamp(400px, calc((100dvh - var(--bar) - 320px) / var(--ratio, 0.66)), var(--max, 704px)); } }
+@media (min-width: 721px) { .stage { max-width: clamp(var(--min, 400px), calc((100dvh - var(--bar) - 320px) / var(--ratio, 0.66)), var(--max, 704px)); } }
 .foot { margin-top: 40px; align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }

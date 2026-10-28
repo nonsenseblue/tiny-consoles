@@ -63,5 +63,20 @@
     "hint": "Wait for each sheet to be written and stamped, or press a tab to lift its sheet.",
     "ratio": 0.42,
     "max": 1080
+  },
+  {
+    "tag": "day-for-night",
+    "text": "Four sheets of French New Wave paperwork: a subtitle file, a contact sheet, a page of script and a shooting note. The French on each sheet is what was said; whatever looks through it finds an English line that does not quite agree.",
+    "about": "Subtitles that don’t agree.",
+    "chips": [
+      "new wave",
+      "type",
+      "subtitles",
+      "grain"
+    ],
+    "hint": "Move over a sheet and its lens, frames, viewfinder or note follows you. Click a sheet to see it full size.",
+    "ratio": 1,
+    "max": 440,
+    "min": 320
   }
 ]
