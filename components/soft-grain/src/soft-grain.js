@@ -16,6 +16,7 @@
  */
 
 import { definePiece, onScreen, seeded } from '../../shared/piece.js';
+const STYLE = new URL('./soft-grain.css', import.meta.url).href + new URL(import.meta.url).search;
 
 const FONT = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap';
 
@@ -448,4 +449,4 @@ function run(root) {
   setTimeout(() => requestAnimationFrame(drift), 3400);
 }
 
-definePiece('soft-grain', { here: import.meta.url, font: FONT, markup: '<div class="wall" id="wall" part="wall"></div>', hide: '#wall', run });
+definePiece('soft-grain', { style: STYLE, font: FONT, markup: '<div class="wall" id="wall" part="wall"></div>', hide: '#wall', run });

@@ -16,6 +16,7 @@
 
 import { zoomable } from '../../shared/zoom.js';
 import { definePiece, fitBoard } from '../../shared/piece.js';
+const STYLE = new URL('./lost-and-found.css', import.meta.url).href + new URL(import.meta.url).search;
 
 const FONT = 'https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@500&display=swap';
 
@@ -479,4 +480,4 @@ function run(root, host) {
 
 }
 
-definePiece('lost-and-found', { here: import.meta.url, font: FONT, markup: MARKUP, hide: '.desk', faces: ['10px "Courier Prime"', '700 10px "Courier Prime"', '500 10px Inter'], run });
+definePiece('lost-and-found', { style: STYLE, font: FONT, markup: MARKUP, hide: '.desk', faces: ['10px "Courier Prime"', '700 10px "Courier Prime"', '500 10px Inter'], run });

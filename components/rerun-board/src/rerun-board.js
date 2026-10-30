@@ -15,6 +15,7 @@
  */
 
 import { definePiece, onScreen, seeded } from '../../shared/piece.js';
+const STYLE = new URL('./rerun-board.css', import.meta.url).href + new URL(import.meta.url).search;
 
 const FONT = 'https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap';
 
@@ -200,4 +201,4 @@ function run(root, host) {
   if (reduce) { layout(); loop(performance.now()); }
 }
 
-definePiece('rerun-board', { here: import.meta.url, font: FONT, markup: MARKUP, hide: '.board', faces: ['40px "Instrument Serif"'], run });
+definePiece('rerun-board', { style: STYLE, font: FONT, markup: MARKUP, hide: '.board', faces: ['40px "Instrument Serif"'], run });

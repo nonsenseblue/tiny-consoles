@@ -11,12 +11,10 @@
  * Code: MIT · nonsenseblue
  */
 
-/* here is the piece's own import.meta.url: its stylesheet is found next to it,
-   and the ?v= stamp the deploy puts on the script carries over, so both always update together.
+/* style is the piece's stylesheet URL, built in the piece's own file so bundlers can see the asset.
    faces is a list of font specs, or [spec, text] when only some letters are needed. */
-export function definePiece(tag, { here, font = null, markup = '', hide = null, faces = [], run }) {
+export function definePiece(tag, { style, font = null, markup = '', hide = null, faces = [], run }) {
   if (customElements.get(tag)) return;
-  const style = new URL(`./${tag}.css`, here).href + new URL(here).search;
   customElements.define(tag, class extends HTMLElement {
     connectedCallback() {
       if (this.shadowRoot) return;

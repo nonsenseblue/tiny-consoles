@@ -14,6 +14,7 @@
 
 import { zoomable } from '../../shared/zoom.js';
 import { definePiece } from '../../shared/piece.js';
+const STYLE = new URL('./deep-space.css', import.meta.url).href + new URL(import.meta.url).search;
 
 
 function run(root) {
@@ -221,4 +222,4 @@ function run(root) {
   });
 }
 
-definePiece('deep-space', { here: import.meta.url, markup: '<div class="wall" id="wall" part="wall"></div>', hide: '#wall', run });
+definePiece('deep-space', { style: STYLE, markup: '<div class="wall" id="wall" part="wall"></div>', hide: '#wall', run });

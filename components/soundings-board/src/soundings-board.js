@@ -15,6 +15,7 @@
  */
 
 import { definePiece, seeded } from '../../shared/piece.js';
+const STYLE = new URL('./soundings-board.css', import.meta.url).href + new URL(import.meta.url).search;
 
 
 const MARKUP = `
@@ -284,4 +285,4 @@ function run(root, host) {
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { ro.observe(host); io.observe(host); });
 }
 
-definePiece('soundings-board', { here: import.meta.url, markup: MARKUP, hide: '.board', run });
+definePiece('soundings-board', { style: STYLE, markup: MARKUP, hide: '.board', run });

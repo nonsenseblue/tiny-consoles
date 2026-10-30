@@ -17,6 +17,7 @@
 
 import { zoomable } from '../../shared/zoom.js';
 import { definePiece, fitBoard, onScreen, seeded } from '../../shared/piece.js';
+const STYLE = new URL('./ma-kasuri.css', import.meta.url).href + new URL(import.meta.url).search;
 
 const FONT = 'https://fonts.googleapis.com/css2?family=Klee+One&family=Shippori+Mincho:wght@500&display=swap';
 const NS = 'http://www.w3.org/2000/svg';
@@ -376,4 +377,4 @@ function run(root, host) {
 
 /* Japanese faces arrive in slices; ask for the letters actually used */
 const USED = [...new Set(CLOTHS.map(c => c.title + c.year + c.said + c.meant + (c.outsider ? '番外' : '海辺の宿')).join(''))].join('');
-definePiece('ma-kasuri', { here: import.meta.url, font: FONT, markup: MARKUP, hide: '.board', faces: [['500 26px "Shippori Mincho"', USED + 'AZ·'], ['400 11px "Klee One"', USED]], run });
+definePiece('ma-kasuri', { style: STYLE, font: FONT, markup: MARKUP, hide: '.board', faces: [['500 26px "Shippori Mincho"', USED + 'AZ·'], ['400 11px "Klee One"', USED]], run });

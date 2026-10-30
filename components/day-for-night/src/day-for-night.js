@@ -16,6 +16,7 @@
 
 import { zoomable } from '../../shared/zoom.js';
 import { definePiece, fitBoard, onScreen } from '../../shared/piece.js';
+const STYLE = new URL('./day-for-night.css', import.meta.url).href + new URL(import.meta.url).search;
 
 const FONT = 'https://fonts.googleapis.com/css2?family=Courier+Prime&family=EB+Garamond:ital@0;1&family=Jost:wght@500&display=swap';
 
@@ -196,7 +197,8 @@ function run(root, host) {
   const frame = now => {
     requestAnimationFrame(frame);
     if (!visible) return;
-    const t = (now - t0) / 1000;
+    /* a frame's timestamp can be older than a click handled just before it; a negative t would index LINES at -1 */
+    const t = Math.max(0, (now - t0) / 1000);
 
     /* 1 · the lens drifts over the lines, or follows the pointer; the cue steps on like playback */
     const p1 = hover.get(srt);
@@ -232,4 +234,4 @@ function run(root, host) {
   requestAnimationFrame(frame);
 }
 
-definePiece('day-for-night', { here: import.meta.url, font: FONT, markup: MARKUP, hide: '.board', faces: ['24px "EB Garamond"', 'italic 17px "EB Garamond"', '12px "Courier Prime"', '500 12px Jost'], run });
+definePiece('day-for-night', { style: STYLE, font: FONT, markup: MARKUP, hide: '.board', faces: ['24px "EB Garamond"', 'italic 17px "EB Garamond"', '12px "Courier Prime"', '500 12px Jost'], run });
