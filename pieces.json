@@ -52,7 +52,7 @@
   },
   {
     "tag": "lost-and-found",
-    "text": "Four sheets from the register of an imagined lost property office, left on a desk. One by one, what was written into them types itself in, the highlighter goes across and the stamp comes down.",
+    "text": "Four sheets from the register of an imagined lost property office, left on a desk. Open one and what was written into it types itself in, the highlighter goes across and the stamp comes down.",
     "about": "Four lost property sheets.",
     "chips": [
       "archive",
@@ -60,7 +60,7 @@
       "dot type",
       "stamp"
     ],
-    "hint": "Wait for each sheet to be written and stamped, or press a tab to lift its sheet.",
+    "hint": "Click a sheet to open it and watch it being written; press a tab to lift its sheet.",
     "ratio": 0.42,
     "max": 1080
   },

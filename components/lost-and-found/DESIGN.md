@@ -10,7 +10,7 @@ description: Four sheets from the register of an imagined lost property office, 
 
 An imagined lost property office at a small station keeps a register: an index of everything it holds, one file per item, a ledger written in order of arrival, and a claim slip for whatever goes home. The piece lays four of those sheets on a desk, slightly askew and overlapping, as if the binder had just been opened.
 
-Each sheet is a printed form with something written into it. The form is there from the start; what was written arrives as if typed, then a highlighter goes over what matters and a stamp comes down. The tone is quiet and a little tender: an office that writes everything down carefully and asks for no names.
+Each sheet is a printed form with something written into it. Opened full size, the form is there from the start; what was written arrives as if typed, then a highlighter goes over what matters and a stamp comes down. The tone is quiet and a little tender: an office that writes everything down carefully and asks for no names.
 
 ## Influences
 
@@ -128,7 +128,7 @@ Small status stamps come down first, then the large stamp, with a short knock th
 
 ### The desk
 
-The sheets are written one after another, slowly. When all four are done the desk rests, then everything is written again. A sheet lifts when the cursor is over it, and its tabs bring it to the top. Nothing runs while the desk is off screen. With reduced motion, the four sheets are shown finished.
+The four sheets lie finished on the desk. Click one and it opens full size and is written again from the start: numbers, entries, highlighter, signature and stamps. Prev and Next go to the other sheets, each written as it opens; closing puts it back finished. A sheet lifts when the cursor is over it, and its tabs bring it to the top. With reduced motion, an opened sheet is shown finished.
 
 ## Do's and Don'ts
 

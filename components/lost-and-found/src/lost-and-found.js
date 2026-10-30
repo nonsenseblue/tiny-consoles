@@ -1,8 +1,8 @@
 /**
  * <lost-and-found> · tiny-consoles
  * Four sheets from the register of an imagined lost property office, left on a desk:
- * the index, one file, the ledger and a claim slip. One sheet at a time comes to the top,
- * what was written into it types itself in, the highlighter goes across, and the stamp comes down.
+ * the index, one file, the ledger and a claim slip. They lie finished on the desk; open one full size
+ * and what was written into it types itself in, the highlighter goes across, and the stamp comes down.
  *
  * Usage:
  *   <script type="module" src="components/lost-and-found/src/lost-and-found.js"></script>
@@ -134,8 +134,6 @@ const LAYOUTS = {
 };
 
 const CHAR = 26, GAP = 70;   /* ms per character, ms between one entry and the next */
-const HOLD = 1400;           /* ms between one sheet and the next */
-const REST = 14000;          /* ms the finished desk stays before it is written again */
 
 /* our own 5x7 dot font */
 const F = {
@@ -552,7 +550,24 @@ function run(root, host) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const desk = root.querySelector('.desk'), stage = root.querySelector('.stage');
   const sheets = [...root.querySelectorAll('.sheet')];
-  zoomable(root, sheets, { ignore: '.tabs, a, button', label: el => ['Index', 'File', 'Ledger', 'Released'][sheets.indexOf(el)] });
+  /* on the desk every sheet is shown finished; opening one full size writes it again from the start */
+  let zoom = null, writing = null, gen = 0;
+  const opened = el => {
+    const i = sheets.indexOf(el), s = states[i];
+    if (!s) return;
+    if (zoom && zoom.isOpen(el)) {
+      if (writing === el) return;
+      writing = el;
+      if (reduce.matches) { done(s); return; }
+      const my = ++gen;
+      blank(s);
+      write(s, () => my === gen).then(() => { if (my === gen) writing = null; });
+    } else {
+      if (writing === el) { gen++; writing = null; }
+      done(s);
+    }
+  };
+  zoom = zoomable(root, sheets, { ignore: '.tabs, a, button', after: opened, label: el => ['Index', 'File', 'Ledger', 'Released'][sheets.indexOf(el)] });
   fill(root);
 
   /* lay the sheets on the desk and scale the desk to the space it has */
@@ -579,28 +594,8 @@ function run(root, host) {
   });
 
   const states = sheets.map(el => prepare(el.querySelector('.card')));
-  if (reduce.matches) { states.forEach(done); return; }
+  states.forEach(done);
 
-  /* only write while the desk is on screen */
-  let visible = false, gen = 0;
-  const seen = () => new Promise(r => { const check = () => visible ? r() : setTimeout(check, 300); check(); });
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(desk);
-
-  (async () => {
-    for (;;) {
-      const my = ++gen, alive = () => my === gen;
-      states.forEach(blank);
-      sheets.forEach(s => s.classList.remove('top'));
-      for (let i = 0; i < states.length; i++) {
-        await seen();
-        sheets.forEach(s => s.classList.remove('top')); sheets[i].classList.add('top');
-        await write(states[i], alive);
-        await wait(HOLD);
-      }
-      sheets.forEach(s => s.classList.remove('top'));
-      await wait(REST);
-    }
-  })();
 }
 
 class LostAndFound extends HTMLElement {
