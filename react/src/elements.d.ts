@@ -12,6 +12,7 @@ declare module 'react' {
       'rerun-board': PieceElement;
       'lost-and-found': PieceElement;
       'day-for-night': PieceElement;
+      'ma-kasuri': PieceElement;
     }
   }
 }

@@ -17,6 +17,10 @@ Pieces that start from a film, a book or a record.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#ma-kasuri"><img src="components/ma-kasuri/assets/thumb.webp" alt="ma-kasuri" width="96"></a></td>
+<td><b>07 · <a href="https://tinyconsoles.vercel.app/#ma-kasuri"><code>&lt;ma-kasuri&gt;</code></a></b><br>Four squares of kasuri cloth for films by Ozu, Naruse and Kore-eda; washed, their labels say what went unsaid.<br><sub>kasuri · film · ma · <a href="components/ma-kasuri/assets/preview.webp">preview</a> · <a href="components/ma-kasuri/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#day-for-night"><img src="components/day-for-night/assets/thumb.webp" alt="day-for-night" width="96"></a></td>
 <td><b>06 · <a href="https://tinyconsoles.vercel.app/#day-for-night"><code>&lt;day-for-night&gt;</code></a></b><br>Four sheets of French New Wave paperwork whose English subtitles do not quite agree.<br><sub>new wave · subtitles · grain · <a href="components/day-for-night/assets/preview.webp">preview</a> · <a href="components/day-for-night/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -60,11 +64,11 @@ Small experiments that stand on their own.
 
 ## Use a piece
 
-Two lines: the script, then the tag. Swap `day-for-night` for any piece above.
+Two lines: the script, then the tag. Swap `ma-kasuri` for any piece above.
 
 ```html
-<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/day-for-night/src/day-for-night.js"></script>
-<day-for-night></day-for-night>
+<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/ma-kasuri/src/ma-kasuri.js"></script>
+<ma-kasuri></ma-kasuri>
 ```
 
 ### With React
@@ -76,10 +80,10 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri } from 'tiny-consoles/react';
 
 export default function Page() {
-  return <DayForNight style={{ maxWidth: 960 }} />;
+  return <MaKasuri style={{ maxWidth: 960 }} />;
 }
 ```
 

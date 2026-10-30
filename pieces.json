@@ -78,5 +78,20 @@
     "ratio": 1,
     "max": 440,
     "min": 320
+  },
+  {
+    "tag": "ma-kasuri",
+    "text": "Four squares of kasuri cloth for films by Ozu, Naruse and Kore-eda, each with a woven label carrying the one line someone said out loud. Washed, the cloth creases and the label rewrites itself into what was meant.",
+    "about": "What goes unsaid, in the wash.",
+    "chips": [
+      "kasuri",
+      "film",
+      "ma",
+      "cloth"
+    ],
+    "hint": "Rest the pointer on a cloth and wait for the wash. Click one to see it full size.",
+    "ratio": 1,
+    "max": 440,
+    "min": 320
   }
 ]

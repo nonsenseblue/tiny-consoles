@@ -1,0 +1,37 @@
+/* <ma-kasuri> · tiny-consoles · loaded by ma-kasuri.js into its shadow root */
+
+:host {
+  display: block;
+  --mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --hand: "Klee One", "Hiragino Maru Gothic ProN", serif;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; margin: 0; }
+
+/* the board: a fixed design size, scaled as one object to the width it is given */
+.board { position: relative; width: 100%; aspect-ratio: var(--w) / var(--h); }
+.stage { position: absolute; left: 0; top: 0; width: calc(var(--w) * 1px); height: calc(var(--h) * 1px); transform-origin: 0 0; transform: scale(var(--k, 1)); }
+
+/* each cloth: a square of woven kasuri, cream until it comes off the loom */
+.sheet {
+  position: absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px);
+  width: 520px; height: 520px; overflow: hidden; background: #ece6d8;
+  transform-origin: 0 0; transition: transform .5s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 16px 34px -20px rgba(0,0,0,.4);
+}
+.sheet svg { display: block; width: 520px; height: 520px; }
+.sheet .cloth { opacity: 0; transition: opacity .8s ease; }
+.sheet.woven .cloth { opacity: 1; }
+.sheet .crease { mix-blend-mode: soft-light; }
+.sheet .tagcrease { mix-blend-mode: multiply; }
+
+/* the woven label */
+.sheet text { fill: #2a2724; }
+.sheet .t { font: 500 26px var(--mincho); letter-spacing: .08em; }
+.sheet .y { font: 500 9px var(--mincho); letter-spacing: .16em; }
+.sheet .l { font: 400 10.5px var(--hand); }
+.sheet .mk { font: 500 6.5px var(--mincho); letter-spacing: .2em; opacity: .75; }
+.sheet .en { font: 500 6.5px var(--mincho); letter-spacing: .14em; }
+
+/* lifting a cloth: on hover it rises a little; a click opens it full size */
+@media (hover: hover) { .board .sheet { cursor: zoom-in; } .board .sheet:hover { z-index: 10; transform: translateY(-6px); } }
