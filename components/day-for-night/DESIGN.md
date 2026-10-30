@@ -128,7 +128,7 @@ The dark note slides slowly over the tiled title, or is carried by the pointer, 
 
 ### Full size
 
-Clicking a sheet opens it over the page; the arrow keys go through the four, Esc or a click outside closes it. With reduced motion, every sheet shows one finished state and nothing moves.
+Clicking a sheet opens it over the page, with notes beside it on the film it comes after, the sheet and what looks through it (below it on a phone). Replay runs the reel again from the start. The arrow keys, Prev and Next go through the four, Esc, Close or a click outside closes it. With reduced motion, every sheet shows one finished state and nothing moves.
 
 ## Do's and Don'ts
 

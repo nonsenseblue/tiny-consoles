@@ -131,7 +131,7 @@ With reduced motion the cloths are woven and stay fresh: the spoken lines only.
 
 ### Full size
 
-Clicking a cloth opens it over the page; the arrow keys, Prev and Next go through the four, Esc or a click outside closes it. The wash works the same there.
+Clicking a cloth opens it over the page, with notes beside it on the film, the cloth and the label (below it on a phone). The cloth starts its wash from the beginning; Replay starts it again. The arrow keys, Prev and Next go through the four, Esc, Close or a click outside closes it.
 
 ## Do's and Don'ts
 
