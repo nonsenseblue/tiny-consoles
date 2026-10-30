@@ -70,24 +70,40 @@ export function field() {
     ctx.stroke();
   };
 
+  /* geo is the current drawing; a relayout swaps it and the sweep carries on with the new one */
+  let geo = null, swept = false, at = '';
   const sweep = () => {
     cancelAnimationFrame(raf);
-    const geo = build();
-    if (reduce) return paint(geo, geo.w);
+    geo = build();
+    if (reduce) { swept = true; return paint(geo, geo.w); }
     const t0 = performance.now(), dur = 3600;
     const frame = now => {
       const t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);
       paint(geo, e * geo.w + (t === 1 ? 1 : 0));
-      if (t < 1) raf = requestAnimationFrame(frame);
+      if (t < 1) raf = requestAnimationFrame(frame); else swept = true;
     };
     raf = requestAnimationFrame(frame);
   };
   sweep();
-  let width = innerWidth, timer;
-  addEventListener('resize', () => {
-    if (innerWidth === width) return;
-    width = innerWidth;
-    clearTimeout(timer);
-    timer = setTimeout(() => { const geo = build(); paint(geo, geo.w); }, 200);
-  });
+
+  /* the title moves once the fonts and the pinned pieces arrive (on a first visit they come after this runs),
+     so measure again whenever it moves, and draw the lines down to where it is now */
+  const where = () => {
+    const h1 = document.querySelector('.home h1'), page = canvas.parentElement;
+    return `${Math.round(h1.getBoundingClientRect().top - page.getBoundingClientRect().top + page.scrollTop)}/${h1.offsetHeight}/${innerWidth}`;
+  };
+  at = where();
+  const relayout = () => {
+    const now = where();
+    if (now === at) return;
+    at = now;
+    geo = build();
+    if (swept) paint(geo, geo.w);   // mid-sweep, the next frame paints the new lines
+  };
+  let timer;
+  const soon = () => { clearTimeout(timer); timer = setTimeout(relayout, 120); };
+  const watch = new ResizeObserver(soon), inner = canvas.parentElement.querySelector('.home-in');
+  if (inner) [inner, ...inner.children].forEach(el => watch.observe(el));
+  if (document.fonts) document.fonts.ready.then(soon);
+  addEventListener('resize', soon);
 }

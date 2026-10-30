@@ -10,7 +10,7 @@ description: Four squares of kasuri cloth for four quiet Japanese films; washed,
 
 Four squares of woven kasuri, one for each of four films about families who do not say things: Naruse's *Meshi* (1951), Ozu's *Sanma no aji* (1962), and Kore-eda's *Aruitemo aruitemo* (2008) and *Umi yori mo mada fukaku* (2016). Each cloth has a woven label stitched on, carrying the one line a character says out loud.
 
-The second layer is time. Leave the pointer on a cloth and it goes through the wash: it creases, the dyes soften toward their own faded colours, the label crumples, and letter by letter the line is rewoven into what was meant and never said. Take the pointer away and it slowly comes back. With nobody's pointer on the board, the cloths take turns.
+The second layer is time. Leave the pointer on a cloth and it goes through the wash: it creases, the dyes soften toward their own faded colours, the label crumples, and letter by letter the line is rewoven into what was meant and never said. Take the pointer away and it slowly comes back. With nobody's pointer on the board, the cloths rest as they are.
 
 The title joins *ma*, the space between things, with *kasuri*. The cream patches left undyed in every cloth are the silences.
 
@@ -127,13 +127,13 @@ Woven tape with heat-cut edges, ends folded under and held by a fine running sti
 
 On hover the cloth creases (a displacement by low noise), soft creases are lit across it, the dyes move toward their faded colours, the label crumples a little less than the cloth, and the line is rewoven one letter at a time, the letter on the loom shown faint.
 
-The label wears with it. Its ink comes off in patches, where a low noise lets go first, and the whole print greys a little; the line that was meant stays readable. The stitch tails are gone by halfway, snipped by whoever wore it, leaving only a short stub; a new label could not have been cut yet. The weft ends grow longer and fray further, and a few more work loose. It takes about four seconds; leaving takes it back in about two. Without a pointer, one cloth at a time goes through the wash and back; a cloth opened full size takes every turn itself.
+The label wears with it. Its ink comes off in patches, where a low noise lets go first, and the whole print greys a little; the line that was meant stays readable. The stitch tails are gone by halfway, snipped by whoever wore it, leaving only a short stub; a new label could not have been cut yet. The weft ends grow longer and fray further, and a few more work loose. It takes about four seconds; leaving takes it back in about two.
 
 With reduced motion the cloths are woven and stay fresh: the spoken lines only.
 
 ### Full size
 
-Clicking a cloth opens it over the page, with notes beside it on the film, the cloth and the label (below it on a phone). The cloth starts its wash from the beginning; Replay starts it again. The arrow keys, Prev and Next go through the four, Esc, Close or a click outside closes it.
+Clicking a cloth opens it over the page, with notes beside it on the film, the cloth and the label (below it on a phone). There it is woven again from bare warp, row by row, its label is stitched on, and it goes through the wash once and stays washed; Replay starts it all again. On the board the four cloths show at once, saved from the loom as images. The arrow keys, Prev and Next go through the four, Esc, Close or a click outside closes it.
 
 ## Do's and Don'ts
 

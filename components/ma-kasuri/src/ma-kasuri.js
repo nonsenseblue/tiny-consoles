@@ -297,14 +297,20 @@ function sheetMarkup(cloth, i) {
       <feComposite in="SourceGraphic" operator="in"/>
     </filter>
     <pattern id="${id}p" width="4" height="1.5" patternUnits="userSpaceOnUse"><rect width="4" height=".6" fill="rgba(240,235,224,.55)"/></pattern>
+    <!-- the warp on the loom before any weft goes in: undyed threads side by side -->
+    <pattern id="${id}wp" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#ece5d6"/><rect width=".7" height="3" fill="rgba(60,50,35,.12)"/></pattern>
+    <!-- how much has been woven: every finished row, then the row the shuttle is crossing -->
+    <clipPath id="${id}r"><rect class="rows" x="-13" y="-13" width="546" height="546"/><rect class="row" x="-13" y="533" width="546" height="${ROW}"/></clipPath>
     <mask id="${id}m" style="mask-type:alpha"><image class="tagimg" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/></mask>
   </defs>
-  <g class="cloth" filter="url(#${id}w)">
+  <rect class="warp" width="520" height="520" fill="url(#${id}wp)"/>
+  <g class="cloth" filter="url(#${id}w)"><g clip-path="url(#${id}r)">
     <image class="fresh" x="-13" y="-13" width="546" height="546" preserveAspectRatio="none"/>
     <image class="faded" x="-13" y="-13" width="546" height="546" preserveAspectRatio="none" opacity="0"/>
-  </g>
+  </g></g>
+  <rect class="shuttle" width="14" height="${ROW}" rx="${ROW / 2}" fill="#f6f1e6" opacity="0"/>
   <rect class="crease" width="520" height="520" filter="url(#${id}c)" opacity="0"/>
-  <g transform="translate(${486 - tw} 352) rotate(-1)">
+  <g class="label" transform="translate(${486 - tw} 352) rotate(-1)">
     <g class="tag" filter="url(#${id}l)">
       <image class="tagimg" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/>
       <image class="tagtails" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/>
@@ -324,6 +330,17 @@ function sheetMarkup(cloth, i) {
 </section>`;
 }
 
+/* the cloths as woven, saved from the loom so they show at once; each path written out so bundlers ship the files */
+const CLOTH_IMAGES = [
+  [new URL('../assets/cloth-1-fresh.webp', import.meta.url).href, new URL('../assets/cloth-1-faded.webp', import.meta.url).href],
+  [new URL('../assets/cloth-2-fresh.webp', import.meta.url).href, new URL('../assets/cloth-2-faded.webp', import.meta.url).href],
+  [new URL('../assets/cloth-3-fresh.webp', import.meta.url).href, new URL('../assets/cloth-3-faded.webp', import.meta.url).href],
+  [new URL('../assets/cloth-4-fresh.webp', import.meta.url).href, new URL('../assets/cloth-4-faded.webp', import.meta.url).href],
+];
+
+/* the weft: rows woven across the cloth when it is opened full size */
+const WEFT = 140, ROW = 546 / WEFT;
+
 const MARKUP = `<div class="board"><div class="stage">${CLOTHS.map(sheetMarkup).join('')}</div></div>`;
 
 /* where the four cloths lie: two by two, as in day-for-night */
@@ -337,12 +354,20 @@ function run(root, host) {
 
   fitBoard(host, board, stage, () => SQUARE, () => sheets.forEach((el, i) => { el.style.setProperty('--x', AT[i][0]); el.style.setProperty('--y', AT[i][1]); }));
 
-  /* a cloth opened full size starts its wash from the beginning; Replay starts it again */
+  /* a cloth opened full size is woven again from bare warp, its label stitched on, then washed once;
+     Replay starts it all again. On the board every cloth is shown finished */
   let zoom = null, openAt = 0, lastOpen = null;
-  const restart = el => { const s = state[sheets.indexOf(el)]; if (!s) return; s.w = 0; draw(s); openAt = performance.now(); };
+  const restart = el => {
+    const s = state[sheets.indexOf(el)]; if (!s) return;
+    s.w = 0; draw(s); openAt = performance.now();
+    if (!reduce.matches) { s.weft = 0; s.tag = 0; loomDraw(s); }
+  };
   const opened = el => {
     if (zoom && zoom.isOpen(el)) { if (lastOpen !== el) { lastOpen = el; restart(el); } }
-    else if (lastOpen === el) lastOpen = null;
+    else {
+      if (lastOpen === el) lastOpen = null;
+      const s = state[sheets.indexOf(el)]; if (s && s.weft !== undefined) { s.weft = 1; s.tag = 1; loomDraw(s); }
+    }
   };
 
   /* each cloth: its parts, its wash (0 fresh → 1 washed), and the letter count already rewoven */
@@ -357,6 +382,7 @@ function run(root, host) {
       faded: q('.faded'), crease: q('.crease'), tagcrease: q('.tagcrease'), line: q('.l'), tagworn: q('.tagworn'), tagtails: q('.tagtails'),
       ink: el.querySelector('feColorMatrix'), woven: q('.woven'),
       warp: [...el.querySelectorAll('feDisplacementMap')],
+      weft: 1, tag: 1, rows: q('.rows'), row: q('.row'), shuttle: q('.shuttle'), label: q('.label'),
     };
   });
 
@@ -390,26 +416,48 @@ function run(root, host) {
     s.warp[1].setAttribute('scale', (5 * s.w).toFixed(2));
     write(s);
   };
+  /* the weaving: rows done so far, the shuttle crossing the next one, left to right then back */
+  const loomDraw = s => {
+    const rows = WEFT * s.weft, done = Math.floor(rows), part = rows - done;
+    s.rows.setAttribute('height', (done * ROW).toFixed(2));
+    s.row.setAttribute('y', (-13 + done * ROW).toFixed(2));
+    const across = done % 2 ? 1 - part : part;   // every other row the shuttle goes back the other way
+    s.row.setAttribute('x', done % 2 ? (-13 + 546 * across).toFixed(1) : '-13');
+    s.row.setAttribute('width', (546 * (done % 2 ? part : part)).toFixed(1));
+    const weaving = s.weft > 0 && s.weft < 1;
+    s.shuttle.setAttribute('opacity', weaving ? '1' : '0');
+    s.shuttle.setAttribute('x', (-13 + 546 * across - 7).toFixed(1));
+    s.shuttle.setAttribute('y', (-13 + done * ROW).toFixed(2));
+    s.label.setAttribute('opacity', s.tag.toFixed(3));
+  };
   state.forEach(draw);
+  state.forEach(loomDraw);
   zoom = zoomable(root, sheets, {
     label: el => el.getAttribute('aria-label'), after: opened, replay: restart,
     notes: el => NOTES[sheets.indexOf(el)], notesFont: '"Shippori Mincho", serif',
   });
 
-  /* weave the four cloths one after another, then show each as soon as it is off the loom */
+  /* weave the four cloths one after another, then show all four together once the last is off the loom */
   let next = 0;
   const loom = () => {
-    if (next >= state.length) return;
+    if (next >= state.length) { state.forEach(s => s.el.classList.add('woven')); return; }
     const s = state[next++];
     weave(s.cloth, ([fresh, faded]) => {
       s.el.querySelector('.fresh').setAttribute('href', fresh);
       s.faded.setAttribute('href', faded);
-      s.el.classList.add('woven');
       loom();
     });
   };
 
-  if (reduce.matches) { board.classList.add('still'); loom(); return; }
+  /* show the saved cloths, all four together once they are in; weave on the page only if they cannot load */
+  const show = () => {
+    const fresh = CLOTH_IMAGES.map(([src]) => { const img = new Image(); img.src = src; return img.decode(); });
+    Promise.all(fresh).then(() => {
+      state.forEach((s, i) => { s.el.querySelector('.fresh').setAttribute('href', CLOTH_IMAGES[i][0]); s.faded.setAttribute('href', CLOTH_IMAGES[i][1]); s.el.classList.add('woven'); });
+    }, loom);
+  };
+
+  if (reduce.matches) { board.classList.add('still'); show(); return; }
 
   sheets.forEach((el, i) => {
     el.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') { state[i].hover = true; lastHover = performance.now(); } });
@@ -420,24 +468,28 @@ function run(root, host) {
   let visible = false, started = false;
   onScreen(board, on => {
     visible = on;
-    if (visible && !started) { started = true; loom(); }
+    if (visible && !started) { started = true; show(); }
   }, { rootMargin: '200px' });
 
-  /* with nobody's pointer on it, the cloths take turns: one goes slowly through the wash and comes back,
-     then the board rests before the next */
+  /* the cloths rest as they are. A pointer left on one washes it and leaving lets it come back;
+     the one open full size goes through the wash once and stays washed until Replay */
   let lastHover = -1e9, last = performance.now();
-  const CYCLE = 16, UP = 5, HOLD = 4.5, DOWN = 3.5;
+  const UP = 5, DOWN = 3.5, WEAVE = 4.5, STITCH = .7;
   const frame = now => {
     requestAnimationFrame(frame);
     const dt = Math.min(.1, (now - last) / 1000); last = now;
     if (!visible) return;
-    const idle = now - lastHover > 3000 && !state.some(s => s.hover);
-    const t = now / 1000, turn = Math.floor(t / CYCLE) % state.length, p = t % CYCLE;
-    const autoGoal = p < UP + HOLD ? 1 : 0;
-    state.forEach((s, i) => {
-      /* the cloth open full size takes every turn itself */
-      const open = zoom && zoom.isOpen(s.el), q = ((now - openAt) / 1000) % CYCLE;
-      const goal = s.hover ? 1 : open ? (q < UP + HOLD ? 1 : 0) : idle && i === turn && !(zoom && zoom.isAnyOpen()) ? autoGoal : 0;
+    state.forEach(s => {
+      const open = zoom && zoom.isOpen(s.el);
+      /* full size: weave, then stitch the label on, then wash */
+      let ready = true;
+      if (open && s.weft < 1 || open && s.tag < 1) {
+        const t = (now - openAt) / 1000;
+        s.weft = Math.min(1, t / WEAVE); s.tag = Math.min(1, Math.max(0, (t - WEAVE) / STITCH));
+        loomDraw(s);
+        ready = false;
+      }
+      const goal = s.hover || (open && ready) ? 1 : 0;
       const rate = goal > s.w ? 1 / (s.hover ? 4.5 : UP) : 1 / (s.hover ? 2.5 : DOWN);
       const w = goal > s.w ? Math.min(goal, s.w + rate * dt) : Math.max(goal, s.w - rate * dt);
       if (w !== s.w) { s.w = w; draw(s); }
