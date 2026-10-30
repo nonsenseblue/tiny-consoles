@@ -68,7 +68,6 @@ export function field() {
       ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
     }
     ctx.stroke();
-    if (upto < geo.w) { ctx.fillStyle = 'rgba(27,26,25,.18)'; ctx.fillRect(upto, 0, 1, geo.h); }
   };
 
   const sweep = () => {

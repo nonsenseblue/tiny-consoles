@@ -53,12 +53,22 @@
         <h1>tiny<br>consoles</h1>
         <p class="lede">Small design experiments, collected over time. Each one is a Web Component you can drop into any page with a single tag. Swipe sideways, or use the controls at the top, to move between them.</p>
       </div>
-      <nav class="index grid" id="index" aria-label="Pieces"></nav>
+      <!-- the pinned pieces (chosen in home.json); the rest are in All works -->
+      <section class="shelf" id="shelf-pinned"><h3><svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="3" cy="3" r="1" fill="currentColor" opacity="0.35"/><circle cx="7" cy="3" r="1" fill="currentColor" opacity="0.35"/><circle cx="11" cy="3" r="1" fill="currentColor" opacity="0.35"/><circle cx="3" cy="7" r="1" fill="currentColor" opacity="0.35"/><circle cx="7" cy="7" r="1.6" fill="currentColor" opacity="1"/><circle cx="11" cy="7" r="1" fill="currentColor" opacity="0.35"/><circle cx="3" cy="11" r="1" fill="currentColor" opacity="0.35"/><circle cx="7" cy="11" r="1" fill="currentColor" opacity="0.35"/><circle cx="11" cy="11" r="1" fill="currentColor" opacity="0.35"/></svg><span>Pinned</span><em id="count-pinned"></em></h3><nav class="index grid" id="pinned" aria-label="Pinned"></nav></section>
+      <div class="more-row"><a class="more" href="#all" data-go="all">Explore more</a></div>
       <footer class="colophon grid">
         <div>Code: MIT · Visual design: CC BY 4.0</div>
         <div>Made by <a href="https://github.com/nonsenseblue">nonsenseblue</a> with Claude</div>
         <div><a href="https://github.com/nonsenseblue/tiny-consoles">Source on GitHub</a></div>
       </footer>
+    </div>
+  </section>
+  <!-- every piece, newest first -->
+  <section class="page all" data-key="all" aria-label="All works">
+    <canvas class="swell" id="swell" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <header class="all-head"><h2>All works</h2><p class="sub">Everything so far, grouped by kind.</p><ul class="jump" id="jump"></ul></header>
+      <div id="all"></div>
     </div>
   </section>
 </main>

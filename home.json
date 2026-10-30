@@ -1,0 +1,31 @@
+{
+  "pinned": [
+    "soundings-board",
+    "rerun-board",
+    "lost-and-found",
+    "day-for-night"
+  ],
+  "groups": [
+    {
+      "name": "Stories",
+      "tags": [
+        "day-for-night",
+        "rerun-board"
+      ]
+    },
+    {
+      "name": "Imagined places",
+      "tags": [
+        "soft-grain",
+        "soundings-board",
+        "lost-and-found"
+      ]
+    },
+    {
+      "name": "Studies",
+      "tags": [
+        "deep-space"
+      ]
+    }
+  ]
+}

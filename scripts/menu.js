@@ -32,7 +32,8 @@ export function menu(pages, labels) {
   set(false);
 
   button.addEventListener('click', () => set(!panel.classList.contains('open')));
-  panel.addEventListener('click', e => { if (e.target.closest('[data-go]')) set(false); });
+  /* any link to a page closes the menu, the logo in the bar as well as the list */
+  document.addEventListener('click', e => { if (e.target.closest('[data-go]')) set(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
   matchMedia('(min-width: 721px)').addEventListener('change', e => { if (e.matches) set(false); });
 }

@@ -12,12 +12,14 @@ export function setup({ components, version }) {
     `<script type="module" src="${folder(tag)}src/${tag}.js"></script>\n<${tag}></${tag}>`;
   const firstSentence = text => (text.match(/^.*?[.!?](\s|$)/) || [text])[0].trim();
 
-  function renderIndexItem(piece, num) {
+  function renderIndexItem(piece, num, isNew = false) {
     const item = document.getElementById('index-item').content.firstElementChild.cloneNode(true);
     item.href = `#${piece.tag}`;
     item.dataset.go = piece.tag;
     item.querySelector('img').src = `${folder(piece.tag)}assets/thumb.webp${version}`;
     item.querySelector('.n').textContent = num;
+    /* the newest piece carries a small New mark wherever it is listed */
+    if (isNew) item.querySelector('.n').insertAdjacentHTML('beforeend', '<i class="new">New</i>');
     item.querySelector('b').textContent = title(piece.tag);
     item.querySelector('.about').textContent = piece.about || firstSentence(piece.text);   /* a short line for the index; the plate keeps the full text */
     item.querySelector('.made').textContent = piece.chips.join(', ');

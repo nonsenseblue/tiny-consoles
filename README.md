@@ -11,29 +11,14 @@ Each one is a Web Component you can drop into any page with a single tag.
 
 <br>
 
-## Card sets
+## Stories
 
-Six small pieces side by side, each one alive on its own.
-
-<table>
-<tr>
-<td width="112"><a href="https://tinyconsoles.vercel.app/#soft-grain"><img src="components/soft-grain/assets/thumb.webp" alt="soft-grain" width="96"></a></td>
-<td><b>01 · <a href="https://tinyconsoles.vercel.app/#soft-grain"><code>&lt;soft-grain&gt;</code></a></b><br>Six record sleeves for an imagined quiet label; grainy gradients cut into shapes, fine lines that ripple.<br><sub>grain · record sleeve · line art · <a href="components/soft-grain/assets/preview.webp">preview</a> · <a href="components/soft-grain/DESIGN.md">design notes</a></sub></td>
-</tr>
-<tr>
-<td width="112"><a href="https://tinyconsoles.vercel.app/#deep-space"><img src="components/deep-space/assets/thumb.webp" alt="deep-space" width="96"></a></td>
-<td><b>02 · <a href="https://tinyconsoles.vercel.app/#deep-space"><code>&lt;deep-space&gt;</code></a></b><br>Six tiny 1-bit screens, live-dithered at 30 fps, with parallax under the cursor.<br><sub>1-bit · dither · generative · <a href="components/deep-space/assets/preview.webp">preview</a> · <a href="components/deep-space/DESIGN.md">design notes</a></sub></td>
-</tr>
-</table>
-
-## Identity boards
-
-One wide board for an imagined place, drawn entirely in code.
+Pieces that start from a film, a book or a record.
 
 <table>
 <tr>
-<td width="112"><a href="https://tinyconsoles.vercel.app/#soundings-board"><img src="components/soundings-board/assets/thumb.webp" alt="soundings-board" width="96"></a></td>
-<td><b>03 · <a href="https://tinyconsoles.vercel.app/#soundings-board"><code>&lt;soundings-board&gt;</code></a></b><br>A coastal listening station: seabed sections, a card on a grid, a depth readout that surfaces words.<br><sub>identity · swiss grid · engraving · <a href="components/soundings-board/assets/preview.webp">preview</a> · <a href="components/soundings-board/DESIGN.md">design notes</a></sub></td>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#day-for-night"><img src="components/day-for-night/assets/thumb.webp" alt="day-for-night" width="96"></a></td>
+<td><b>06 · <a href="https://tinyconsoles.vercel.app/#day-for-night"><code>&lt;day-for-night&gt;</code></a></b><br>Four sheets of French New Wave paperwork whose English subtitles do not quite agree.<br><sub>new wave · subtitles · grain · <a href="components/day-for-night/assets/preview.webp">preview</a> · <a href="components/day-for-night/DESIGN.md">design notes</a></sub></td>
 </tr>
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#rerun-board"><img src="components/rerun-board/assets/thumb.webp" alt="rerun-board" width="96"></a></td>
@@ -41,9 +26,9 @@ One wide board for an imagined place, drawn entirely in code.
 </tr>
 </table>
 
-## Paperwork
+## Imagined places
 
-Sheets of invented documents that write and reveal themselves. Click a sheet to see it full size.
+Things made for places that do not exist: a label, a station, an office.
 
 <table>
 <tr>
@@ -51,8 +36,23 @@ Sheets of invented documents that write and reveal themselves. Click a sheet to 
 <td><b>05 · <a href="https://tinyconsoles.vercel.app/#lost-and-found"><code>&lt;lost-and-found&gt;</code></a></b><br>Four sheets from a lost property register that type themselves in, then get highlighted and stamped.<br><sub>archive · forms · dot type · stamp · <a href="components/lost-and-found/assets/preview.webp">preview</a> · <a href="components/lost-and-found/DESIGN.md">design notes</a></sub></td>
 </tr>
 <tr>
-<td width="112"><a href="https://tinyconsoles.vercel.app/#day-for-night"><img src="components/day-for-night/assets/thumb.webp" alt="day-for-night" width="96"></a></td>
-<td><b>06 · <a href="https://tinyconsoles.vercel.app/#day-for-night"><code>&lt;day-for-night&gt;</code></a></b><br>Four sheets of French New Wave paperwork whose English subtitles do not quite agree.<br><sub>new wave · subtitles · grain · <a href="components/day-for-night/assets/preview.webp">preview</a> · <a href="components/day-for-night/DESIGN.md">design notes</a></sub></td>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#soundings-board"><img src="components/soundings-board/assets/thumb.webp" alt="soundings-board" width="96"></a></td>
+<td><b>03 · <a href="https://tinyconsoles.vercel.app/#soundings-board"><code>&lt;soundings-board&gt;</code></a></b><br>A coastal listening station: seabed sections, a card on a grid, a depth readout that surfaces words.<br><sub>identity · swiss grid · engraving · <a href="components/soundings-board/assets/preview.webp">preview</a> · <a href="components/soundings-board/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#soft-grain"><img src="components/soft-grain/assets/thumb.webp" alt="soft-grain" width="96"></a></td>
+<td><b>01 · <a href="https://tinyconsoles.vercel.app/#soft-grain"><code>&lt;soft-grain&gt;</code></a></b><br>Six record sleeves for an imagined quiet label; grainy gradients cut into shapes, fine lines that ripple.<br><sub>grain · record sleeve · line art · <a href="components/soft-grain/assets/preview.webp">preview</a> · <a href="components/soft-grain/DESIGN.md">design notes</a></sub></td>
+</tr>
+</table>
+
+## Studies
+
+Small experiments that stand on their own.
+
+<table>
+<tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#deep-space"><img src="components/deep-space/assets/thumb.webp" alt="deep-space" width="96"></a></td>
+<td><b>02 · <a href="https://tinyconsoles.vercel.app/#deep-space"><code>&lt;deep-space&gt;</code></a></b><br>Six tiny 1-bit screens, live-dithered at 30 fps, with parallax under the cursor.<br><sub>1-bit · dither · generative · <a href="components/deep-space/assets/preview.webp">preview</a> · <a href="components/deep-space/DESIGN.md">design notes</a></sub></td>
 </tr>
 </table>
 

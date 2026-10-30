@@ -5,6 +5,8 @@
 
 :root {
   --paper: #f3f2ef;
+  /* card stock: faint cloudy mottling, a few small fibres, and the fine tooth of the paper */
+  --paper-tex: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271000%27%20height%3D%271000%27%3E%3Cfilter%20id%3D%27c%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.004%27%20numOctaves%3D%274%27%20seed%3D%277%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%20.42%20%200%200%200%200%20.38%20%200%200%200%200%20.32%20%200%200%200%20.32%20-.134%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23c%29%27%2F%3E%3C%2Fsvg%3E") 0 0 / 1000px 1000px, url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%3E%3Cfilter%20id%3D%27k%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.16%27%20numOctaves%3D%272%27%20seed%3D%2721%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%20.35%20%200%200%200%200%20.32%20%200%200%200%200%20.28%20%200%200%200%2014%20-10.6%27%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%27linear%27%20slope%3D%27.14%27%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23k%29%27%2F%3E%3C%2Fsvg%3E") 0 0 / 400px 400px, url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27240%27%20height%3D%27240%27%3E%3Cfilter%20id%3D%27t%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.85%27%20numOctaves%3D%272%27%20seed%3D%273%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%20.3%20%200%200%200%200%20.28%20%200%200%200%200%20.25%20%200%200%200%20.07%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23t%29%27%2F%3E%3C%2Fsvg%3E") 0 0 / 240px 240px;
   --ink: #1b1a19;
   --muted: #7a766f;
   --line: rgba(27, 26, 25, 0.13);
@@ -16,7 +18,7 @@
 html, body { height: 100%; }
 body {
   overflow: hidden;
-  background: var(--paper);
+  background: var(--paper-tex), var(--paper); background-attachment: fixed;
   color: var(--ink);
   font-family: Inter, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +38,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- bar ---------- */
 .bar {
   position: fixed; inset: 0 0 auto; height: var(--bar); z-index: 10;
-  background: var(--paper);
+  /* the same sheet of paper as the page behind it, pinned to the window so there is no seam */
+  background: var(--paper-tex), var(--paper); background-attachment: fixed;
   font-size: 12px;
 }
 .bar .grid { height: 100%; display: flex; align-items: center; }
@@ -100,7 +103,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .page {
   position: absolute; inset: 0;
   overflow-y: auto; overscroll-behavior: contain;
-  background: var(--paper);
+  background: none;   /* the paper is the body's, so it stays put while pages slide over it */
   transform: translateX(calc(var(--at, 0) * 100% + var(--drag, 0px)));
   transition: transform .8s var(--ease);
   will-change: transform;
@@ -118,7 +121,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 20px;
   pointer-events: none;
 }
-.guides i { border-left: 1px solid var(--line); border-right: 1px solid var(--line); opacity: 0.45; }
+.guides i { border-left: 1px solid var(--line); border-right: 1px solid var(--line); opacity: 0.14; }
 @media (max-width: 720px) {
   .guides { grid-template-columns: repeat(4, 1fr); column-gap: 12px; }
   .guides i:nth-child(n+5) { display: none; }
@@ -127,13 +130,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 #field { position: absolute; left: 0; top: 0; width: 100%; height: 60%; display: block; pointer-events: none; }
 .home-in { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100%; padding-top: 56px; padding-bottom: clamp(32px, 6vh, 56px); }
 /* on phones the title sits lower so the contour field has its own space above it */
-@media (max-width: 720px) { .home-in { padding-top: 30vh; padding-bottom: calc(36px + env(safe-area-inset-bottom)); } }
+@media (max-width: 720px) { .home-in { padding-top: 13vh; padding-bottom: calc(36px + env(safe-area-inset-bottom)); } }
 /* phones: the piece pages also get room below their last line */
 @media (max-width: 720px) { .piece .wrap { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } }
 .hero { align-items: end; margin-top: auto; }  /* pushes the title down when there is room, scrolls instead of clipping when there is not */
 h1 {
   grid-column: 1 / 9;
-  font-size: clamp(64px, 11vw, 168px);
+  font-size: clamp(64px, min(11vw, 18vh), 168px);   /* short windows shrink the title so the index fits on one screen */
   font-weight: 500; letter-spacing: -0.055em; line-height: 0.86;
 }
 .lede { grid-column: 10 / 13; font-size: 13px; line-height: 1.6; color: var(--muted); padding-bottom: 8px; }
@@ -143,7 +146,62 @@ h1 {
 }
 
 /* the index itself: a row of entries, read left to right */
-.index { margin-top: 56px; row-gap: 28px; }
+.index { row-gap: 28px; }
+/* the shelves on the home page: a small heading over each row */
+.shelf { margin-top: clamp(32px, 6vh, 56px); }
+/* phones: the pinned four sit two by two, thumbnail and name only, so the index needs no scrolling */
+@media (max-width: 720px) {
+  .home #pinned { grid-template-columns: 1fr 1fr; row-gap: 14px; column-gap: 12px; }
+  .home #pinned .entry { grid-column: auto; grid-template-columns: 48px 1fr; column-gap: 10px; align-items: center; }
+  .home #pinned .entry .thumb { grid-row: 1 / 3; width: 48px; height: 48px; }
+  .home #pinned .entry b { font-size: 14px; line-height: 1.25; }
+  .home #pinned .entry .about, .home #pinned .entry .made { display: none; }
+  .more-row { margin-top: 20px; }
+  .home .shelf { margin-top: 26px; }
+  .home .lede { font-size: 13px; line-height: 1.55; margin-top: 12px; }
+  .home .colophon { margin-top: 28px; }
+}
+.shelf + .shelf { margin-top: 44px; }
+.shelf h3 { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; color: var(--ink); letter-spacing: 0.01em; margin-bottom: 14px; }
+.shelf h3 svg { flex: none; width: 13px; height: 13px; }
+.shelf h3 em { font-style: normal; color: var(--muted); font-feature-settings: "tnum" 1; margin-left: 2px; }
+.entry .n { display: flex; align-items: center; gap: 8px; }
+.entry .new { display: inline-block; padding: 4px 7px; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; color: var(--ink); font-size: 10.5px; font-style: normal; font-weight: 500; letter-spacing: 0.01em; line-height: 1; text-box: trim-both cap alphabetic; }   /* trimmed to the capitals, so the word sits in the true middle of the pill */
+.more-row { margin-top: 36px; text-align: right; }
+.more { display: inline-block; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 7px 18px; font-size: 13px; color: var(--ink); transition: padding .25s var(--ease), border-color .2s ease; }
+.more:hover { text-decoration: none; padding: 7px 24px; border-color: rgba(27, 26, 25, 0.6); }
+/* the full list of works */
+.all .wrap { padding-top: 28px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+/* All works lies over the pages instead of sliding with them */
+.page.all { --at: 0; z-index: 5; background: var(--paper-tex), var(--paper); background-attachment: fixed;
+  opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .45s ease, transform .6s var(--ease), visibility 0s .6s; }
+.page.all.open { opacity: 1; visibility: visible; transform: none; transition: opacity .45s ease, transform .6s var(--ease), visibility 0s; }
+/* each group: its name on the left, its pieces filling the rest of the row */
+.all .shelf { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 20px; margin-top: 52px; }
+/* the head of All works: the dot field over the page, then a small title, a line and jump links to each group */
+.swell { position: absolute; left: 0; top: 0; width: 100%; height: 230px; display: block; pointer-events: none; }
+.all .wrap { position: relative; }
+.all-head { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 20px; align-items: end; padding-top: 190px; }
+.all-head h2 { grid-column: 1 / 7; margin: 0; font-size: 24px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+.all-head .sub { grid-column: 1 / 7; font-size: 14px; color: var(--muted); margin-top: 6px; }
+.all-head .jump { grid-column: 7 / 13; grid-row: 1 / 3; align-self: center; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; list-style: none; }
+.all-head .jump a { display: inline-block; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 4px 12px; font-size: 12px; color: var(--ink); transition: padding .25s var(--ease), border-color .2s ease; }
+.all-head .jump a:hover { text-decoration: none; padding: 4px 16px; border-color: rgba(27, 26, 25, 0.6); }
+@media (max-width: 720px) {
+  .swell { height: 170px; }
+  .all-head { grid-template-columns: 1fr; padding-top: 140px; }
+  .all-head h2, .all-head .sub, .all-head .jump { grid-column: 1; grid-row: auto; }
+  .all-head .jump { justify-content: flex-start; margin-top: 16px; }
+}
+.all .shelf h3 { grid-column: 1 / 4; align-self: start; margin: 0; }
+.all .shelf .index { grid-column: 4 / 13; display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 20px; row-gap: 28px; background: none; padding-top: 0; margin: 0; }
+.all .shelf .entry { grid-column: auto; }
+@media (max-width: 720px) {
+  .all .shelf { grid-template-columns: 1fr; row-gap: 16px; }
+  .all .shelf h3, .all .shelf .index { grid-column: 1; }
+  .all .shelf .index { grid-template-columns: 1fr; }
+}
+.all #all .shelf:first-child { margin-top: 40px; }
 .entry { grid-column: span 3; display: grid; grid-template-columns: 64px 1fr; column-gap: 14px; row-gap: 2px; align-content: start; font-size: 12px; line-height: 1.5; }
 .entry:hover { text-decoration: none; }
 .entry .thumb { grid-row: 1 / 5; width: 64px; height: 64px; overflow: hidden; border-radius: 6px; background: var(--line); }
@@ -155,7 +213,7 @@ h1 {
 @media (max-width: 960px) { .entry { grid-column: span 6; } }
 @media (max-width: 720px) { .entry { grid-column: span 4; } }
 
-.colophon { margin-top: clamp(64px, 13vh, 130px); padding: 0; font-size: 11px; color: var(--muted); row-gap: 6px; }
+.colophon { margin-top: clamp(36px, 9vh, 110px); padding: 0; font-size: 11px; color: var(--muted); row-gap: 6px; }
 .colophon > div:nth-child(1) { grid-column: 1 / 5; }
 .colophon > div:nth-child(2) { grid-column: 5 / 9; }
 .colophon > div:nth-child(3) { grid-column: 9 / 13; text-align: right; }

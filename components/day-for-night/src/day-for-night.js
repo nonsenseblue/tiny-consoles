@@ -108,11 +108,14 @@ const LAYOUTS = {
 const ZOOM_CSS = `
 .zoom { margin: auto; padding: 0; border: 0; background: none; overflow: visible; max-width: none; max-height: none; cursor: default; color: #f3f2ef; }
 .zoom::backdrop { background: rgba(18, 17, 16, .8); backdrop-filter: blur(3px); }
+.zoom[open]::backdrop { animation: zfade .3s ease; }
+@keyframes zfade { from { opacity: 0; } }
+.zoom .zopen { transition: none !important; }
 .zoom .zbox { position: relative; }
 .zoom .zopen { position: absolute !important; left: 0 !important; top: 0 !important; margin: 0 !important; transform-origin: 0 0 !important; box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .7); }
 .zoom .zopen.scaled { transform: scale(var(--zoom, 1)) !important; }
 .zoom .zopen.resized { transform: none !important; width: 100% !important; height: 100% !important; }
-.zoom .zcap { margin-top: 14px; font: 500 11px/1.4 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.zoom .zcap { margin-top: 14px; text-align: center; font: 500 11px/1.4 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
 .zoom button { font: 400 13px system-ui, sans-serif; color: inherit; background: none; border: 1px solid rgba(243, 242, 239, .4); border-radius: 999px; padding: 6px 16px; cursor: pointer; transition: padding .25s cubic-bezier(.2,.8,.2,1), border-color .2s; }
 .zoom button:hover, .zoom button:focus-visible { padding: 6px 22px; border-color: rgba(243, 242, 239, .85); outline: none; }
 .zoom .zclose { position: fixed; top: 22px; right: 26px; }
@@ -137,13 +140,16 @@ function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('
     if (mode === 'scale') open.style.setProperty('--zoom', k);
     after(open);
   };
+  /* the piece's own transitions must not play while a sheet is moved in or out of the view */
+  const still = el => { el.style.transition = 'none'; void el.offsetWidth; requestAnimationFrame(() => requestAnimationFrame(() => el.style.removeProperty('transition'))); };
   const put = () => {
+    still(open);
     hold.replaceWith(open);
     open.classList.remove('zopen', 'scaled', 'resized');
     open.style.removeProperty('--zoom'); open.style.removeProperty('width'); open.style.removeProperty('height');
     const el = open; open = null; after(el);
   };
-  const show = el => {
+  const swap = el => {
     if (open) put();
     size = { w: el.offsetWidth, h: el.offsetHeight };
     hold = document.createElement('div');
@@ -151,6 +157,7 @@ function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('
     hold.style.cssText = `aspect-ratio:${size.w} / ${size.h}`;
     el.replaceWith(hold);
     open = el;
+    still(el);
     el.classList.add('zopen', mode === 'scale' ? 'scaled' : 'resized');
     if (mode === 'scale') { el.style.width = `${size.w}px`; el.style.height = `${size.h}px`; }
     box.append(el);
@@ -158,9 +165,28 @@ function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('
     if (!dialog.open) dialog.showModal();
     fit();
   };
+  /* opening eases the sheet in; moving to the next one slides the old out and the new in, in the direction of travel */
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  const EASE = 'cubic-bezier(.2,.8,.2,1)';
+  let busy = false;
+  const play = (frames, ms, ease) => Promise.all([box, cap].map(n => n.animate(frames, { duration: ms, easing: ease, fill: 'both' }).finished)).catch(() => {});
+  const show = async (el, dir = 0) => {
+    if (busy) return;
+    if (calm.matches) { swap(el); return; }
+    busy = true;
+    if (!dialog.open) {
+      swap(el);
+      await play([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], 320, EASE);
+    } else {
+      await play([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${-dir * 32}px)` }], 180, 'ease-in');
+      swap(el);
+      await play([{ opacity: 0, transform: `translateX(${dir * 32}px)` }, { opacity: 1, transform: 'none' }], 300, EASE);
+    }
+    busy = false;
+  };
 
   dialog.addEventListener('close', () => { if (open) put(); });
-  const step = d => { if (open) { const n = items.length; show(items[(items.indexOf(open) + d + n) % n]); } };
+  const step = d => { if (open) { const n = items.length; show(items[(items.indexOf(open) + d + n) % n], d); } };
   dialog.addEventListener('click', e => {
     if (e.target.closest('.zprev')) return step(-1);
     if (e.target.closest('.znext')) return step(1);
