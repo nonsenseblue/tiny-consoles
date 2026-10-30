@@ -121,11 +121,13 @@ Each design is a map of which dye goes where. The loom shifts each warp thread b
 
 ### The label
 
-Woven tape with heat-cut edges, ends folded under and held by a fine running stitch with needle holes.
+Woven tape with heat-cut edges, ends folded under and held by a fine running stitch with needle holes. A new label still has its loose threads: where each running stitch was finished, its tail hangs off the label in the stitch colour and frays at the cut end, and a weft end or two curls out of the heat-cut edge in the colour of the tape.
 
 ### The wash
 
-On hover the cloth creases (a displacement by low noise), soft creases are lit across it, the dyes move toward their faded colours, the label crumples a little less than the cloth, and the line is rewoven one letter at a time, the letter on the loom shown faint. It takes about four seconds; leaving takes it back in about two. Without a pointer, one cloth at a time goes through the wash and back; a cloth opened full size takes every turn itself.
+On hover the cloth creases (a displacement by low noise), soft creases are lit across it, the dyes move toward their faded colours, the label crumples a little less than the cloth, and the line is rewoven one letter at a time, the letter on the loom shown faint.
+
+The label wears with it. Its ink comes off in patches, where a low noise lets go first, and the whole print greys a little; the line that was meant stays readable. The stitch tails are gone by halfway, snipped by whoever wore it, leaving only a short stub; a new label could not have been cut yet. The weft ends grow longer and fray further, and a few more work loose. It takes about four seconds; leaving takes it back in about two. Without a pointer, one cloth at a time goes through the wash and back; a cloth opened full size takes every turn itself.
 
 With reduced motion the cloths are woven and stay fresh: the spoken lines only.
 
@@ -141,3 +143,5 @@ Clicking a cloth opens it over the page, with notes beside it on the film, the c
 - Don't draw objects (bowls, fish, slides, buildings): only woven geometry.
 - Don't wash the colours out; real washing softens them, it does not grey them.
 - Don't name or show the seaside inn.
+- Do keep the stitch tails on the new label only; once worn they have been cut.
+- Don't let the ink wear off so far that the meant line can no longer be read.

@@ -182,12 +182,13 @@ function dyeCloth(idx, lift, rgb) {
 }
 
 /* ---------- the woven label: tape with heat-cut edges, both ends folded under and stitched down ---------- */
-const TAG_H = 92;
+const TAG_H = 92, LOOSE = 22;   // LOOSE: room around the label for the loose threads hanging off it
 const tagWidth = cloth => ([...cloth.title].length <= 3 ? 190 : 248);
-function wovenTag(w, h, thread) {
+function wovenTag(w, h, thread, seed, worn = 0, tails = false) {
   const rnd = seeded(5);
-  const c = document.createElement('canvas'); c.width = w * 2; c.height = h * 2;
-  const g = c.getContext('2d'); g.scale(2, 2);
+  const c = document.createElement('canvas'); c.width = (w + 2 * LOOSE) * 2; c.height = (h + 2 * LOOSE) * 2;
+  const g = c.getContext('2d'); g.scale(2, 2); g.translate(LOOSE, LOOSE);
+  if (tails) { looseThreads(g, w, h, thread, seed, 0, true); return c.toDataURL('image/png'); }   // just the stitch tails, on their own layer
   const fold = 14;
   g.save(); g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 5; g.shadowOffsetY = 2;
   g.fillStyle = '#efe9dc'; g.fillRect(2, 3, w - 4, h - 6); g.restore();
@@ -213,7 +214,60 @@ function wovenTag(w, h, thread) {
     g.strokeStyle = 'rgba(255,214,200,.55)'; g.lineWidth = .3; g.beginPath(); g.moveTo(x + jx - .15, y + .4); g.lineTo(x + jx + .1, y + len - .5); g.stroke();
     g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.arc(x + jx, y + len + 1, .32, 0, 7); g.fill();
   }
+  looseThreads(g, w, h, thread, seed, worn, false);
   return c.toDataURL('image/png');
+}
+
+/* the loose threads nobody snipped: where the running stitch ends, its tail hangs off the label and frays;
+   and here and there a longer weft end curls out of the heat-cut edge. worn is 0 for a new label and 1 after
+   the wash. A new label still has its stitch tails, nobody has had the chance to cut them; on a worn one they
+   were snipped long ago, leaving only a stub, while the weft ends have grown longer and frayed, and more come loose. */
+function looseThreads(g, w, h, thread, seed, worn, tailsOnly) {
+  let rnd = seeded(seed + 100);
+  const strand = (pts, colour, width) => {
+    const path = () => { g.beginPath(); g.moveTo(...pts[0]); for (let i = 1; i < pts.length; i += 3) g.bezierCurveTo(...pts[i], ...pts[i + 1], ...pts[i + 2]); };
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    g.save(); g.translate(.5, .8); g.strokeStyle = 'rgba(0,0,0,.2)'; g.lineWidth = width + .5; path(); g.stroke(); g.restore();   // lying on the cloth
+    g.strokeStyle = colour; g.lineWidth = width; path(); g.stroke();
+    g.strokeStyle = 'rgba(255,240,230,.35)'; g.lineWidth = width * .35; path(); g.stroke();
+    /* the cut end comes apart into fibres, more of them and longer once washed */
+    const [ax, ay] = pts[pts.length - 2], [bx, by] = pts[pts.length - 1], a = Math.atan2(by - ay, bx - ax);
+    g.lineWidth = .3; g.strokeStyle = colour;
+    for (let k = 0; k < 6; k++) {
+      const t = a + (k - 2.5) * (.3 + rnd() * .25), l = (1.6 + rnd() * 2) * (1 + worn * 1.2), bend = rnd() - .5;
+      if (k % 2 && !worn) continue;
+      g.beginPath(); g.moveTo(bx, by); g.quadraticCurveTo(bx + Math.cos(t) * l * .6 + bend * (1 + worn * 2), by + Math.sin(t) * l * .6, bx + Math.cos(t) * l, by + Math.sin(t) * l); g.stroke();
+    }
+  };
+  /* a stitch tail from (x, y), going out past the edge in direction dir (1 down, -1 up) and curling sideways */
+  const tail = (x, y, dir, side) => {
+    if (!tailsOnly) {
+      if (!worn) return;   // a new label's tails are drawn on their own layer, so the wash can take them away
+      g.lineCap = 'round'; g.strokeStyle = thread; g.lineWidth = 1;   // snipped off: a tiny stub where the stitch was finished
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + side * .8, y + dir * 2.2); g.stroke();
+      g.lineWidth = .3; g.beginPath(); g.moveTo(x + side * .8, y + dir * 2.2); g.lineTo(x + side * 1.6, y + dir * 3); g.stroke();
+      return;
+    }
+    const reach = (13 + rnd() * 7) * (1 + worn * .45), curl = (6 + rnd() * 6) * side * (1 + worn * .7), kink = (rnd() - .5) * 6 * worn;
+    const ey = dir > 0 ? h + reach - 3 : -reach + 3;
+    strand([[x, y],
+      [x + curl * .1 + kink, y + dir * 4], [x + curl * .2 - kink, (y + ey) / 2 - dir * 2], [x + curl * .55, (y + ey) / 2 + dir * 3],
+      [x + curl * .9 + kink, ey - dir * 4], [x + curl * 1.3, ey - dir * 1], [x + curl * 1.1 + (rnd() - .5) * 2, ey]], thread, 1.05);
+  };
+  const last = 6.5 + Math.floor((h - 7 - 6.5) / 4.6) * 4.6;   // where each running stitch was finished off
+  const sideA = rnd() < .5 ? -1 : 1, right = rnd() < .7;
+  tail(8.5, last + 3, 1, sideA);
+  if (right) tail(w - 8.5, 6.5, -1, 1);
+  if (tailsOnly) return;
+  rnd = seeded(seed);
+  /* weft ends, the colour of the tape: one or two on a new label, a few more after the wash */
+  const n = 1 + (rnd() < .5 ? 1 : 0) + (worn ? 2 : 0);
+  for (let i = 0; i < n; i++) {
+    const x = 30 + rnd() * (w - 60), top = rnd() < .4, y = top ? 3 : h - 3, d = top ? -1 : 1;
+    const len = (8 + rnd() * 6) * (1 + worn * .4), s = (rnd() - .5) * 10 * (1 + worn);
+    strand([[x, y], [x + s * .2, y + d * len * .4], [x + s * .6, y + d * len * .5], [x + s * .7, y + d * len * .8],
+      [x + s * .8, y + d * len], [x + s, y + d * len * 1.05], [x + s * 1.3, y + d * len * .95]], '#e6dfcf', .7);
+  }
 }
 
 /* ---------- one cloth as one SVG: both dyes, the crease light, the label, and the filters that crumple them ---------- */
@@ -226,7 +280,7 @@ function sheetMarkup(cloth, i) {
     <filter id="${id}w" x="-5%" y="-5%" width="110%" height="110%">
       <feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="0"/>
     </filter>
-    <filter id="${id}l" x="-10%" y="-10%" width="120%" height="120%">
+    <filter id="${id}l" x="-15%" y="-40%" width="130%" height="180%">
       <feTurbulence type="fractalNoise" baseFrequency=".035 .06" numOctaves="2" seed="8"/><feDisplacementMap in="SourceGraphic" scale="0"/>
     </filter>
     <filter id="${id}c" x="0" y="0" width="100%" height="100%">
@@ -237,8 +291,13 @@ function sheetMarkup(cloth, i) {
       <feTurbulence type="fractalNoise" baseFrequency=".02 .045" numOctaves="3" seed="8"/>
       <feDiffuseLighting surfaceScale="6" lighting-color="#fff"><feDistantLight azimuth="225" elevation="30"/></feDiffuseLighting>
     </filter>
+    <filter id="${id}i" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".09 .14" numOctaves="4" seed="${4 + i}"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+      <feComposite in="SourceGraphic" operator="in"/>
+    </filter>
     <pattern id="${id}p" width="4" height="1.5" patternUnits="userSpaceOnUse"><rect width="4" height=".6" fill="rgba(240,235,224,.55)"/></pattern>
-    <mask id="${id}m" style="mask-type:alpha"><image class="tagimg" width="${tw}" height="${TAG_H}"/></mask>
+    <mask id="${id}m" style="mask-type:alpha"><image class="tagimg" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/></mask>
   </defs>
   <g class="cloth" filter="url(#${id}w)">
     <image class="fresh" x="-13" y="-13" width="546" height="546" preserveAspectRatio="none"/>
@@ -247,8 +306,10 @@ function sheetMarkup(cloth, i) {
   <rect class="crease" width="520" height="520" filter="url(#${id}c)" opacity="0"/>
   <g transform="translate(${486 - tw} 352) rotate(-1)">
     <g class="tag" filter="url(#${id}l)">
-      <image class="tagimg" width="${tw}" height="${TAG_H}"/>
-      <g class="woven" transform="translate(32 0)">
+      <image class="tagimg" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/>
+      <image class="tagtails" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}"/>
+      <image class="tagworn" x="${-LOOSE}" y="${-LOOSE}" width="${tw + 2 * LOOSE}" height="${TAG_H + 2 * LOOSE}" opacity="0"/>
+      <g class="woven" transform="translate(32 0)" filter="url(#${id}i)">
         <text class="t" y="${n > 3 ? 20 : 16}" dy=".88em" style="font-size:${Math.min(26, Math.floor(136 / n))}px">${cloth.title}</text>
         <text class="y" x="${tw - 64}" y="${wide ? 53 : 20}" dy=".88em" text-anchor="end">${cloth.year}</text>
         <text class="l" y="51" dy=".88em"></text>
@@ -287,10 +348,14 @@ function run(root, host) {
   /* each cloth: its parts, its wash (0 fresh → 1 washed), and the letter count already rewoven */
   const state = sheets.map((el, i) => {
     const cloth = CLOTHS[i], q = s => el.querySelector(s);
-    el.querySelectorAll('.tagimg').forEach(img => img.setAttribute('href', wovenTag(tagWidth(cloth), TAG_H, cloth.outsider ? '#4a4846' : '#a8392a')));
+    const thread = cloth.outsider ? '#4a4846' : '#a8392a';
+    el.querySelectorAll('.tagimg').forEach(img => img.setAttribute('href', wovenTag(tagWidth(cloth), TAG_H, thread, 11 + i * 7)));
+    q('.tagworn').setAttribute('href', wovenTag(tagWidth(cloth), TAG_H, thread, 11 + i * 7, 1));
+    q('.tagtails').setAttribute('href', wovenTag(tagWidth(cloth), TAG_H, thread, 11 + i * 7, 0, true));
     return {
       el, cloth, w: 0, shown: -1, hover: false,
-      faded: q('.faded'), crease: q('.crease'), tagcrease: q('.tagcrease'), line: q('.l'),
+      faded: q('.faded'), crease: q('.crease'), tagcrease: q('.tagcrease'), line: q('.l'), tagworn: q('.tagworn'), tagtails: q('.tagtails'),
+      ink: el.querySelector('feColorMatrix'), woven: q('.woven'),
       warp: [...el.querySelectorAll('feDisplacementMap')],
     };
   });
@@ -315,6 +380,12 @@ function run(root, host) {
     s.faded.setAttribute('opacity', s.w.toFixed(3));
     s.crease.setAttribute('opacity', (.55 * s.w).toFixed(3));
     s.tagcrease.setAttribute('opacity', (.55 * s.w).toFixed(3));
+    s.tagworn.setAttribute('opacity', s.w.toFixed(3));
+    s.tagtails.setAttribute('opacity', Math.max(0, 1 - 2 * s.w).toFixed(3));   // worn a while, the tails get snipped
+    /* the ink: the noise decides where it lets go first; fully washed, about a third of it is patchy or gone */
+    const a = -2.6 * s.w, b = 1 + 1.3 * s.w;
+    s.ink.setAttribute('values', `0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  ${a.toFixed(3)} 0 0 0 ${b.toFixed(3)}`);
+    s.woven.setAttribute('opacity', (1 - .15 * s.w).toFixed(3));
     s.warp[0].setAttribute('scale', (18 * s.w).toFixed(2));
     s.warp[1].setAttribute('scale', (5 * s.w).toFixed(2));
     write(s);
