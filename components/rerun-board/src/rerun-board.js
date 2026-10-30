@@ -10,11 +10,12 @@
  *
  * Styles: rerun-board.css, next to this file (loaded automatically).
  * Design notes: ../DESIGN.md.
- * No dependencies. Respects prefers-reduced-motion.
+ * No outside dependencies; shares a little code with the other pieces in components/shared/. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-const STYLE = new URL('./rerun-board.css', import.meta.url).href + new URL(import.meta.url).search;
+import { definePiece, onScreen, seeded } from '../../shared/piece.js';
+
 const FONT = 'https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap';
 
 const MARKUP = `
@@ -60,7 +61,6 @@ function run(root, host) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $$ = s => [...root.querySelectorAll(s)];
 
-  const seeded = s => () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
   function noise(seed) {
     const r = seeded(seed), P = new Uint8Array(512), p = [...Array(256).keys()];
     for (let i = 255; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
@@ -193,30 +193,11 @@ function run(root, host) {
     colonies.forEach(c => c.frame(t, reduce ? 1 : dt));
     if (visible && !reduce) raf = requestAnimationFrame(loop);
   };
-  new IntersectionObserver(es => {
-    visible = es.some(x => x.isIntersecting);
+  onScreen(host, on => {
+    visible = on;
     if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(loop); }
-  }).observe(host);
+  });
   if (reduce) { layout(); loop(performance.now()); }
 }
 
-class RerunBoard extends HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot) return;
-    /* the serif is loaded into the document so the shadow root can use it */
-    if (!document.querySelector(`link[href="${FONT}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${FONT}">`);
-    const root = this.attachShadow({ mode: 'open' });
-    root.innerHTML = `<link rel="stylesheet" href="${STYLE}">${MARKUP}`;
-    const board = root.querySelector('.board');
-    board.style.visibility = 'hidden';
-    const link = root.querySelector('link');
-    const start = () => {
-      const fonts = document.fonts ? document.fonts.load('40px "Instrument Serif"').catch(() => {}) : Promise.resolve();
-      fonts.then(() => { board.style.visibility = ''; run(root, this); });
-    };
-    link.addEventListener('load', start, { once: true });
-    link.addEventListener('error', start, { once: true });
-  }
-}
-
-if (!customElements.get('rerun-board')) customElements.define('rerun-board', RerunBoard);
+definePiece('rerun-board', { here: import.meta.url, font: FONT, markup: MARKUP, hide: '.board', faces: ['40px "Instrument Serif"'], run });

@@ -10,12 +10,12 @@
  *
  * Styles: soundings-board.css, next to this file (loaded automatically).
  * Design notes: ../DESIGN.md.
- * No dependencies. Respects prefers-reduced-motion.
+ * No outside dependencies; shares a little code with the other pieces in components/shared/. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-/* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
-const STYLE = new URL('./soundings-board.css', import.meta.url).href + new URL(import.meta.url).search;
+import { definePiece, seeded } from '../../shared/piece.js';
+
 
 const MARKUP = `
 <div class="board" part="board">
@@ -59,7 +59,6 @@ function run(root, host) {
   const $ = s => root.querySelector(s);
 
   /* ---------- tools ---------- */
-  const seeded = s => () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
   function makeNoise(seed) {
     const r = seeded(seed), P = new Uint8Array(512), p = [...Array(256).keys()];
     for (let i = 255; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
@@ -285,18 +284,4 @@ function run(root, host) {
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { ro.observe(host); io.observe(host); });
 }
 
-class SoundingsBoard extends HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot) return;
-    const root = this.attachShadow({ mode: 'open' });
-    root.innerHTML = `<link rel="stylesheet" href="${STYLE}">${MARKUP}`;
-    const board = root.querySelector('.board');
-    board.style.visibility = 'hidden';
-    const link = root.querySelector('link');
-    const start = () => { board.style.visibility = ''; run(root, this); };
-    link.addEventListener('load', start, { once: true });
-    link.addEventListener('error', start, { once: true });
-  }
-}
-
-if (!customElements.get('soundings-board')) customElements.define('soundings-board', SoundingsBoard);
+definePiece('soundings-board', { here: import.meta.url, markup: MARKUP, hide: '.board', run });

@@ -106,6 +106,10 @@ components/<tag>/
   src/<tag>.css        its styles
   assets/thumb.webp    the small still in the gallery and here
   assets/preview.webp  the full preview image
+
+components/shared/
+  piece.js             starting a piece: faces, stylesheet, nothing shown unstyled
+  zoom.js              the full size view, with Prev, Replay, Next and notes
 ```
 
 ## License

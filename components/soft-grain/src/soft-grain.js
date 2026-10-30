@@ -11,13 +11,12 @@
  *
  * Styles: soft-grain.css, next to this file (loaded automatically).
  * Design notes: ../DESIGN.md.
- * No dependencies. Respects prefers-reduced-motion.
+ * No outside dependencies; shares a little code with the other pieces in components/shared/. Respects prefers-reduced-motion.
  * Code: MIT · Visual design: CC BY 4.0 · nonsenseblue
  */
 
-/* Styles live next to this file in soft-grain.css; resolved from this file's own URL so it works anywhere it is embedded */
-/* carries this file's ?v= stamp (set at deploy) over to its stylesheet, so both always update together */
-const STYLE = new URL('./soft-grain.css', import.meta.url).href + new URL(import.meta.url).search;
+import { definePiece, onScreen, seeded } from '../../shared/piece.js';
+
 const FONT = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap';
 
 function run(root) {
@@ -88,7 +87,6 @@ function run(root) {
 
   /* ---------- SVG line patterns (viewBox 0 0 100 100) ---------- */
   const f = n => n.toFixed(2);
-  const seeded = seed => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
   const PATTERNS = {
     rays() {
       let s = '';
@@ -436,12 +434,12 @@ function run(root) {
 
   /* idle: once the lines are drawn, all six sleeves breathe together, each on its own slow path.
      Only while the wall is on screen, and never with reduced motion. */
-  let onScreen = true;
-  if ('IntersectionObserver' in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }).observe(wall);
+  let visible = true;
+  onScreen(wall, on => { visible = on; });
   let t0 = 0;
   const drift = now => {
     if (!t0) t0 = now;
-    if (onScreen && !reduce.matches && document.visibilityState === 'visible') {
+    if (visible && !reduce.matches && document.visibilityState === 'visible') {
       const t = (now - t0) / 1000;
       drifters.forEach((fn, i) => fn(t, i));
     }
@@ -450,19 +448,4 @@ function run(root) {
   setTimeout(() => requestAnimationFrame(drift), 3400);
 }
 
-class SoftGrain extends HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot) return;
-    const root = this.attachShadow({ mode: 'open' });
-    /* the titles' serif lives in the document so the shadow root can use it */
-    if (!document.querySelector(`link[href="${FONT}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${FONT}">`);
-    root.innerHTML = `<link rel="stylesheet" href="${STYLE}"><div class="wall" id="wall" part="wall" style="visibility:hidden"></div>`;
-    /* start only once the stylesheet is in, so the cards measure their real size and never flash unstyled */
-    const link = root.querySelector('link');
-    const start = () => { root.getElementById('wall').style.visibility = ''; run(root); };
-    link.addEventListener('load', start, { once: true });
-    link.addEventListener('error', start, { once: true });
-  }
-}
-
-if (!customElements.get('soft-grain')) customElements.define('soft-grain', SoftGrain);
+definePiece('soft-grain', { here: import.meta.url, font: FONT, markup: '<div class="wall" id="wall" part="wall"></div>', hide: '#wall', run });

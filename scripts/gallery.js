@@ -3,7 +3,8 @@
  * The index shows the pinned pieces (home.json "pinned", in that order) and a link to All works,
  * the full list grouped by home.json "groups".
  * The pages sit in a ring: index → newest → … → 01 → index. All works is not in the ring; Explore more opens it over the pages.
- * To add a piece: make a folder components/<tag>/ with DESIGN.md, src/<tag>.js, src/<tag>.css
+ * To add a piece: make a folder components/<tag>/ with DESIGN.md, src/<tag>.js (start it with definePiece
+ * from components/shared/piece.js), src/<tag>.css
  * and assets/thumb.webp, then add one entry to pieces.json.
  *
  * pages.js   the index entries and the piece pages
