@@ -1,16 +1,18 @@
 /* tiny-consoles · menu
- * On phones the arrows give way to a menu button. It opens a list of every page;
- * picking one goes there (the pager handles [data-go]) and the menu closes.
+ * On phones the arrows give way to a menu button. It opens the index, a link to All works
+ * and the pinned pieces; picking one goes there (the pager handles [data-go]) and the menu closes.
  */
 
-export function menu(pages, labels) {
+export function menu(pages, labels, isOpenAll = () => false) {
   const button = document.querySelector('.menu-btn');
   const panel = document.getElementById('menu');
   if (!button || !panel) return;
 
+  const item = (key, num, name, nav) => `<li${nav ? ' class="nav"' : ''}><a href="#${key}" data-go="${key}"><span>${num}</span>${name}</a></li>`;
   panel.querySelector('ol').innerHTML = pages.map((page, i) => {
     const [num, name] = labels[i].includes(' · ') ? labels[i].split(' · ') : ['', labels[i]];
-    return `<li><a href="#${page.dataset.key}" data-go="${page.dataset.key}"><span>${num}</span>${name}</a></li>`;
+    /* All works sits right under the index, as its own pill */
+    return item(page.dataset.key, num, name, i === 0) + (i === 0 ? item('all', '', 'All works', true) : '');
   }).join('');
 
   const canvas = panel.querySelector('canvas');
@@ -25,7 +27,7 @@ export function menu(pages, labels) {
     button.setAttribute('aria-expanded', String(open));
     panel.inert = !open;
     if (open) {
-      const now = document.querySelector('.page.current')?.dataset.key;
+      const now = isOpenAll() ? 'all' : document.querySelector('.page.current')?.dataset.key;
       panel.querySelectorAll('a').forEach(a => a.toggleAttribute('aria-current', a.dataset.go === now));
     }
   };
@@ -33,7 +35,7 @@ export function menu(pages, labels) {
 
   button.addEventListener('click', () => set(!panel.classList.contains('open')));
   /* any link to a page closes the menu, the logo in the bar as well as the list */
-  document.addEventListener('click', e => { if (e.target.closest('[data-go]')) set(false); });
+  document.addEventListener('click', e => { if (e.target.closest('[data-go]')) set(false); }, true);   /* capture, so All works (which stops the click) closes it too */
   addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
   matchMedia('(min-width: 721px)').addEventListener('change', e => { if (e.matches) set(false); });
 }

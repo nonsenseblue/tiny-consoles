@@ -76,7 +76,9 @@ document.getElementById('all').append(...groups.map(group => {
 /* ring order: index, then newest first, back round to 01; All works sits apart and opens over the pages */
 const ring = [{ page: home, label: 'Index' }, ...built.slice().reverse()];
 pager(ring.map(r => r.page), ring.map(r => r.label));
-menu(ring.map(r => r.page), ring.map(r => r.label));
+/* the phone menu keeps it short: the index, All works, and only the pinned pieces */
+const inMenu = ring.filter((r, i) => i === 0 || (shelves.pinned || []).includes(r.page.dataset.key));
+menu(inMenu.map(r => r.page), inMenu.map(r => r.label), () => all.classList.contains('open'));
 
 /* the head of All works: a jump link per group, and the dot field above it */
 document.getElementById('jump').append(...groups.map(group => {

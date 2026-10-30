@@ -85,11 +85,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .menu a span { flex: none; width: 22px; font-size: 12px; letter-spacing: 0; font-feature-settings: "tnum" 1; }
   .menu a[aria-current] { color: var(--ink); }
   /* the way home is a button, set apart from the numbered pieces below it */
-  .menu li:first-child { margin-bottom: 10px; }
-  .menu li:first-child a { display: inline-flex; padding: 7px 18px; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; font-size: 15px; }
-  .menu li:first-child a span { display: none; }
-  .menu li:first-child a[aria-current] { border-color: var(--ink); }
-  .menu li:first-child a[aria-current]::after { content: none; }
+  .menu ol { display: flex; flex-wrap: wrap; column-gap: 8px; }   /* the two pills share a row; every piece takes a full line below */
+  .menu li:not(.nav) { flex: 0 0 100%; }
+  .menu li.nav + li:not(.nav) { margin-top: 10px; }
+  .menu li.nav a { display: inline-flex; padding: 7px 18px; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; font-size: 15px; }
+  .menu li.nav a span { display: none; }
+  .menu li.nav a[aria-current] { border-color: var(--ink); }
+  .menu li.nav a[aria-current]::after { content: none; }
   .menu a[aria-current]::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-left: auto; align-self: center; }
   .menu.open a { animation: menu-in .5s var(--ease) both; }
   .menu.open li:nth-child(2) a { animation-delay: .03s; } .menu.open li:nth-child(3) a { animation-delay: .06s; }
