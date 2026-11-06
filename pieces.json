@@ -104,7 +104,7 @@
       "fossil",
       "powder"
     ],
-    "hint": "Rest the cursor on the bone chips and they crumble into powder that stays.",
+    "hint": "Rest the cursor on the bone chips and they crumble; the powder washes into the river.",
     "ratio": 0.53,
     "max": 1280
   }

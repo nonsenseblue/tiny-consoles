@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Pliocene Coast
-description: A torn paper collage of what the Galactic Railroad might have left in the ground; bone chips that crumble into powder when touched, feathers falling onto a river.
+description: A torn paper collage of what the Galactic Railroad might have left in the ground; bone chips that crumble into powder and wash into a river, feathers drifting down onto the water.
 ---
 
 # Pliocene Coast
@@ -23,7 +23,7 @@ Nothing is labelled and no line of the book appears. The places are only hinted 
 | Five dots on the middle sheet | The Northern Cross |
 | A long blue grey river along the bottom, slit with ripples | The river Campanella goes into |
 | The broken arcs on the river under the rings | The dark hole and its amber, reflected and cut up by the water |
-| White feathers falling on the right, one afloat on the river | The birds the bird catcher gathers from the sky |
+| White feathers on the right, two of which drift down onto the river | The birds the bird catcher gathers from the sky |
 | The concentric scrap, lower right | A walnut fossil found on the shore |
 
 When it comes into view everything moves at once for eight seconds and settles. After that nothing moves on its own; only what the pointer touches changes, and what it changes stays.
@@ -74,7 +74,7 @@ The collage has no text. The notes in the full size view set the title, Nokto de
 
 ## Layout
 
-One collage drawn at 1560 × 820 and scaled to the width it is given. The outline is not a rectangle: two dark sheets step down from left to right on the page's own paper, the strata strip stands above them, a third dark sheet with the feathers sits on the right, the rings sit across the bottom, and a thin river strip runs under everything along the foot, its top edge torn uneven.
+One collage drawn at 1560 × 820 and scaled to the width it is given. The outline is not a rectangle: two dark sheets step down from left to right on the page's own paper, the strata strip stands above them, a third dark sheet sits on the right, where the feathers start, the rings sit across the bottom, and a thin river strip runs under everything along the foot, its top edge torn uneven.
 
 <details><summary>Tokens</summary>
 
@@ -102,23 +102,23 @@ All still paper is baked into `assets/collage.webp` (3120 × 1640, transparent a
 
 ### Coming into view
 
-Eight seconds, all at once: the railway winds out from its first point and stops past the break, the smallest bone chip crumbles to nothing and the next one starts to, the powder falls and settles on the rim of the dark rings, the sand sinks a few pixels, the light inside the amber shifts and comes back. Then it rests.
+All at once: the railway winds out from its first point and stops past the break, the smallest bone chip crumbles to nothing and the next one starts to, the sand sinks a few pixels, the light inside the amber shifts and comes back, and two of the three feathers on the right let go one after another and drift down, swaying less and less, until they lie on the river. Each one sends out four rings of water as it lands, drawn by hand like the slits in the river: broken arcs of uneven weight in the same dark ink, spreading and fading over about four seconds. The black and white disc on the strata turns like a record let go, about two thirds of a turn, slowing to a stop. The rest takes eight seconds; the last feather lands at about twelve. Then it rests.
 
 ### Touch
 
-Leave the pointer on a bone chip and it wears away into powder that falls and heaps up on the rim; take the pointer away and it stops where it is. Nothing grows back. Near the amber, its inner light moves a pixel or two with the pointer. Nothing runs while the piece is still, or off screen.
+Leave the pointer on a bone chip and it wears away into powder. The powder falls onto the rim of the dark rings, slides down it into the river, and fades out there in small rings of water; take the pointer away and it stops where it is. Nothing grows back. Near the amber, its inner light moves a pixel or two with the pointer. Rest the pointer on the black and white disc and it is pushed round again, then slows to a stop when the pointer leaves. Nothing runs while the piece is still, or off screen.
 
-With reduced motion the railway is shown whole, and nothing moves.
+With reduced motion the railway is shown whole, the feathers stay on their sheet, and nothing moves.
 
 ### Full size
 
-Clicking the collage opens it over a dimmed page with no rectangle behind its torn edge, and notes beside it (under it on a phone) on the book, the 1985 film, and what each part of the collage stands for; the notes are our own words. It keeps working there: bone chips still crumble under the pointer. Replay puts everything back as it was before it came into view (chips whole, no powder, no railway) and plays the eight seconds again. There is only one piece, so there is no Prev or Next. Esc, Close or a click outside closes it.
+Clicking the collage opens it over a dimmed page with no rectangle behind its torn edge, and notes beside it (under it on a phone) on the book, the 1985 film, and what each part of the collage stands for; the notes are our own words. It keeps working there: bone chips still crumble under the pointer. Replay puts everything back as it was before it came into view (chips whole, no powder, no railway, the two feathers back on their sheet) and plays the eight seconds again. There is only one piece, so there is no Prev or Next. Esc, Close or a click outside closes it.
 
 ## Do's and Don'ts
 
 - Do keep it one collage of cut paper; don't add cards, grids or labels.
 - Don't write any text on it, from the book or our own.
 - Do keep amber to the one piece.
-- Don't let anything loop; change only what was touched, and keep it changed.
+- Don't let anything loop; change only what was touched, and keep it changed. The powder is the exception: it is carried off by the river.
 - Don't draw literal things from the book (trains, birds, apples): hint by shape only.
 - Don't stick small pieces flat on the open river; they read as stickers.

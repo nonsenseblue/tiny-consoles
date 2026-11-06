@@ -18,7 +18,7 @@ Pieces that start from a film, a book or a record.
 <table>
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#pliocene-coast"><img src="components/pliocene-coast/assets/thumb.webp" alt="pliocene-coast" width="96"></a></td>
-<td><b>08 · <a href="https://tinyconsoles.vercel.app/#pliocene-coast"><code>&lt;pliocene-coast&gt;</code></a></b><br>A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble into powder that stays.<br><sub>collage · torn paper · fossil · <a href="components/pliocene-coast/assets/preview.webp">preview</a> · <a href="components/pliocene-coast/DESIGN.md">design notes</a></sub></td>
+<td><b>08 · <a href="https://tinyconsoles.vercel.app/#pliocene-coast"><code>&lt;pliocene-coast&gt;</code></a></b><br>A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble and wash into the river.<br><sub>collage · torn paper · fossil · <a href="components/pliocene-coast/assets/preview.webp">preview</a> · <a href="components/pliocene-coast/DESIGN.md">design notes</a></sub></td>
 </tr>
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#ma-kasuri"><img src="components/ma-kasuri/assets/thumb.webp" alt="ma-kasuri" width="96"></a></td>

@@ -5,7 +5,7 @@ import { useEffect, type HTMLAttributes } from 'react';
 export type PlioceneCoastProps = HTMLAttributes<HTMLElement>;
 
 /**
- * A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble into powder.
+ * A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble into the river.
  * Renders the <pliocene-coast> Web Component; the piece itself lives in components/pliocene-coast/.
  */
 export function PlioceneCoast(props: PlioceneCoastProps) {

@@ -3,7 +3,8 @@
  * A torn paper collage of what the Galactic Railroad might have left in the ground: bone chips,
  * a sand of stars, a coal-sack hole with a piece of amber at its floor, a railway that winds out
  * from one point and breaks off. When it comes on screen everything moves together for a few
- * seconds and settles; touch the bone chips and they keep crumbling into powder that stays.
+ * seconds and settles, the feathers drifting down onto the river; touch the bone chips and they crumble
+ * into powder that slides into the river and dissolves in rings of water.
  *
  * Usage:
  *   <script type="module" src="components/pliocene-coast/src/pliocene-coast.js"></script>
@@ -26,8 +27,11 @@ const FONT = 'https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&disp
 const W = 1560, H = 820;
 const INTRO = 8000;               // everything moves together this long, then settles
 const CHIPS = [[520, 200, 44], [600, 268, 36], [668, 330, 30], [724, 384, 22], [762, 424, 14]];
-const RINGS = { cx: 470, cy: 680, rx: 380, ry: 330 }; // the coal sack: powder settles on its rim
-const FLOOR = 640;
+const RINGS = { cx: 470, cy: 680, rx: 380, ry: 330 }; // the coal sack: powder lands on its rim and slides off into the river
+// where each feather comes to rest on the river, lying almost flat, and when it lets go (s) and how long it falls (s)
+// the first, longest feather stays on its sheet; the other two fall
+const DISC = { x: 1010, y: 520, r: 92 }; // the black and white rings: spun once when it comes into view, and again under the pointer
+const DRIFT = [null, { x: 1150, y: 690, a: -0.1, at: 0.6, fall: 10.5 }, { x: 1395, y: 788, a: -0.05, at: 2.2, fall: 9.5 }];
 
 
 /* shown beside the collage when it is opened full size; every line our own, nothing quoted */
@@ -38,8 +42,8 @@ const NOTES = {
     ['The coast', 'Halfway along the line they get off at a riverbank of crystal sand, where a professor is digging out the bones of an animal from more than a million years ago. Here that dig is the whole picture: chips of bone, strata, and the sand they lie in.'],
     ['The hole', 'Near the end of the journey there is a black hole in the sky that nothing comes back from. The big dark rings are that hole; at its floor is the one warm thing, a piece of amber, for the scorpion who wished its body could burn as a light for others.'],
     ['The railway', 'The line winds out from a single point and breaks off before it finishes, the way the journey does.'],
-    ['The river and the feathers', 'Birds are caught along the river and come apart in your hand like sweets. A few feathers are falling; one has reached the water, and under the rings the river holds their broken reflection.'],
-    ['How it moves', 'When it comes into view everything moves at once for a few seconds and then settles. Touch a bone chip and it crumbles into powder that stays where it falls. Replay puts it all back.'],
+    ['The river and the feathers', 'Birds are caught along the river and come apart in your hand like sweets. A few feathers fall onto the water, and under the rings the river holds their broken reflection.'],
+    ['How it moves', 'When it comes into view everything moves at once for a few seconds and then settles. The feathers let go one by one and drift down onto the river. Touch a bone chip and it crumbles; the powder slides off the rim into the river and is gone, in small rings of water. Replay puts it all back.'],
   ],
 };
 
@@ -64,7 +68,13 @@ function run(root) {
   function start(svg) {
     const NS = 'http://www.w3.org/2000/svg';
     const grow = svg.querySelector('.grow'), len = grow.getTotalLength();
-    const amber = svg.querySelector('.amin'), sand = svg.querySelector('.sand-in'), powder = svg.querySelector('.powder');
+    const amber = svg.querySelector('.amin'), sand = svg.querySelector('.sand-in'), powder = svg.querySelector('.powder'), ripples = svg.querySelector('.ripples');
+    const disc = svg.querySelector('.disc');
+    let spin = 0, turn = 0;
+    const feathers = [...svg.querySelectorAll('.feather')].filter((el, i) => DRIFT[i]).map(el => {
+      const d = DRIFT[[...svg.querySelectorAll('.feather')].indexOf(el)];
+      return { el, x: +el.dataset.x, y: +el.dataset.y, a: +el.dataset.a, dx: d.x, dy: d.y, da: d.a, at: d.at, fall: d.fall, landed: false };
+    });
     const chips = [...svg.querySelectorAll('.chip')].map((el, i) => {
       const [cx, cy, R] = CHIPS[i];
       el.style.transformBox = 'view-box'; el.style.transformOrigin = `${cx}px ${cy}px`;
@@ -75,7 +85,7 @@ function run(root) {
     if (reduce) { grow.style.strokeDashoffset = 0; return; }
     grow.style.strokeDashoffset = len;
 
-    let parts = [], heap = {};
+    let parts = [], rings = [];
     let t0 = null, last = 0, raf = 0, visible = false, px = -1e4, py = -1e4, ax = 0, ay = 0;
 
     const setChip = c => { c.el.style.transform = `scale(${(0.15 + 0.85 * c.life).toFixed(3)})`; c.el.style.opacity = c.life < 0.08 ? 0 : 1; };
@@ -85,23 +95,60 @@ function run(root) {
       el.setAttribute('fill', '#e2dac9');
       el.setAttribute('opacity', (0.45 + Math.random() * 0.5).toFixed(2));
       powder.appendChild(el);
-      parts.push({ el, x, y, vx: (Math.random() - 0.4) * 22, vy: Math.random() * 10, done: false });
+      parts.push({ el, x, y, vx: (Math.random() - 0.4) * 22, vy: Math.random() * 10, on: false, wet: 0, op: +el.getAttribute('opacity') });
     };
     const shed = (c, chance) => {
       if (Math.random() > chance) return;
       const a = Math.random() * Math.PI * 2;
       spawn(c.cx + Math.cos(a) * c.R * c.life * 0.9, c.cy + Math.sin(a) * c.R * c.life * 0.55);
     };
-    const surface = bin => ground(bin * 3) - (heap[bin] || 0);
-    const ground = x => {
-      const u = (x - RINGS.cx) / RINGS.rx;
-      return Math.abs(u) < 1 ? RINGS.cy - RINGS.ry * Math.sqrt(1 - u * u) - 2 : FLOOR;
+    const inside = x => Math.abs((x - RINGS.cx) / RINGS.rx) < 0.985;
+    const ground = x => { const u = (x - RINGS.cx) / RINGS.rx; return RINGS.cy - RINGS.ry * Math.sqrt(Math.max(0, 1 - u * u)) - 2; };
+    // a ring of water spreading out from where something touched the river
+    // a ring of water, drawn by hand: a few broken arcs of uneven weight that spread out and fade
+    const RIPPLE_INK = '#1d2126', RIPPLE_STYLE = 'cut';
+    const ripple = (x, y, size, count, life = 2.4, width = 1.3, gap = 0.45) => {
+      if (rings.length > 24 && size < 60) return;
+      for (let i = 0; i < count; i++) {
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('opacity', 0);
+        // arcs on a unit circle, squashed later; each arc its own length, gaps between, a little wobble
+        let a0 = Math.random() * Math.PI * 2;
+        const end = a0 + Math.PI * 2;
+        while (a0 < end - 0.3) {
+          const a1 = Math.min(end, a0 + (RIPPLE_STYLE === 'cut' ? 0.35 + Math.random() * 0.9 : 0.12 + Math.random() * 0.22));
+          const pts = [];
+          for (let a = a0; a <= a1 + 1e-6; a += 0.06) {
+            const w = 1 + (Math.random() - 0.5) * 0.04 + Math.sin(a * 5 + i) * 0.02;
+            pts.push(`${(Math.cos(a) * w).toFixed(3)} ${(Math.sin(a) * w).toFixed(3)}`);
+          }
+          const seg = document.createElementNS(NS, 'path');
+          seg.setAttribute('d', 'M' + pts.join(' L'));
+          seg.setAttribute('fill', 'none');
+          seg.setAttribute('stroke', RIPPLE_STYLE === 'cut' ? RIPPLE_INK : '#7f8c97');
+          seg.setAttribute('stroke-linecap', 'round');
+          seg.setAttribute('vector-effect', 'non-scaling-stroke');
+          seg.setAttribute('stroke-width', (width * (RIPPLE_STYLE === 'cut' ? 1.3 : 2.2) * (0.6 + Math.random() * 0.8)).toFixed(2));
+          g.appendChild(seg);
+          a0 = a1 + 0.15 + Math.random() * (RIPPLE_STYLE === 'cut' ? 0.5 : 0.25);
+        }
+        ripples.appendChild(g);
+        rings.push({ el: g, x, y, size, life, age: -i * gap });
+      }
+    };
+    const placeFeather = (f, t) => {
+      // a slow fall that eases in and out, swinging from side to side less and less, turning to lie on the water
+      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const sway = Math.sin(t * Math.PI * 3.2) * (1 - t);
+      const x = f.x + (f.dx - f.x) * e + sway * 34, y = f.y + (f.dy - f.y) * e;
+      const rot = (f.a + (f.da - f.a) * e + sway * 0.35) * 180 / Math.PI - f.a * 180 / Math.PI;
+      f.el.setAttribute('transform', `translate(${(x - f.x).toFixed(1)} ${(y - f.y).toFixed(1)}) rotate(${rot.toFixed(2)} ${f.x} ${f.y})`);
     };
 
     function frame(now) {
       raf = 0;
       if (!visible) return;
-      if (t0 === null) t0 = now;
+      if (t0 === null) { t0 = now; spin = 110; }
       const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
       const k = Math.min(1, Math.max(0, (now - t0) / INTRO));
       let busy = k < 1;
@@ -131,32 +178,59 @@ function run(root) {
         c.life = Math.max(0, c.life - 0.32 * dt * (30 / c.R));
         shed(c, 0.9); shed(c, 0.9); setChip(c); busy = true;
       }
-      // powder falls and stays where it lands
+      // powder falls onto the rim of the rings, slides down it into the river and dissolves there
       for (const p of parts) {
-        if (p.done) continue;
         busy = true;
-        p.vy += 260 * dt; p.vx *= 0.985; p.x += p.vx * dt; p.y += p.vy * dt;
-        const bin = Math.round(p.x / 3), floor = surface(bin);
-        if (p.y >= floor) {
-          // like sand, a grain on a steep heap rolls off to the lower side before it settles
-          let best = bin;
-          for (let j = -3; j <= 3; j++) if (j && surface(bin + j) - floor > 2.4 * Math.abs(j) && surface(bin + j) > surface(best)) best = bin + j;
-          if (best !== bin) { p.x = best * 3; p.y = Math.min(p.y, surface(best) - 0.5); p.vy = 0; }
-          else {
-            p.y = floor; p.done = true;
-            for (let j = -3; j <= 3; j++) heap[bin + j] = (heap[bin + j] || 0) + 0.45 * Math.exp(-j * j / 4);
-          }
+        if (p.wet) {
+          p.wet += dt; p.x += 6 * dt;
+          p.el.setAttribute('opacity', (p.op * Math.max(0, 1 - p.wet / 1.4)).toFixed(2));
+          if (p.wet > 1.4) { p.el.remove(); p.gone = true; continue; }
+        } else if (p.on) {
+          const dir = Math.sign(p.x - RINGS.cx) || 1;
+          p.vx = Math.min(140, Math.abs(p.vx) + 90 * dt) * dir;
+          p.x += p.vx * dt; p.y = ground(p.x);
+          if (!inside(p.x)) { p.wet = 0.001; p.y = RINGS.cy + 4 + Math.random() * 8; if (Math.random() < 0.12) ripple(p.x, p.y, 16, 1); }
+        } else {
+          p.vy += 260 * dt; p.vx *= 0.985; p.x += p.vx * dt; p.y += p.vy * dt;
+          if (inside(p.x) && p.y >= ground(p.x)) { p.on = true; p.y = ground(p.x); p.vx = 10; }
+          else if (!inside(p.x) && p.y >= RINGS.cy + 4) { p.wet = 0.001; if (Math.random() < 0.12) ripple(p.x, p.y, 16, 1); }
         }
         p.el.setAttribute('cx', p.x.toFixed(1)); p.el.setAttribute('cy', p.y.toFixed(1));
       }
+      if (parts.some(p => p.gone)) parts = parts.filter(p => !p.gone);
+      // the feathers let go one after another and drift down onto the river
+      const secs = (now - t0) / 1000;
+      for (const f of feathers) {
+        if (f.landed) continue;
+        busy = true;
+        const t = Math.min(1, Math.max(0, (secs - f.at) / f.fall));
+        placeFeather(f, t);
+        if (t >= 1) { f.landed = true; ripple(f.dx, f.dy + 4, 190, 4, 4.2, 1.9, 0.6); }
+      }
+      // the disc turns like a record let go: pushed while the pointer rests on it, slowing to a stop on its own
+      if (Math.hypot(px - DISC.x, py - DISC.y) < DISC.r) spin = Math.min(130, spin + 150 * dt);
+      spin *= Math.exp(-0.45 * dt);
+      if (spin > 0.4) { turn = (turn + spin * dt) % 360; disc.setAttribute('transform', `rotate(${turn.toFixed(2)} ${DISC.x} ${DISC.y})`); busy = true; }
+      else spin = 0;
+      // rings of water spread and fade
+      for (const r of rings) {
+        r.age += dt;
+        if (r.age < 0) { r.el.setAttribute('opacity', 0); continue; }
+        const q = r.age / r.life, rx = 6 + r.size * (1 - Math.pow(1 - q, 2));
+        r.el.setAttribute('transform', `translate(${r.x} ${r.y}) scale(${rx.toFixed(1)} ${(rx * 0.22).toFixed(1)})`);
+        r.el.setAttribute('opacity', Math.max(0, Math.min(1, q * 8) * Math.pow(1 - q, 1.3)).toFixed(2));
+        if (q >= 1) { r.el.remove(); r.gone = true; }
+      }
+      if (rings.length) { busy = true; rings = rings.filter(r => !r.gone); }
       if (busy || px > -1e3) raf = requestAnimationFrame(frame); else last = 0;
     }
     const wake = () => { if (!raf && visible) raf = requestAnimationFrame(frame); };
     // everything back to how it was before it came into view: chips whole, no powder, no railway yet
     replay = () => {
       for (const c of chips) { c.life = 1; setChip(c); }
-      powder.replaceChildren(); parts = []; heap = {};
-      grow.style.strokeDashoffset = len; ax = ay = 0;
+      powder.replaceChildren(); parts = []; ripples.replaceChildren(); rings = [];
+      for (const f of feathers) { f.landed = false; f.el.removeAttribute('transform'); }
+      grow.style.strokeDashoffset = len; ax = ay = 0; turn = 0; disc.removeAttribute('transform');
       t0 = null; last = 0; wake();
     };
 
