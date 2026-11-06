@@ -17,6 +17,10 @@ Pieces that start from a film, a book or a record.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#pliocene-coast"><img src="components/pliocene-coast/assets/thumb.webp" alt="pliocene-coast" width="96"></a></td>
+<td><b>08 · <a href="https://tinyconsoles.vercel.app/#pliocene-coast"><code>&lt;pliocene-coast&gt;</code></a></b><br>A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble into powder that stays.<br><sub>collage · torn paper · fossil · <a href="components/pliocene-coast/assets/preview.webp">preview</a> · <a href="components/pliocene-coast/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#ma-kasuri"><img src="components/ma-kasuri/assets/thumb.webp" alt="ma-kasuri" width="96"></a></td>
 <td><b>07 · <a href="https://tinyconsoles.vercel.app/#ma-kasuri"><code>&lt;ma-kasuri&gt;</code></a></b><br>Four squares of kasuri cloth for films by Ozu, Naruse and Kore-eda; washed, their labels say what went unsaid.<br><sub>kasuri · film · ma · <a href="components/ma-kasuri/assets/preview.webp">preview</a> · <a href="components/ma-kasuri/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -64,11 +68,11 @@ Small experiments that stand on their own.
 
 ## Use a piece
 
-Two lines: the script, then the tag. Swap `ma-kasuri` for any piece above.
+Two lines: the script, then the tag. Swap `pliocene-coast` for any piece above.
 
 ```html
-<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/ma-kasuri/src/ma-kasuri.js"></script>
-<ma-kasuri></ma-kasuri>
+<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/pliocene-coast/src/pliocene-coast.js"></script>
+<pliocene-coast></pliocene-coast>
 ```
 
 ### With React
@@ -80,10 +84,10 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast } from 'tiny-consoles/react';
 
 export default function Page() {
-  return <MaKasuri style={{ maxWidth: 960 }} />;
+  return <PlioceneCoast style={{ maxWidth: 1200 }} />;
 }
 ```
 

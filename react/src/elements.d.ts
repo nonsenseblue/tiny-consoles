@@ -13,6 +13,7 @@ declare module 'react' {
       'lost-and-found': PieceElement;
       'day-for-night': PieceElement;
       'ma-kasuri': PieceElement;
+      'pliocene-coast': PieceElement;
     }
   }
 }

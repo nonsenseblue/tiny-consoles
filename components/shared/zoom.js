@@ -1,6 +1,6 @@
 /**
  * Full size view, shared by every piece that opens its sheets one at a time.
- * Click a tile to open it over a dimmed page; Prev, Next, the arrow keys or a swipe go through the others,
+ * Click a tile to open it over a dimmed page; Prev, Next, the arrow keys or a swipe go through the others (left out when there is only one),
  * Replay starts the open sheet's animation again, Esc, Close or a click outside puts it back.
  * The tile itself is moved, so it keeps running.
  * mode 'scale' enlarges the tile as drawn; mode 'resize' gives it more room and lets it lay out again.
@@ -33,6 +33,8 @@ const ZOOM_CSS = `
 .zoom.notes[open] { display: grid; grid-template-columns: auto 340px; column-gap: 56px; align-items: center; padding-bottom: 40px; }
 .zoom.notes .zcap { display: none; }
 .zside { font: 400 13px/1.65 Inter, system-ui, sans-serif; max-height: 72vh; overflow: auto; overscroll-behavior: contain; scrollbar-width: none; }
+/* the notes can take focus when the view opens, since they scroll; no frame around them for that */
+.zside:focus { outline: none; }
 .zside .zn { font-size: 11px; letter-spacing: .14em; opacity: .6; margin: 0 0 18px; }
 .zside .zt { font: 500 30px/1.15 var(--zt, inherit); letter-spacing: .06em; margin: 0; }
 .zside .zm { font-size: 12px; opacity: .65; margin: 8px 0 24px; }
@@ -72,6 +74,8 @@ export function zoomable(root, items, { mode = 'scale', label = el => el.getAttr
     + (replay ? `<button class="zrp" type="button">${ZICON.replay}Replay</button>` : '')
     + `<button class="znext" type="button" aria-label="Next">${ZICON.next}</button></div>`;
   root.append(dialog);
+  /* a single piece has nothing to go to */
+  if (items.length < 2) dialog.querySelectorAll('.zprev, .znext').forEach(b => b.remove());
   const box = dialog.querySelector('.zbox'), cap = dialog.querySelector('.zcap'), side = dialog.querySelector('.zside');
   const phone = matchMedia('(max-width: 720px)');
   let open = null, hold = null, size = null;
@@ -85,8 +89,8 @@ export function zoomable(root, items, { mode = 'scale', label = el => el.getAttr
     after(open);
   };
   const write = el => {
-    const i = items.indexOf(el), count = `${i + 1} / ${items.length}`;
-    cap.textContent = `${count}${label(el) ? ' · ' + label(el) : ''}`;
+    const i = items.indexOf(el), count = items.length > 1 ? `${i + 1} / ${items.length}` : '';
+    cap.textContent = [count, label(el)].filter(Boolean).join(' · ');
     if (!side) return;
     const n = notes(el) || {};
     side.innerHTML = `<p class="zn">${count}</p>${n.title ? `<h3 class="zt">${zesc(n.title)}</h3>` : ''}${n.meta ? `<p class="zm">${zesc(n.meta)}</p>` : ''}`
@@ -139,7 +143,7 @@ export function zoomable(root, items, { mode = 'scale', label = el => el.getAttr
   };
 
   dialog.addEventListener('close', () => { if (open) put(); });
-  const step = d => { if (open) { const n = items.length; show(items[(items.indexOf(open) + d + n) % n], d); } };
+  const step = d => { if (open && items.length > 1) { const n = items.length; show(items[(items.indexOf(open) + d + n) % n], d); } };
   dialog.addEventListener('click', e => {
     if (e.target.closest('.zprev')) return step(-1);
     if (e.target.closest('.znext')) return step(1);

@@ -93,5 +93,19 @@
     "ratio": 1,
     "max": 440,
     "min": 320
+  },
+  {
+    "tag": "pliocene-coast",
+    "text": "A torn paper collage of what the Galactic Railroad might have left in the ground: bone chips, a sand of stars, a dark hole with amber at its floor, a railway that breaks off, feathers falling onto a river. When it comes into view everything moves together for a few seconds, then settles.",
+    "about": "Paper left by a starlit railway.",
+    "chips": [
+      "collage",
+      "torn paper",
+      "fossil",
+      "powder"
+    ],
+    "hint": "Rest the cursor on the bone chips and they crumble into powder that stays.",
+    "ratio": 0.53,
+    "max": 1280
   }
 ]

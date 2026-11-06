@@ -1,0 +1,19 @@
+/* <pliocene-coast> · tiny-consoles · loaded by pliocene-coast.js into its shadow root */
+
+:host { display: block; }
+* { box-sizing: border-box; margin: 0; }
+
+/* one collage at a fixed ratio; the paper layer is an image, the moving parts an svg laid exactly on it */
+.board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1560 / 820;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.live { position: absolute; inset: 0; }
+.live svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+
+/* opened full size: the torn outline is the edge, so no rectangular shadow behind it */
+.board.zopen { box-shadow: none !important; }
