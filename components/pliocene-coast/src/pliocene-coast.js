@@ -31,7 +31,7 @@ const RINGS = { cx: 470, cy: 680, rx: 380, ry: 330 }; // the coal sack: powder l
 // where each feather comes to rest on the river, lying almost flat, and when it lets go (s) and how long it falls (s)
 // the first, longest feather stays on its sheet; the other two fall
 const DISC = { x: 1010, y: 520, r: 92 }; // the black and white rings: spun once when it comes into view, and again under the pointer
-const DRIFT = [null, { x: 1150, y: 690, a: -0.1, at: 0.6, fall: 10.5 }, { x: 1395, y: 788, a: -0.05, at: 2.2, fall: 9.5 }];
+const DRIFT = [null, { x: 1150, y: 690, a: -0.1, at: 0.4, fall: 14, swings: 4.5 }, { x: 1005, y: 772, a: 0.06, at: 2, fall: 13, swings: 4 }];
 
 
 /* shown beside the collage when it is opened full size; every line our own, nothing quoted */
@@ -73,7 +73,7 @@ function run(root) {
     let spin = 0, turn = 0;
     const feathers = [...svg.querySelectorAll('.feather')].filter((el, i) => DRIFT[i]).map(el => {
       const d = DRIFT[[...svg.querySelectorAll('.feather')].indexOf(el)];
-      return { el, x: +el.dataset.x, y: +el.dataset.y, a: +el.dataset.a, dx: d.x, dy: d.y, da: d.a, at: d.at, fall: d.fall, landed: false };
+      return { el, x: +el.dataset.x, y: +el.dataset.y, a: +el.dataset.a, dx: d.x, dy: d.y, da: d.a, at: d.at, fall: d.fall, swings: d.swings, landed: false, bob: 0 };
     });
     const chips = [...svg.querySelectorAll('.chip')].map((el, i) => {
       const [cx, cy, R] = CHIPS[i];
@@ -136,13 +136,20 @@ function run(root) {
         rings.push({ el: g, x, y, size, life, age: -i * gap });
       }
     };
-    const placeFeather = (f, t) => {
-      // a slow fall that eases in and out, swinging from side to side less and less, turning to lie on the water
-      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      const sway = Math.sin(t * Math.PI * 3.2) * (1 - t);
-      const x = f.x + (f.dx - f.x) * e + sway * 34, y = f.y + (f.dy - f.y) * e;
-      const rot = (f.a + (f.da - f.a) * e + sway * 0.35) * 180 / Math.PI - f.a * 180 / Math.PI;
-      f.el.setAttribute('transform', `translate(${(x - f.x).toFixed(1)} ${(y - f.y).toFixed(1)}) rotate(${rot.toFixed(2)} ${f.x} ${f.y})`);
+    const placeFeather = (f, t, bob = 0) => {
+      // a feather falls like a light leaf: it swings from side to side, tilting with the swing, nearly stops and
+      // even lifts a little at each end, sinks as it passes through the middle, and swings less as it nears the water
+      const u = t * t * (3 - 2 * t);
+      const k = Math.PI * 2 * f.swings, ph = u * k;
+      // the swing grows in from the moment it lets go and dies away as it reaches the water, so it lands as placed
+      const reach = Math.min(1, u * 7) * Math.pow(1 - u, 0.6);
+      // how far down: quick through the middle of a swing, slow at its ends, with a small lift there
+      const fallen = (0.62 * u + 0.38 * (u - Math.sin(2 * ph) / (2 * k))) - Math.pow(Math.sin(ph), 4) * 0.012 * reach;
+      const x = f.x + (f.dx - f.x) * u + Math.sin(ph) * 46 * reach;
+      const y = f.y + (f.dy - f.y) * Math.min(1, fallen) + bob;
+      const flutter = Math.sin(t * 61) * 0.025 * reach + Math.sin(t * 37 + 1) * 0.015 * reach;
+      const rot = (f.da - f.a) * u + Math.cos(ph) * 0.42 * reach + flutter;
+      f.el.setAttribute('transform', `translate(${(x - f.x).toFixed(1)} ${(y - f.y).toFixed(1)}) rotate(${(rot * 180 / Math.PI).toFixed(2)} ${f.x} ${f.y})`);
     };
 
     function frame(now) {
@@ -201,11 +208,15 @@ function run(root) {
       // the feathers let go one after another and drift down onto the river
       const secs = (now - t0) / 1000;
       for (const f of feathers) {
-        if (f.landed) continue;
+        if (f.landed) {
+          // once on the water it rocks gently twice and lies still
+          if (f.bob < 3) { f.bob += dt; busy = true; placeFeather(f, 1, Math.sin(f.bob * 4.2) * 2.4 * Math.exp(-f.bob * 1.4)); }
+          continue;
+        }
         busy = true;
         const t = Math.min(1, Math.max(0, (secs - f.at) / f.fall));
         placeFeather(f, t);
-        if (t >= 1) { f.landed = true; ripple(f.dx, f.dy + 4, 190, 4, 4.2, 1.9, 0.6); }
+        if (t >= 1) { f.landed = true; f.bob = 0; ripple(f.dx, f.dy + 4, 190, 4, 4.2, 1.9, 0.6); }
       }
       // the disc turns like a record let go: pushed while the pointer rests on it, slowing to a stop on its own
       if (Math.hypot(px - DISC.x, py - DISC.y) < DISC.r) spin = Math.min(130, spin + 150 * dt);
@@ -229,7 +240,7 @@ function run(root) {
     replay = () => {
       for (const c of chips) { c.life = 1; setChip(c); }
       powder.replaceChildren(); parts = []; ripples.replaceChildren(); rings = [];
-      for (const f of feathers) { f.landed = false; f.el.removeAttribute('transform'); }
+      for (const f of feathers) { f.landed = false; f.bob = 0; f.el.removeAttribute('transform'); }
       grow.style.strokeDashoffset = len; ax = ay = 0; turn = 0; disc.removeAttribute('transform');
       t0 = null; last = 0; wake();
     };
