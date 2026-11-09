@@ -69,6 +69,8 @@
 .ring { position: absolute; left: 50%; top: 50%; margin: -9px 0 0 -20px; overflow: visible; pointer-events: none; filter: url(#carbon); }
 
 /* ---------- the tags: cut corners, a hole punched right through, a paper washer round it ---------- */
+.tags { width: 362px; height: 245px; }
+.tags .tag-s { position: absolute; transform-origin: 0 0; }
 .tag-s { filter: drop-shadow(0 .5px .8px rgba(40,34,28,.25)) drop-shadow(0 4px 8px rgba(40,34,28,.13)); }
 .tag { position: relative; width: 300px; height: 140px; background: #dcdfe0; color: #20262a; --rule: #20262a;
   clip-path: polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px), 0 18px);
@@ -107,6 +109,4 @@
 
 /* opened full size: it stops lifting, and the tag keeps the shadow of its own shape, not a box */
 .sheet.zopen { translate: none !important; cursor: default; }
-.sheet.tag-s.zopen { box-shadow: none !important; }
-/* a tag opens about four times its size, and its tooth would grow with it */
-.sheet.tag-s.zopen .grain { opacity: .28; }
+.sheet.tags.zopen { box-shadow: none !important; }

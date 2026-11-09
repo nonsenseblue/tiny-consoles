@@ -70,17 +70,17 @@ const DEFS = `<svg class="defs" aria-hidden="true">
 
 const grain = (w, h, id) => `<svg class="grain" width="${w}" height="${h}" aria-hidden="true"><rect width="100%" height="100%" filter="url(#${id})"/></svg>`;
 const DAYS = ['M', 'T', 'W', 'T', 'F', 'S'];
-const tag = (shop, kind, no, item, todo, ready, day) => `<section class="sheet tag-s"><div class="tag">
+const tag = (shop, kind, no, item, todo, ready, day, x, y, r) => `<div class="tag-s" style="left:${x}px;top:${y}px;transform:rotate(${r}deg)"><div class="tag">
   ${grain(300, 140, 'stock')}<i class="eye"></i>
   <div class="in"><div class="head"><span class="shop">${shop}<span class="lab">${kind}</span></span><b>${no}</b></div>
     <div class="row"><span class="lab">Item</span><span class="typed">${item}</span></div>
     <div class="row"><span class="lab">Do</span><span class="typed">${todo}</span></div>
     <div class="row"><span class="lab">Ready</span><span class="typed">${ready}</span></div>
     <div class="wk">${DAYS.map((d, i) => `<span>${d}${i === day ? `<svg class="crayon" width="24" height="16" viewBox="0 0 24 16" aria-hidden="true"><path d="${CRAYON}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>` : ''}</span>`).join('')}</div></div>
-</div></section>`;
+</div></div>`;
 
 const MARKUP = `${DEFS}<div class="desk" part="desk"><div class="stage">
-<section class="sheet"><div class="docket">
+<section class="sheet" data-kind="docket"><div class="docket">
   <div class="grid">
     <div class="r top">
       <div class="c shop"><span class="lab">Townsend</span><span class="lab">Repairs<br>&amp; Small<br>Mending</span><span class="lab">Est. 1961</span></div>
@@ -111,7 +111,7 @@ const MARKUP = `${DEFS}<div class="desk" part="desk"><div class="stage">
   </div>
   ${grain(600, 342, 'card')}
 </div></section>
-<section class="sheet slip-s"><div class="slip">
+<section class="sheet slip-s" data-kind="slip"><div class="slip">
   <div class="part copy">
     <h1>MERIDIAN</h1>
     <div class="lab sub">Laundry · Dry Cleaning · Pressing</div>
@@ -136,16 +136,21 @@ const MARKUP = `${DEFS}<div class="desk" part="desk"><div class="stage">
   </div>
   ${grain(330, 430, 'thin')}
 </div></section>
-${tag('Keys &amp; Blades', 'Sharpening', '0907', 'Kitchen knife, carbon', 'Dull. Will not cut bread', 'Next Tue', 1)}
-${tag('A. Pell', 'Alterations', '261', 'Trousers, grey wool', 'Hem up 2 cm, keep cuff', 'Fri', 3)}
+<section class="sheet tags" data-kind="tags">
+${tag('Keys &amp; Blades', 'Sharpening', '0907', 'Kitchen knife, carbon', 'Dull. Will not cut bread', 'Next Tue', 1, 10, 40, -6)}
+${tag('A. Pell', 'Alterations', '261', 'Trousers, grey wool', 'Hem up 2 cm, keep cuff', 'Fri', 3, 48, 78, 4)}
+</section>
 </div></div>`;
 
-/* where each sheet lies: design units, rotation in degrees, scale. The sizes keep to real ones: the tag is
-   a 12 cm tag, the ticket about 15 cm, the slip 10 by 13. Wide boards leave room round the stack; on a
+/* where each sheet lies: design units, rotation in degrees, scale. The two tags lie together and open together.
+   The sizes keep to real ones: the tag is a No. 3 tag, about 9.5 cm, the ticket about 15 cm, the slip 10 by 13. Wide boards leave room round the stack; on a
    phone the board is cut close to it, so the stack is not lost in the margins. */
+/* design pixels to a real centimetre, for each kind of slip */
+const PX_PER_CM = { docket: 600 / 15, slip: 330 / 10, tags: 300 / 9.5 };
+
 const LAYOUTS = {
-  wide:   { w: 1640, h: 690, at: [[504.6, 145.6, -2, .818], [359.4, 112.6, -3.5, .964], [808.2, 403, -6, 1.043], [847.8, 442.6, 4, 1.043]] },
-  narrow: { w: 690,  h: 476, at: [[150, 80, -2, .62], [40, 55, -3.5, .73], [380, 275, -6, .79], [410, 305, 4, .79]] },
+  wide:   { w: 1640, h: 690, at: [[504.6, 145.6, -2, .818], [359.4, 112.6, -3.5, .964], [797.8, 361.3, 0, 1.043]] },
+  narrow: { w: 690,  h: 476, at: [[150, 80, -2, .62], [40, 55, -3.5, .73], [372.1, 243.4, 0, .79]] },
 };
 
 /* ---------- motion ---------- */
@@ -215,8 +220,10 @@ function timeline(sheet) {
     sheet.querySelectorAll('.carbon').forEach(el => press(el, 280, 110));
     t += 260; draw(sheet.querySelector('.ring path'), 480);
   } else {
-    sheet.querySelectorAll('.head b, .typed').forEach(type);
-    t += 200; draw(sheet.querySelector('.crayon path'), 460);
+    sheet.querySelectorAll('.tag').forEach(tg => {
+      tg.querySelectorAll('.head b, .typed').forEach(type);
+      t += 200; draw(tg.querySelector('.crayon path'), 460); t += 160;
+    });
   }
   const end = t + 200;
   return { end, seek: (T, live = false) => ev.forEach(f => f(T, live)) };
@@ -258,7 +265,9 @@ function run(root, host) {
   zoom = zoomable(root, sheets, {
     after: opened,
     replay: el => { if (writing === el) { gen++; writing = null; } opened(el); },
-    label: el => ['Repair ticket', 'Laundry slip', 'Tag, sharpening', 'Tag, alterations'][sheets.indexOf(el)],
+    label: el => ['Repair ticket', 'Laundry slip', 'Tags'][sheets.indexOf(el)],
+    /* every slip opens at the same real scale, the one at which the laundry slip fits, so the tags stay small */
+    most: el => Math.min(innerWidth * .86 / 330, innerHeight * .74 / 430) * PX_PER_CM.slip / PX_PER_CM[el.dataset.kind],
   });
 
   /* lay the stack on the board and scale the board to the space it has */

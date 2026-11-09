@@ -62,7 +62,8 @@ const ZICON = {
 const zesc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 /* replay(el) starts the sheet's animation again from the beginning.
    notes(el) may return { title, meta, lead, parts: [[heading, text], …] }; the view then shows them beside the sheet. */
-export function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('aria-label') || '', skip = () => false, after = () => {}, replay = null, notes = null, notesFont = 'inherit', ignore = 'a, button, input' } = {}) {
+/* most(el) may cap how far a sheet is enlarged, so things of different real sizes keep their sizes against each other. */
+export function zoomable(root, items, { mode = 'scale', label = el => el.getAttribute('aria-label') || '', skip = () => false, after = () => {}, replay = null, notes = null, notesFont = 'inherit', ignore = 'a, button, input', most = () => Infinity } = {}) {
   if (typeof HTMLDialogElement === 'undefined' || !('showModal' in HTMLDialogElement.prototype)) return null;
   root.append(Object.assign(document.createElement('style'), { textContent: ZOOM_CSS }));
   const dialog = document.createElement('dialog');
@@ -81,9 +82,9 @@ export function zoomable(root, items, { mode = 'scale', label = el => el.getAttr
   let open = null, hold = null, size = null;
 
   const fit = () => {
-    const k = !notes ? Math.min(innerWidth * .86 / size.w, innerHeight * .74 / size.h)
+    const k = Math.min(most(open), !notes ? Math.min(innerWidth * .86 / size.w, innerHeight * .74 / size.h)
       : phone.matches ? (innerWidth - 40) / size.w
-      : Math.min(innerWidth * .4 / size.w, innerHeight * .6 / size.h);
+      : Math.min(innerWidth * .4 / size.w, innerHeight * .6 / size.h));
     box.style.width = `${size.w * k}px`; box.style.height = `${size.h * k}px`;
     if (mode === 'scale') open.style.setProperty('--zoom', k);
     after(open);
