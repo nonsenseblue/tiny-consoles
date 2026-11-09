@@ -14,6 +14,7 @@ declare module 'react' {
       'day-for-night': PieceElement;
       'ma-kasuri': PieceElement;
       'pliocene-coast': PieceElement;
+      'claim-check': PieceElement;
     }
   }
 }

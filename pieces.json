@@ -62,7 +62,7 @@
     ],
     "hint": "Click a sheet to open it and watch it being written; press a tab to lift its sheet.",
     "ratio": 0.42,
-    "max": 1080
+    "max": 920
   },
   {
     "tag": "day-for-night",
@@ -107,5 +107,19 @@
     "hint": "Rest the cursor on the bone chips and they crumble; the powder washes into the river.",
     "ratio": 0.53,
     "max": 1280
+  },
+  {
+    "tag": "claim-check",
+    "text": "A repair ticket, a laundry slip and two tags, left at the counters in one week and gathered into a small stack. Open one and it is written again, field by field, until the day is circled by hand.",
+    "about": "Tickets for things left to mend.",
+    "chips": [
+      "receipts",
+      "carbon copy",
+      "typewriter",
+      "hand drawn"
+    ],
+    "hint": "Click a ticket to open it and watch it being filled in.",
+    "ratio": 0.42,
+    "max": 1080
   }
 ]

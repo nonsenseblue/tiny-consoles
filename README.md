@@ -40,6 +40,10 @@ Things made for places that do not exist: a label, a station, an office.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#claim-check"><img src="components/claim-check/assets/thumb.webp" alt="claim-check" width="96"></a></td>
+<td><b>09 · <a href="https://tinyconsoles.vercel.app/#claim-check"><code>&lt;claim-check&gt;</code></a></b><br>A stack of tickets for things left to mend or clean; open one and it fills itself in until the day is circled by hand.<br><sub>receipts · carbon copy · typewriter · hand drawn · <a href="components/claim-check/assets/preview.webp">preview</a> · <a href="components/claim-check/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#lost-and-found"><img src="components/lost-and-found/assets/thumb.webp" alt="lost-and-found" width="96"></a></td>
 <td><b>05 · <a href="https://tinyconsoles.vercel.app/#lost-and-found"><code>&lt;lost-and-found&gt;</code></a></b><br>Four sheets from a lost property register that type themselves in, then get highlighted and stamped.<br><sub>archive · forms · dot type · stamp · <a href="components/lost-and-found/assets/preview.webp">preview</a> · <a href="components/lost-and-found/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -68,11 +72,11 @@ Small experiments that stand on their own.
 
 ## Use a piece
 
-Two lines: the script, then the tag. Swap `pliocene-coast` for any piece above.
+Two lines: the script, then the tag. Swap `claim-check` for any piece above.
 
 ```html
-<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/pliocene-coast/src/pliocene-coast.js"></script>
-<pliocene-coast></pliocene-coast>
+<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/claim-check/src/claim-check.js"></script>
+<claim-check></claim-check>
 ```
 
 ### With React
@@ -84,10 +88,10 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck } from 'tiny-consoles/react';
 
 export default function Page() {
-  return <PlioceneCoast style={{ maxWidth: 1200 }} />;
+  return <ClaimCheck style={{ maxWidth: 1080 }} />;
 }
 ```
 
