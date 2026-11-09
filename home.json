@@ -12,7 +12,8 @@
         "pliocene-coast",
         "ma-kasuri",
         "day-for-night",
-        "rerun-board"
+        "rerun-board",
+        "deep-space"
       ]
     },
     {
@@ -22,12 +23,6 @@
         "soft-grain",
         "soundings-board",
         "lost-and-found"
-      ]
-    },
-    {
-      "name": "Studies",
-      "tags": [
-        "deep-space"
       ]
     }
   ]

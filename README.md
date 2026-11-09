@@ -32,6 +32,10 @@ Pieces that start from a film, a book or a record.
 <td width="112"><a href="https://tinyconsoles.vercel.app/#rerun-board"><img src="components/rerun-board/assets/thumb.webp" alt="rerun-board" width="96"></a></td>
 <td><b>04 · <a href="https://tinyconsoles.vercel.app/#rerun-board"><code>&lt;rerun-board&gt;</code></a></b><br>An institute of reruns: colonies grow in, the clock counts down, and everything grows back almost the same.<br><sub>identity · liquid pixels · loop · <a href="components/rerun-board/assets/preview.webp">preview</a> · <a href="components/rerun-board/DESIGN.md">design notes</a></sub></td>
 </tr>
+<tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#deep-space"><img src="components/deep-space/assets/thumb.webp" alt="deep-space" width="96"></a></td>
+<td><b>02 · <a href="https://tinyconsoles.vercel.app/#deep-space"><code>&lt;deep-space&gt;</code></a></b><br>Six tiny 1-bit screens, live-dithered at 30 fps, with parallax under the cursor.<br><sub>1-bit · dither · generative · <a href="components/deep-space/assets/preview.webp">preview</a> · <a href="components/deep-space/DESIGN.md">design notes</a></sub></td>
+</tr>
 </table>
 
 ## Imagined places
@@ -56,19 +60,6 @@ Things made for places that do not exist: a label, a station, an office.
 <td><b>01 · <a href="https://tinyconsoles.vercel.app/#soft-grain"><code>&lt;soft-grain&gt;</code></a></b><br>Six record sleeves for an imagined quiet label; grainy gradients cut into shapes, fine lines that ripple.<br><sub>grain · record sleeve · line art · <a href="components/soft-grain/assets/preview.webp">preview</a> · <a href="components/soft-grain/DESIGN.md">design notes</a></sub></td>
 </tr>
 </table>
-
-## Studies
-
-Small experiments that stand on their own.
-
-<table>
-<tr>
-<td width="112"><a href="https://tinyconsoles.vercel.app/#deep-space"><img src="components/deep-space/assets/thumb.webp" alt="deep-space" width="96"></a></td>
-<td><b>02 · <a href="https://tinyconsoles.vercel.app/#deep-space"><code>&lt;deep-space&gt;</code></a></b><br>Six tiny 1-bit screens, live-dithered at 30 fps, with parallax under the cursor.<br><sub>1-bit · dither · generative · <a href="components/deep-space/assets/preview.webp">preview</a> · <a href="components/deep-space/DESIGN.md">design notes</a></sub></td>
-</tr>
-</table>
-
-<br>
 
 ## Use a piece
 

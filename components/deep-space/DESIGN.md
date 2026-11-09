@@ -16,6 +16,7 @@ The tone is playful but restrained. One ink, one void, monospaced captions, noth
 
 | Source | What Deep Space takes from it |
 |---|---|
+| *Star Wars* (1977) and *The Empire Strikes Back* (1980) | Four of the six screens start from these films: two suns setting over a desert, the jump to lightspeed, the asteroid belt, and a small base in falling snow. The ringed world and the radar sweep are our own. |
 | One-bit screens | Two colours and nothing between, like the first Macintosh and early handheld devices. Tone comes from pattern, not from grey. |
 | Ordered dithering | The 8x8 Bayer matrix, a classic way to fake shades with on and off pixels. Its regular cross-hatch is the texture of the whole piece. |
 | One-bit games | Games that chose dithering as a style rather than a limit, *Return of the Obra Dinn* being the best known. |
