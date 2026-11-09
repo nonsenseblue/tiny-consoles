@@ -19,7 +19,7 @@ Nothing is labelled and no line of the book appears. The places are only hinted 
 | The big dark rings | The Coal Sack, the black hole in the sky near where Campanella is gone |
 | The amber at its floor | The scorpion's fire, a body burning to light the dark |
 | The railway that breaks off | The journey that cannot be finished |
-| Small torn triangles by the line | The triangle markers lit along the track |
+| Small torn scraps by the line | The triangle markers lit along the track |
 | Five dots on the middle sheet | The Northern Cross |
 | A long blue grey river along the bottom, slit with ripples | The river Campanella goes into |
 | The broken arcs on the river under the rings | The dark hole and its amber, reflected and cut up by the water |
@@ -92,7 +92,7 @@ Every piece of paper has a close shadow the size of its thickness (0.6px across,
 
 ## Shapes
 
-Torn edges everywhere, never a clean cut. Ink on paper is printed: slightly displaced and with small gaps. Amber is a rounded pebble painted in layers, with bubbles, a crack, a dark speck and a hand drawn outline. Feathers are long and pointed with one nick in the vane, and a tapering quill that runs past the base. No sticker shapes, no icons.
+Torn edges everywhere, never a clean cut. Every sheet has fine paper fibre and a frosted, matte grain, lighter on the bone papers so they stay clean. Ink on paper is printed: slightly displaced and with small gaps. Amber is a rounded pebble painted in layers, with bubbles, a crack, a dark speck and a hand drawn outline. Feathers are long and pointed with one nick in the vane, and a tapering quill that runs past the base. No sticker shapes, no icons.
 
 ## Components
 
@@ -102,11 +102,11 @@ All still paper is baked into `assets/collage.webp` (3120 × 1640, transparent a
 
 ### Coming into view
 
-All at once: the railway winds out from its first point and stops past the break, the smallest bone chip crumbles to nothing and the next one starts to, the sand sinks a few pixels, the light inside the amber shifts and comes back, and two of the three feathers on the right let go one after another and drift down like light leaves: swinging from side to side and tilting with the swing, nearly stopping and lifting a little at each end, sinking through the middle, a fine flutter all the way, until they settle on the river and rock twice. Each one sends out four rings of water as it lands, drawn by hand like the slits in the river: broken arcs of uneven weight in the same dark ink, spreading and fading over about four seconds. The black and white disc on the strata turns like a record let go, about two thirds of a turn, slowing to a stop. The rest takes eight seconds; the last feather lands at about fifteen. Then it rests.
+All at once: the railway winds out from its first point and stops past the break, the smallest bone chip crumbles to nothing and the next one starts to, the sand sinks a few pixels, the light inside the amber shifts and comes back, and two of the three feathers on the right let go one after another and drift down like light leaves: swinging from side to side and tilting with the swing, nearly stopping and lifting a little at each end, sinking through the middle, a fine flutter all the way, until they settle on the river and rock twice. Each one sends out four rings of water as it lands, drawn by hand like the slits in the river: thin broken arcs of uneven weight in the same dark ink, spreading and fading over about four seconds. When the swell reaches a feather already lying on the water, that feather is lifted once, carried a little way outward and turned slightly, and stays where the water leaves it. The black and white disc on the strata turns like a record let go, about two thirds of a turn, slowing to a stop. The rest takes eight seconds; the last feather lands at about fifteen. Then it rests, except the broken reflection of the rings on the river, which keeps moving: ring after ring spreads outward from under the amber, fading as it widens, while the next one rises behind it.
 
 ### Touch
 
-Leave the pointer on a bone chip and it wears away into powder. The powder falls onto the rim of the dark rings, slides down it into the river, and fades out there in small rings of water; take the pointer away and it stops where it is. Nothing grows back. Near the amber, its inner light moves a pixel or two with the pointer. Rest the pointer on the black and white disc and it is pushed round again, then slows to a stop when the pointer leaves. Nothing runs while the piece is still, or off screen.
+Leave the pointer on a bone chip and it wears away into powder. The powder falls onto the rim of the dark rings, slides down it into the river, and fades out there; take the pointer away and it stops where it is. Nothing grows back. Near the amber, its inner light moves a pixel or two with the pointer. Rest the pointer on the black and white disc and it is pushed round again, then slows to a stop when the pointer leaves. Nothing runs while the piece is still, or off screen.
 
 With reduced motion the railway is shown whole, the feathers stay on their sheet, and nothing moves.
 
@@ -119,6 +119,6 @@ Clicking the collage opens it over a dimmed page with no rectangle behind its to
 - Do keep it one collage of cut paper; don't add cards, grids or labels.
 - Don't write any text on it, from the book or our own.
 - Do keep amber to the one piece.
-- Don't let anything loop; change only what was touched, and keep it changed. The powder is the exception: it is carried off by the river.
+- Don't let anything loop; change only what was touched, and keep it changed. The exceptions are water: the powder is carried off by the river, and the reflection keeps spreading outward.
 - Don't draw literal things from the book (trains, birds, apples): hint by shape only.
 - Don't stick small pieces flat on the open river; they read as stickers.

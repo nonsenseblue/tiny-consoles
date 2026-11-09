@@ -70,11 +70,17 @@ function run(root) {
     const grow = svg.querySelector('.grow'), len = grow.getTotalLength();
     const amber = svg.querySelector('.amin'), sand = svg.querySelector('.sand-in'), powder = svg.querySelector('.powder'), ripples = svg.querySelector('.ripples');
     const disc = svg.querySelector('.disc');
+    // the broken reflection of the rings on the river, which never quite holds still
+    const glints = [...svg.querySelectorAll('.glint')].map(el => ({ el, k: +el.dataset.k, m: +el.dataset.m, op: +el.getAttribute('opacity'), sw: +el.getAttribute('stroke-width'), ph: Math.random() * Math.PI * 2, w: 0.5 + Math.random() * 0.5 }));
     let spin = 0, turn = 0;
-    const feathers = [...svg.querySelectorAll('.feather')].filter((el, i) => DRIFT[i]).map(el => {
-      const d = DRIFT[[...svg.querySelectorAll('.feather')].indexOf(el)];
-      return { el, x: +el.dataset.x, y: +el.dataset.y, a: +el.dataset.a, dx: d.x, dy: d.y, da: d.a, at: d.at, fall: d.fall, swings: d.swings, landed: false, bob: 0 };
+    const gust = seed => { let q = seed * 9301 + 49297; const rnd = () => ((q = (q * 16807) % 2147483647) / 2147483647); return Array.from({ length: 12 }, rnd); };
+    const onSheet = [...svg.querySelectorAll('.feather:not(.afloat)')];
+    const feathers = onSheet.filter((el, i) => DRIFT[i]).map(el => {
+      const d = DRIFT[onSheet.indexOf(el)];
+      return { el, x: +el.dataset.x, y: +el.dataset.y, a: +el.dataset.a, dx: d.x, dy: d.y, da: d.a, at: d.at, fall: d.fall, swings: d.swings, landed: false, wt: 9, amp: 0, g: gust(d.x) };
     });
+    // the feather that was already lying on the river
+    const afloat = [...svg.querySelectorAll('.feather.afloat')].map(el => ({ el, x: +el.dataset.x, y: +el.dataset.y, wt: 9, amp: 0, afloat: true }));
     const chips = [...svg.querySelectorAll('.chip')].map((el, i) => {
       const [cx, cy, R] = CHIPS[i];
       el.style.transformBox = 'view-box'; el.style.transformOrigin = `${cx}px ${cy}px`;
@@ -104,10 +110,9 @@ function run(root) {
     };
     const inside = x => Math.abs((x - RINGS.cx) / RINGS.rx) < 0.985;
     const ground = x => { const u = (x - RINGS.cx) / RINGS.rx; return RINGS.cy - RINGS.ry * Math.sqrt(Math.max(0, 1 - u * u)) - 2; };
-    // a ring of water spreading out from where something touched the river
     // a ring of water, drawn by hand: a few broken arcs of uneven weight that spread out and fade
-    const RIPPLE_INK = '#1d2126', RIPPLE_STYLE = 'cut';
-    const ripple = (x, y, size, count, life = 2.4, width = 1.3, gap = 0.45) => {
+    const RIPPLE_INK = '#1d2126', RIPPLE_STYLE = 'cut', FLAT = 0.26;
+    const ripple = (x, y, size, count, life = 2.4, width = 1.3, gap = 0.45, src = null) => {
       if (rings.length > 24 && size < 60) return;
       for (let i = 0; i < count; i++) {
         const g = document.createElementNS(NS, 'g');
@@ -128,15 +133,15 @@ function run(root) {
           seg.setAttribute('stroke', RIPPLE_STYLE === 'cut' ? RIPPLE_INK : '#7f8c97');
           seg.setAttribute('stroke-linecap', 'round');
           seg.setAttribute('vector-effect', 'non-scaling-stroke');
-          seg.setAttribute('stroke-width', (width * (RIPPLE_STYLE === 'cut' ? 1.3 : 2.2) * (0.6 + Math.random() * 0.8)).toFixed(2));
+          seg.setAttribute('stroke-width', (width * (RIPPLE_STYLE === 'cut' ? 0.62 : 2.2) * (0.6 + Math.random() * 0.8)).toFixed(2));
           g.appendChild(seg);
           a0 = a1 + 0.15 + Math.random() * (RIPPLE_STYLE === 'cut' ? 0.5 : 0.25);
         }
         ripples.appendChild(g);
-        rings.push({ el: g, x, y, size, life, age: -i * gap });
+        rings.push({ el: g, x, y, size, life, age: -i * gap, src, reach: 0, hit: new Set() });
       }
     };
-    const placeFeather = (f, t, bob = 0) => {
+    const placeFeather = (f, t, bob = 0, tilt = 0, shift = 0) => {
       // a feather falls like a light leaf: it swings from side to side, tilting with the swing, nearly stops and
       // even lifts a little at each end, sinks as it passes through the middle, and swings less as it nears the water
       const u = t * t * (3 - 2 * t);
@@ -148,8 +153,8 @@ function run(root) {
       const x = f.x + (f.dx - f.x) * u + Math.sin(ph) * 46 * reach;
       const y = f.y + (f.dy - f.y) * Math.min(1, fallen) + bob;
       const flutter = Math.sin(t * 61) * 0.025 * reach + Math.sin(t * 37 + 1) * 0.015 * reach;
-      const rot = (f.da - f.a) * u + Math.cos(ph) * 0.42 * reach + flutter;
-      f.el.setAttribute('transform', `translate(${(x - f.x).toFixed(1)} ${(y - f.y).toFixed(1)}) rotate(${(rot * 180 / Math.PI).toFixed(2)} ${f.x} ${f.y})`);
+      const rot = (f.da - f.a) * u + Math.cos(ph) * 0.42 * reach + flutter + tilt;
+      f.el.setAttribute('transform', `translate(${(x - f.x + shift).toFixed(1)} ${(y - f.y).toFixed(1)}) rotate(${(rot * 180 / Math.PI).toFixed(2)} ${f.x} ${f.y})`);
     };
 
     function frame(now) {
@@ -196,11 +201,11 @@ function run(root) {
           const dir = Math.sign(p.x - RINGS.cx) || 1;
           p.vx = Math.min(140, Math.abs(p.vx) + 90 * dt) * dir;
           p.x += p.vx * dt; p.y = ground(p.x);
-          if (!inside(p.x)) { p.wet = 0.001; p.y = RINGS.cy + 4 + Math.random() * 8; if (Math.random() < 0.12) ripple(p.x, p.y, 16, 1); }
+          if (!inside(p.x)) { p.wet = 0.001; p.y = RINGS.cy + 4 + Math.random() * 8; }
         } else {
           p.vy += 260 * dt; p.vx *= 0.985; p.x += p.vx * dt; p.y += p.vy * dt;
           if (inside(p.x) && p.y >= ground(p.x)) { p.on = true; p.y = ground(p.x); p.vx = 10; }
-          else if (!inside(p.x) && p.y >= RINGS.cy + 4) { p.wet = 0.001; if (Math.random() < 0.12) ripple(p.x, p.y, 16, 1); }
+          else if (!inside(p.x) && p.y >= RINGS.cy + 4) { p.wet = 0.001; }
         }
         p.el.setAttribute('cx', p.x.toFixed(1)); p.el.setAttribute('cy', p.y.toFixed(1));
       }
@@ -208,27 +213,68 @@ function run(root) {
       // the feathers let go one after another and drift down onto the river
       const secs = (now - t0) / 1000;
       for (const f of feathers) {
-        if (f.landed) {
-          // once on the water it rocks gently twice and lies still
-          if (f.bob < 3) { f.bob += dt; busy = true; placeFeather(f, 1, Math.sin(f.bob * 4.2) * 2.4 * Math.exp(-f.bob * 1.4)); }
-          continue;
-        }
+        if (f.landed) continue;
         busy = true;
         const t = Math.min(1, Math.max(0, (secs - f.at) / f.fall));
         placeFeather(f, t);
-        if (t >= 1) { f.landed = true; f.bob = 0; ripple(f.dx, f.dy + 4, 190, 4, 4.2, 1.9, 0.6); }
+        // landing: rings go out from where it touched the water
+        if (t >= 1) { f.landed = true; ripple(f.dx, f.dy + 4, 220, 4, 4.4, 1.9, 0.6, f); }
+      }
+      // anything lying on the water is lifted and carried a little when a ring of water passes under it
+      const floating = [...afloat, ...feathers.filter(f => f.landed)];
+      for (const r of rings) {
+        if (r.age <= 0 || r.size < 60) continue;
+        // the swell travels on a little past the ring you can see, weakening as it goes
+        const q = r.age / r.life, rx = (6 + r.size * (1 - Math.pow(1 - q, 2))) * 2.1;
+        for (const f of floating) {
+          if (f === r.src || r.hit.has(f)) continue;
+          const fx = f.afloat ? f.x : f.dx, fy = f.afloat ? f.y : f.dy;
+          const d = Math.hypot(fx - r.x, (fy - r.y) / FLAT);
+          if (d > r.reach && d <= rx) {
+            r.hit.add(f);
+            // the swell lifts it once and carries it a little way outward, turning it slightly; it stays where it is left
+            const push = (r.size / 220) * Math.max(0.75, 1 - d / (r.size * 3));
+            const ang = Math.atan2((fy - r.y) / FLAT, fx - r.x), vary = 0.7 + Math.random() * 0.6;
+            f.from = [f.ox || 0, f.oy || 0, f.rr || 0];
+            f.to = [f.from[0] + Math.cos(ang) * 18 * push * vary, f.from[1] + Math.sin(ang) * 4 * push * vary, f.from[2] + (Math.random() - 0.5) * 0.09 * push];
+            f.lift = (4.5 + Math.random() * 1.5) * push; f.dur = 2.6 + Math.random() * 1.6; f.wt = 0;
+          }
+        }
+        r.reach = rx;
+      }
+      for (const f of floating) {
+        if (!f.from || f.wt > f.dur) continue;
+        f.wt = Math.min(f.dur, f.wt + dt); busy = true;
+        const p = f.wt / f.dur, e = p * p * (3 - 2 * p);
+        f.ox = f.from[0] + (f.to[0] - f.from[0]) * e; f.oy = f.from[1] + (f.to[1] - f.from[1]) * e; f.rr = f.from[2] + (f.to[2] - f.from[2]) * e;
+        const lift = f.lift * Math.pow(Math.sin(Math.PI * Math.min(1, p * 1.25)), 2);
+        if (f.afloat) f.el.setAttribute('transform', `translate(${f.ox.toFixed(2)} ${(f.oy - lift).toFixed(2)}) rotate(${(f.rr * 180 / Math.PI).toFixed(2)} ${f.x} ${f.y})`);
+        else placeFeather(f, 1, f.oy - lift, f.rr, f.ox);
       }
       // the disc turns like a record let go: pushed while the pointer rests on it, slowing to a stop on its own
       if (Math.hypot(px - DISC.x, py - DISC.y) < DISC.r) spin = Math.min(130, spin + 150 * dt);
       spin *= Math.exp(-0.45 * dt);
       if (spin > 0.4) { turn = (turn + spin * dt) % 360; disc.setAttribute('transform', `rotate(${turn.toFixed(2)} ${DISC.x} ${DISC.y})`); busy = true; }
       else spin = 0;
+      // the reflection spreads outward ring by ring from under the amber: each ring grows from small to wide,
+      // fading in and out, and the next one rises behind it, without end
+      const w = (now - t0) / 1000;
+      for (const g of glints) {
+        const R0 = (330 - g.k * 70) * 0.78;
+        const p = (w / 9 + (3 - g.k) / 4) % 1;
+        const R = 70 + p * 250, sc = R / R0;
+        const dx = Math.sin(w * 0.9 * g.w + g.ph) * 2.5;
+        g.el.setAttribute('transform', `translate(${RINGS.cx} 690) scale(${sc.toFixed(4)} ${sc.toFixed(4)}) translate(${(-RINGS.cx + dx / sc).toFixed(2)} -690)`);
+        g.el.setAttribute('opacity', (g.op * Math.pow(Math.sin(Math.PI * p), 1.2) * (0.75 + 0.25 * Math.sin(w * 1.1 * g.w + g.ph * 2.3))).toFixed(3));
+        g.el.setAttribute('stroke-width', (g.sw / Math.max(0.6, sc)).toFixed(2));
+      }
+      if (glints.length) busy = true;
       // rings of water spread and fade
       for (const r of rings) {
         r.age += dt;
         if (r.age < 0) { r.el.setAttribute('opacity', 0); continue; }
         const q = r.age / r.life, rx = 6 + r.size * (1 - Math.pow(1 - q, 2));
-        r.el.setAttribute('transform', `translate(${r.x} ${r.y}) scale(${rx.toFixed(1)} ${(rx * 0.22).toFixed(1)})`);
+        r.el.setAttribute('transform', `translate(${r.x} ${r.y}) scale(${rx.toFixed(1)} ${(rx * FLAT).toFixed(1)})`);
         r.el.setAttribute('opacity', Math.max(0, Math.min(1, q * 8) * Math.pow(1 - q, 1.3)).toFixed(2));
         if (q >= 1) { r.el.remove(); r.gone = true; }
       }
@@ -240,7 +286,8 @@ function run(root) {
     replay = () => {
       for (const c of chips) { c.life = 1; setChip(c); }
       powder.replaceChildren(); parts = []; ripples.replaceChildren(); rings = [];
-      for (const f of feathers) { f.landed = false; f.bob = 0; f.el.removeAttribute('transform'); }
+      for (const f of [...feathers, ...afloat]) { f.landed = false; f.from = null; f.ox = f.oy = f.rr = 0; f.el.removeAttribute('transform'); }
+      for (const g of glints) { g.el.removeAttribute('transform'); g.el.setAttribute('opacity', g.op); g.el.setAttribute('stroke-width', g.sw); }
       grow.style.strokeDashoffset = len; ax = ay = 0; turn = 0; disc.removeAttribute('transform');
       t0 = null; last = 0; wake();
     };
