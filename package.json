@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/nonsenseblue/tiny-consoles.git"
   },
-  "homepage": "https://nonsenseblue.github.io/tiny-consoles/",
+  "homepage": "https://tinyconsoles.vercel.app/",
   "exports": {
     "./react": {
       "types": "./react/dist/index.d.ts",

@@ -15,6 +15,7 @@ declare module 'react' {
       'ma-kasuri': PieceElement;
       'pliocene-coast': PieceElement;
       'claim-check': PieceElement;
+      'press-cuttings': PieceElement;
     }
   }
 }

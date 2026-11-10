@@ -18,16 +18,23 @@ const ZOOM_CSS = `
 .zoom .zopen.scaled { transform: scale(var(--zoom, 1)) !important; }
 .zoom .zopen.resized { transform: none !important; width: 100% !important; height: 100% !important; }
 .zoom .zcap { margin: 14px 0 0; text-align: center; font: 500 11px/1.4 Inter, system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
-/* the controls: a round Close, and one frosted bar with Prev, Replay and Next */
-.zoom button { font: 500 13px/1 Inter, system-ui, sans-serif; color: inherit; border: 0; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background-color .2s; }
-.zoom button svg { width: 16px; height: 16px; flex: none; }
-.zoom .zclose, .zoom .zbar { background: rgba(243, 242, 239, .12); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-.zoom .zclose { position: fixed; top: 20px; right: 22px; width: 40px; height: 40px; border-radius: 50%; }
-.zoom .zbar { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 2px; padding: 4px; border-radius: 999px; z-index: 2; }
-.zoom .zbar button { height: 40px; min-width: 40px; border-radius: 999px; padding: 0 12px; }
-.zoom .zbar .zrp { background: rgba(243, 242, 239, .14); padding: 0 16px; }
-.zoom button:hover, .zoom button:focus-visible { background-color: rgba(243, 242, 239, .24); outline: none; }
-.zoom .zclose:hover, .zoom .zclose:focus-visible { background-color: rgba(243, 242, 239, .28); }
+/* the controls: a round Close in a hairline, and three words at the foot, Prev, Replay and Next, with no box around them */
+.zoom button { font: 500 11px/1 Inter, system-ui, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: inherit; border: 0; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .2s; }
+.zoom button svg { width: 12px; height: 12px; flex: none; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+.zoom .zclose { position: fixed; top: 20px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(243, 242, 239, .32); opacity: .8; }
+.zoom .zclose svg { width: 14px; height: 14px; }
+.zoom .zbar { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; align-items: center; gap: 30px; z-index: 2; }
+.zoom .zbar button { height: 32px; opacity: .72; }
+.zoom .zbar .zrp { opacity: 1; }
+/* a real pointer brightens a word and moves its arrow the way it goes; a touch leaves nothing lit */
+@media (hover: hover) {
+  .zoom button:hover { opacity: 1; }
+  .zoom .zprev:hover svg { transform: translateX(-4px); }
+  .zoom .znext:hover svg { transform: translateX(4px); }
+  .zoom .zrp:hover svg { transform: rotate(-120deg); }
+}
+.zoom button:focus-visible { opacity: 1; outline: 1px solid rgba(243, 242, 239, .5); outline-offset: 5px; border-radius: 2px; }
+.zoom .zclose:focus-visible { border-radius: 50%; outline-offset: 3px; }
 .zhold { visibility: hidden; }
 /* with notes: the sheet on the left, what it is about on the right */
 .zoom.notes[open] { display: grid; grid-template-columns: auto 340px; column-gap: 56px; align-items: center; padding-bottom: 40px; }
@@ -46,8 +53,8 @@ const ZOOM_CSS = `
   .zoom .zclose { top: 16px; right: 16px; }
   .zoom .zbar { bottom: 20px; }
   /* on a phone the sheet sits on top and the notes scroll under it */
-  .zoom.notes[open] { display: block; position: fixed; inset: 0; width: 100vw; height: 100dvh; margin: 0; padding: 72px 20px 110px; overflow-y: auto; background: rgba(18, 17, 16, .82); }
-  .zoom.notes::after { content: ""; position: fixed; left: 0; right: 0; bottom: 0; height: 96px; background: linear-gradient(rgba(18, 17, 16, 0), rgba(18, 17, 16, .96) 55%); pointer-events: none; }
+  .zoom.notes[open] { display: block; position: fixed; inset: 0; width: 100vw; height: 100dvh; margin: 0; padding: 72px 20px 140px; overflow-y: auto; background: rgba(18, 17, 16, .82); }
+  .zoom.notes::after { content: ""; position: fixed; left: 0; right: 0; bottom: 0; height: 140px; background: linear-gradient(rgba(18, 17, 16, 0), #121110 45%); pointer-events: none; }
   .zoom.notes .zbox { margin: 0 auto; }
   .zside { max-height: none; overflow: visible; margin-top: 28px; font-size: 14px; }
   .zside .zt { font-size: 28px; }
@@ -71,9 +78,9 @@ export function zoomable(root, items, { mode = 'scale', label = el => el.getAttr
   dialog.style.setProperty('--zt', notesFont);
   dialog.innerHTML = `<div class="zbox"></div><p class="zcap"></p>${notes ? '<aside class="zside" aria-live="polite"></aside>' : ''}`
     + `<button class="zclose" type="button" aria-label="Close">${ZICON.close}</button>`
-    + `<div class="zbar"><button class="zprev" type="button" aria-label="Previous">${ZICON.prev}</button>`
-    + (replay ? `<button class="zrp" type="button">${ZICON.replay}Replay</button>` : '')
-    + `<button class="znext" type="button" aria-label="Next">${ZICON.next}</button></div>`;
+    + `<div class="zbar"><button class="zprev" type="button" aria-label="Previous">${ZICON.prev}<span aria-hidden="true">Prev</span></button>`
+    + (replay ? `<button class="zrp" type="button">${ZICON.replay}<span>Replay</span></button>` : '')
+    + `<button class="znext" type="button" aria-label="Next"><span aria-hidden="true">Next</span>${ZICON.next}</button></div>`;
   root.append(dialog);
   /* a single piece has nothing to go to */
   if (items.length < 2) dialog.querySelectorAll('.zprev, .znext').forEach(b => b.remove());

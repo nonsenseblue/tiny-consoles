@@ -13,6 +13,9 @@
 
 /* style is the piece's stylesheet URL, built in the piece's own file so bundlers can see the asset.
    faces is a list of font specs, or [spec, text] when only some letters are needed. */
+/* the same for every piece: no tap highlight, and no ring left after a click or a tap; the keyboard still gets one */
+const BASE = ':host { -webkit-tap-highlight-color: transparent; } :focus:not(:focus-visible) { outline: none; } @media (hover: none) { :focus { outline: none; } }';
+
 export function definePiece(tag, { style, font = null, markup = '', hide = null, faces = [], run }) {
   if (customElements.get(tag)) return;
   customElements.define(tag, class extends HTMLElement {
@@ -20,7 +23,7 @@ export function definePiece(tag, { style, font = null, markup = '', hide = null,
       if (this.shadowRoot) return;
       if (font && !document.querySelector(`link[href="${font}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${font}">`);
       const root = this.attachShadow({ mode: 'open' });
-      root.innerHTML = `<link rel="stylesheet" href="${style}">${markup}`;
+      root.innerHTML = `<style>${BASE}</style><link rel="stylesheet" href="${style}">${markup}`;
       const shell = hide && root.querySelector(hide);
       if (shell) shell.style.visibility = 'hidden';
       const start = () => {

@@ -26,6 +26,8 @@ body {
 a { color: inherit; text-decoration: none; }
 /* no underline or fade on hover: the cursor does the work */
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+/* no flash of the browser's own tap highlight on touch screens */
+html { -webkit-tap-highlight-color: transparent; }
 :focus:not(:focus-visible) { outline: none; }
 @media (hover: none) { button:focus, a:focus { outline: none; } }  /* touch screens: no ring left behind after a tap */  /* no ring after a mouse click, keep it for the keyboard */
 .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 40px; }
@@ -172,7 +174,7 @@ h1 {
 .entry .new { display: inline-block; padding: 4px 7px; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; color: var(--ink); font-size: 10.5px; font-style: normal; font-weight: 500; letter-spacing: 0.01em; line-height: 1; text-box: trim-both cap alphabetic; }   /* trimmed to the capitals, so the word sits in the true middle of the pill */
 .more-row { margin-top: 36px; text-align: right; }
 .more { display: inline-block; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 7px 18px; font-size: 13px; color: var(--ink); transition: padding .25s var(--ease), border-color .2s ease; }
-.more:hover { text-decoration: none; padding: 7px 24px; border-color: rgba(27, 26, 25, 0.6); }
+@media (hover: hover) { .more:hover { text-decoration: none; padding: 7px 24px; border-color: rgba(27, 26, 25, 0.6); } }
 /* the full list of works */
 .all .wrap { padding-top: 28px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
 /* All works lies over the pages instead of sliding with them */
@@ -189,7 +191,7 @@ h1 {
 .all-head .sub { grid-column: 1 / 7; font-size: 14px; color: var(--muted); margin-top: 6px; }
 .all-head .jump { grid-column: 7 / 13; grid-row: 1 / 3; align-self: center; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; list-style: none; }
 .all-head .jump a { display: inline-block; border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 4px 12px; font-size: 12px; color: var(--ink); transition: padding .25s var(--ease), border-color .2s ease; }
-.all-head .jump a:hover { text-decoration: none; padding: 4px 16px; border-color: rgba(27, 26, 25, 0.6); }
+@media (hover: hover) { .all-head .jump a:hover { text-decoration: none; padding: 4px 16px; border-color: rgba(27, 26, 25, 0.6); } }
 @media (max-width: 720px) {
   .swell { height: 170px; }
   .all-head { grid-template-columns: 1fr; padding-top: 140px; }
@@ -206,10 +208,10 @@ h1 {
 }
 .all #all .shelf:first-child { margin-top: 40px; }
 .entry { grid-column: span 3; display: grid; grid-template-columns: 64px 1fr; column-gap: 14px; row-gap: 2px; align-content: start; font-size: 12px; line-height: 1.5; }
-.entry:hover { text-decoration: none; }
+@media (hover: hover) { .entry:hover { text-decoration: none; } }
 .entry .thumb { grid-row: 1 / 5; width: 64px; height: 64px; overflow: hidden; border-radius: 6px; background: var(--line); }
 .entry img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.85); transition: transform .9s var(--ease), filter .6s ease; }
-.entry:hover img { transform: scale(1.08); filter: none; }
+@media (hover: hover) { .entry:hover img { transform: scale(1.08); filter: none; } }
 .entry .n { color: var(--muted); font-feature-settings: "tnum" 1; }
 .entry b { font-size: 16px; font-weight: 500; letter-spacing: -0.015em; }
 .entry .about, .entry .made { color: var(--muted); }
@@ -258,25 +260,22 @@ h2 .name { font-size: 20px; color: var(--muted); }
 .foot { margin-top: 40px; align-items: start; }
 .fig { grid-column: 1 / 5; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .fig b { font-weight: 500; color: var(--ink); }
-.use { grid-column: 6 / 13; display: flex; align-items: flex-start; gap: 20px; }
-.use pre { flex: 1; min-width: 0; overflow-x: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; color: var(--muted); }
+/* the embed code is not shown; one pill copies it (and the code appears only if the clipboard is refused) */
+.use { grid-column: 6 / 13; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: 12px 20px; }
+.use pre { display: none; flex: 1 1 100%; order: 2; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; color: var(--muted); }
+.use.open pre { display: block; }
 .use button {
-  flex: none; font-size: 11.5px; line-height: 1.4; color: var(--muted);
-  border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 3px 12px;
-  margin-top: -1px; min-width: 64px; text-align: center;   /* sits on the first line of code, keeps its width when it says Copied */
+  flex: none; font-size: 12px; line-height: 1.4; color: var(--muted);
+  border: 1px solid rgba(27, 26, 25, 0.22); border-radius: 999px; padding: 5px 16px;
+  min-width: 140px; text-align: center;   /* keeps its width when it says Copied */
   transition: color .25s ease, background-color .25s ease, border-color .25s ease;
 }
-.use button:hover { color: var(--ink); border-color: var(--ink); }
+@media (hover: hover) { .use button:hover { color: var(--ink); border-color: var(--ink); } }
 @media (max-width: 720px) {
   .fig, .use { grid-column: 1 / 5; }
-  /* phones: a small header row, "Embed" on the left and Copy on the right, then the code wrapped in full */
-  .use { margin-top: 18px; display: grid; grid-template-columns: 1fr auto; row-gap: 8px; }
-  .use::before { content: "Embed"; font-size: 12px; color: var(--muted); }
-  .use button { grid-column: 2; grid-row: 1; }
-  .use pre { grid-column: 1 / 3; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
+  .use { margin-top: 16px; justify-content: flex-end; }
 }
 
-/* the plate, the piece and its caption arrive one after another when the page comes in */
 .piece .plate, .piece .stage, .piece .foot { opacity: 0; transform: translateY(18px); transition: opacity .9s ease, transform 1.1s cubic-bezier(.2, .7, .2, 1); }
 .piece.current .plate, .piece.current .stage, .piece.current .foot { opacity: 1; transform: none; }
 .piece.current .plate { transition-delay: .35s; }

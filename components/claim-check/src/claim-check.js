@@ -149,7 +149,7 @@ ${tag('A. Pell', 'Alterations', '261', 'Trousers, grey wool', 'Hem up 2 cm, keep
 const PX_PER_CM = { docket: 600 / 15, slip: 330 / 10, tags: 300 / 9.5 };
 
 const LAYOUTS = {
-  wide:   { w: 1640, h: 690, at: [[504.6, 145.6, -2, .818], [359.4, 112.6, -3.5, .964], [797.8, 361.3, 0, 1.043]] },
+  wide:   { w: 1640, h: 690, at: [[564.9, 138.9, -2, .818], [419.7, 105.9, -3.5, .964], [858.1, 354.6, 0, 1.043]] },
   narrow: { w: 690,  h: 476, at: [[150, 80, -2, .62], [40, 55, -3.5, .73], [372.1, 243.4, 0, .79]] },
 };
 
@@ -278,6 +278,28 @@ function run(root, host) {
 
   const lines = sheets.map(timeline);
   lines.forEach(s => s.seek(Infinity));
+
+  /* on the counter, a slip under the cursor has its day circled again, in one stroke, with whatever drew it;
+     the ticket, whose circle lies under the laundry slip, is stamped again as well */
+  const canHover = matchMedia('(hover: hover)');
+  sheets.forEach(el => {
+    const loops = [...el.querySelectorAll('.pen path, .ring path, .crayon path')];
+    const stamp = el.querySelector('.stamp'), card = el.querySelector('.docket');
+    let busy = false;
+    el.addEventListener('pointerenter', e => {
+      if (busy || e.pointerType === 'touch' || !canHover.matches || reduce.matches || zoom?.isAnyOpen()) return;
+      busy = true;
+      if (stamp) setTimeout(() => {
+        stamp.classList.remove('set', 'down'); void stamp.offsetWidth; stamp.classList.add('down');
+        card.classList.remove('thud'); void card.offsetWidth; card.classList.add('thud');
+      }, 520);
+      Promise.all(loops.map((path, i) => {
+        const L = path.getTotalLength();
+        path.style.strokeDasharray = L;
+        return path.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 560, delay: i * 180, easing: 'cubic-bezier(.4,.1,.3,1)', fill: 'backwards' }).finished;
+      })).catch(() => {}).then(() => { busy = false; });
+    });
+  });
 }
 
 definePiece('claim-check', { style: STYLE, font: FONT, markup: MARKUP, hide: '.desk', faces: ['12px "Cutive Mono"', '400 10px Archivo', '500 10px Archivo', '600 10px Archivo'], run });

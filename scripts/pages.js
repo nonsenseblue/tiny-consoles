@@ -68,9 +68,11 @@ export function setup({ components, version }) {
       await navigator.clipboard.writeText(embedCode(button.dataset.copy));
       button.textContent = 'Copied';
     } catch {
-      button.textContent = 'Select';
+      /* no clipboard: show the code so it can be selected by hand */
+      button.closest('.use').classList.add('open');
+      button.textContent = 'Select it';
     }
-    setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+    setTimeout(() => { button.textContent = 'Copy embed code'; }, 1600);
   }
 
   return { renderIndexItem, renderPiece, copyEmbed };

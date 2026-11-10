@@ -62,7 +62,7 @@
     ],
     "hint": "Click a sheet to open it and watch it being written; press a tab to lift its sheet.",
     "ratio": 0.42,
-    "max": 920
+    "max": 820
   },
   {
     "tag": "day-for-night",
@@ -121,5 +121,19 @@
     "hint": "Click a ticket to open it and watch it being filled in.",
     "ratio": 0.42,
     "max": 1080
+  },
+  {
+    "tag": "press-cuttings",
+    "text": "Four small piles of torn and cut paper, left on one desk on the last night of a town paper: the newspaper office, the ferry, the bakery, a letter not sent. Open one and it squares itself up, and the last line of every slip, read down the edge, makes one sentence no paper printed.",
+    "about": "Torn paper that reads down.",
+    "chips": [
+      "collage",
+      "found poem",
+      "torn paper",
+      "print"
+    ],
+    "hint": "Click a pile to open it and watch it square up; read down the edges.",
+    "ratio": 0.6,
+    "max": 840
   }
 ]

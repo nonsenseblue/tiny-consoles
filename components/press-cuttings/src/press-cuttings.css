@@ -1,0 +1,204 @@
+/* <press-cuttings> · tiny-consoles · loaded by press-cuttings.js into its shadow root */
+
+:host {
+  display: block;
+  container-type: inline-size;
+  --old: "Old Standard TT", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  /* paper surfaces, drawn once as noise */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5 .06' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .36 0 0 0 0 .24 0 0 0 .5 -.12'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .4 0 0 0 0 .2 0 0 0 .34 -.06'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  --card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.35' numOctaves='3' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .22 -.04'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  --fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8 .25' numOctaves='2' seed='17'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .44 0 0 0 0 .3 0 0 0 .3 -.08'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  --kraft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .3' numOctaves='3' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .16 0 0 0 0 .08 0 0 0 .9 -.42'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  --crumple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='.01 .045' numOctaves='2' seed='6'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='3'%3E%3CfeDistantLight azimuth='225' elevation='38'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='300' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.defs { position: absolute; width: 0; height: 0; }
+
+/* the desk: a fixed design size, scaled as one object to the width it is given */
+.desk { position: relative; width: 100%; aspect-ratio: var(--w) / var(--h); }
+.stage { position: absolute; left: 0; top: 0; width: calc(var(--w) * 1px); height: calc(var(--h) * 1px); transform-origin: 0 0; transform: scale(var(--k, 1)); }
+.pile { position: absolute; width: 380px; height: 280px; left: calc(var(--x) * 1px - 190px); top: calc(var(--y) * 1px - 140px);
+  transform: rotate(var(--r)) scale(var(--s)); cursor: zoom-in; transition: translate .4s cubic-bezier(.2,.8,.2,1); }
+@media (hover: hover) { .pile:hover { translate: 0 -5px; } }
+.pile.zopen { translate: none !important; cursor: default; box-shadow: none !important; }
+.pile .in { position: absolute; inset: 0; }
+
+/* every slip: one piece of paper, its print torn or cut with it */
+.slip { position: absolute; left: 0; top: 0; filter: drop-shadow(0 .5px .6px rgba(40,30,10,.3)); color: #1a1917; font-family: var(--old); }
+.sheet { position: relative; overflow: hidden; }
+.print { position: relative; }
+
+/* ========== 1 · the paper office ========== */
+
+/* newsprint: thin, fibrous, torn by hand; the ink sinks in and misses in specks */
+.news .sheet { background: var(--fibre), rgba(234,227,208,var(--thin,.7)); }
+.news .print { filter: url(#ink); }
+.news .main { padding: 0 11px 9px; }
+.news .tail { font-size: 6.5px; line-height: 1.3; color: #2b2926; margin: -3px -11px 6px 0; padding-bottom: 4px; border-bottom: .6px solid #1a1917; white-space: nowrap; overflow: hidden; }
+.news .notail { padding-top: 10px; }
+.news .head { font-weight: 700; font-size: 17px; line-height: 1.08; letter-spacing: -.1px; white-space: nowrap; }
+.news .head.big { font-size: 27px; line-height: 1.03; letter-spacing: -.4px; }
+.news .nb { position: absolute; top: -6px; bottom: -6px; font-size: 6.5px; line-height: 1.3; color: #2b2926; overflow: hidden; }
+.news .nb div { white-space: nowrap; display: flex; }
+.news .nb.r { right: 0; border-left: .6px solid #1a1917; padding-left: 5px; }
+.news .nb.l { left: 0; border-right: .6px solid #1a1917; padding-right: 5px; }
+.news .nb.l div { justify-content: flex-end; }
+
+/* magazine: coated stock, cut with scissors; a pull quote with the columns it broke still above it,
+   a shade darker than white, a soft uneven gloss over paper and ink alike, and stiff enough not to lie flat */
+.mag { filter: drop-shadow(0 .5px .6px rgba(40,30,10,.32)) drop-shadow(1.5px 3.5px 3px rgba(40,30,10,.24)); }
+.mag .sheet { background: #e2e1db; clip-path: polygon(.8% 6%, 99% 0, 100% 93%, 57% 100%, 2% 95%); }
+.mag .sheet::after { content: ""; position: absolute; inset: -20%; pointer-events: none; filter: url(#warp);
+  background: radial-gradient(ellipse 44% 60% at 66% 70%, rgba(255,255,255,.26), rgba(255,255,255,.1) 45%, rgba(255,255,255,0) 75%),
+              radial-gradient(ellipse 22% 30% at 24% 36%, rgba(255,255,255,.13), rgba(255,255,255,0) 70%); }
+.mag .col { columns: 2; column-gap: 10px; font-size: 5.6px; line-height: 1.36; text-align: justify; color: #0c0c0b; padding: 7px 11px 5px; border-bottom: .5px solid #141312; margin-bottom: -4px; }
+.mag .mh { font-family: "Bodoni Moda", Didot, serif; font-weight: 500; font-style: italic; font-size: 18.5px; line-height: 1.57; letter-spacing: -.25px; white-space: nowrap; color: #0c0c0b; padding: 9px 11px 3px; }
+
+/* a book page: cream, toothy, browned at the edge, pulled along a ruler */
+.book { filter: url(#deckle) drop-shadow(0 .5px .6px rgba(40,30,10,.3)); }
+.book .sheet { background: var(--tooth), rgba(243,235,213,.95); box-shadow: inset 0 0 14px rgba(176,140,70,.3); }
+.book .print { filter: url(#ink); }
+.book .rh { display: flex; justify-content: space-between; font-size: 6.2px; letter-spacing: .2em; padding: 6px 11px 5px; color: #3a352c; }
+.book .tx { font-size: 12.6px; line-height: 2.1; white-space: nowrap; padding: 0 11px 3px; color: #221f1a; margin-top: -6px; }
+
+/* a handbook: coloured stock, one ink, torn off along its perforation */
+.man .sheet { background: rgba(214,226,205,.95);
+  -webkit-mask: radial-gradient(circle 2.6px at 4.5px .4px, #0000 96%, #000) 0 0 / 9px 100%; mask: radial-gradient(circle 2.6px at 4.5px .4px, #0000 96%, #000) 0 0 / 9px 100%; }
+.man .hd { font-family: Jost, sans-serif; font-weight: 700; font-size: 6px; letter-spacing: .26em; color: #21403c; padding: 11px 11px 3px; border-bottom: .6px solid #21403c; margin: 0 11px 0 0; }
+.man .tx { font-family: Jost, sans-serif; font-weight: 500; font-size: 11px; line-height: 2.3; white-space: nowrap; color: #21403c; padding: 0 11px 2px; margin-top: -3px; }
+
+/* a till receipt: thermal paper gone yellow from the edge, print fading unevenly, the saw of the tear bar */
+.rec .sheet { background: radial-gradient(ellipse 60% 140% at 0% 60%, rgba(206,178,110,.34), transparent 62%), radial-gradient(ellipse 50% 90% at 100% 0%, rgba(214,192,134,.26), transparent 60%),
+  linear-gradient(180deg, rgba(220,204,160,.22), transparent 30%), var(--grain), rgba(239,234,220,var(--thin2,.88)); }
+.rec .print { filter: url(#fade); }
+.rec .tx { font-family: "Courier Prime", "Courier New", monospace; font-size: 9.4px; line-height: 1.5; white-space: pre; color: #5a5160; padding: 10px 11px 0; }
+.rec .tx .last { display: block; line-height: 2.3; margin-top: -2px; letter-spacing: .02em; }
+.rec .bp { position: absolute; left: 7px; bottom: 8px; transform: rotate(-1.2deg); mix-blend-mode: multiply; overflow: visible; }
+.p1.tidy { --thin: .86; --thin2: .92; }
+
+/* ========== 2 · the ferry ========== */
+
+/* a timetable: smooth thin card, two inks, cut with a guillotine, one corner still round */
+.tt { filter: drop-shadow(0 .5px .6px rgba(40,30,10,.32)) drop-shadow(.6px 2px 2px rgba(40,30,10,.16)); }
+.tt .sheet { background: var(--card), #ebe3cd; border-top-left-radius: 7px; clip-path: polygon(0 0, 100% .6%, 100% 99.2%, 0 100%); }
+.tt .print { filter: url(#ink2); font-family: "Barlow Condensed", sans-serif; }
+.tt .bar { color: #2a3d5c; font-weight: 600; font-size: 7.4px; letter-spacing: .22em; padding: 8px 0 3px; margin: 0 11px; display: flex; justify-content: space-between; border-bottom: 1.6px solid #2a3d5c; box-shadow: 0 2px 0 -1.2px #2a3d5c; }
+.tt table { border-collapse: collapse; width: 100%; font-weight: 500; color: #2a3d5c; font-size: 8.6px; margin-top: 3px; }
+.tt td { padding: 2px 11px; border-bottom: .5px dotted rgba(42,61,92,.55); white-space: nowrap; }
+.tt td:last-child { text-align: right; }
+.tt .lastrow { font-weight: 600; font-size: 15.5px; letter-spacing: .02em; color: #a23a2c; padding: 3px 11px 4px; white-space: nowrap; }
+
+/* a ticket: thick salmon board, torn by hand so its pale core shows */
+.tk .sheet { background: var(--card), #e5ab90; }
+.tk .print { padding: 7px 11px 4px; color: #3b1f17; }
+.tk .co { font-weight: 700; font-size: 8px; letter-spacing: .16em; display: flex; justify-content: space-between; }
+.tk .co b { color: #8c1d14; letter-spacing: .08em; }
+.tk .sm { font-size: 7px; line-height: 1.5; letter-spacing: .04em; margin-top: 2px; }
+.tk .last { font-style: italic; font-size: 14px; line-height: 1.6; }
+
+/* a postcard: heavy card gone cream, written on in pen, ripped across in one go */
+.pc .sheet { background: var(--card), radial-gradient(ellipse 90% 140% at 0% 0%, rgba(196,164,104,.22), transparent 60%), #e9dfc8; }
+.pc .print { padding: 8px 12px 2px; }
+.pc .div { position: absolute; right: 46px; top: 6px; bottom: -10px; border-left: .7px solid rgba(60,60,60,.45); }
+.pc .hd { font-family: "Work Sans", sans-serif; font-weight: 500; font-size: 5.6px; letter-spacing: .34em; color: #7a776f; margin-bottom: 2px; }
+.pc .hw { font-family: "Homemade Apple", cursive; font-size: 9.4px; line-height: 2.05; color: #24304e; white-space: nowrap; transform: rotate(-1.4deg); transform-origin: 0 50%; }
+.pc .hw .last { font-size: 11.5px; }
+
+/* a leaflet from the landing: tinted satin paper, a strip of map, torn along its fold */
+.lf .sheet { background: var(--grain), #e4d8a8; }
+.lf .map { height: 40px; position: relative; background: #a9c2bd; border-bottom: .6px solid #4f6d6a; overflow: hidden; }
+.lf .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lf .crease { position: absolute; top: 0; bottom: 0; left: 61%; width: 7px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.07) 45%, rgba(255,255,255,.55) 55%, rgba(255,255,255,0)); }
+.lf .tx { font-family: "Work Sans", sans-serif; font-size: 10.6px; line-height: 2.3; color: #3a3420; white-space: nowrap; padding: 3px 11px 0; }
+.lf .tx b { font-weight: 500; }
+
+/* a page of tides: India paper, thin enough to read through, pulling out in long fibres */
+.al .sheet { background: var(--fine), radial-gradient(ellipse 80% 120% at 100% 100%, rgba(190,160,100,.28), transparent 60%), rgba(232,222,196,var(--thin,.66)); }
+.al .print { padding: 6px 11px 2px; color: #25221d; filter: url(#ink2); }
+.al .hd { display: flex; justify-content: space-between; font-size: 5.8px; letter-spacing: .22em; border-bottom: .5px solid #25221d; padding-bottom: 2px; }
+.al table { border-collapse: collapse; width: 100%; font-size: 5.8px; line-height: 1.35; margin: 2px 0 1px; }
+.al td { white-space: nowrap; padding: 0 2px; }
+.al td:not(:first-child) { text-align: right; }
+.al .nt { font-size: 6.2px; line-height: 1.4; font-style: italic; }
+.al .last { font-style: italic; font-size: 12.6px; line-height: 2; white-space: nowrap; }
+.p2.tidy { --thin: .86; }
+
+/* ========== 3 · the bakery ========== */
+
+/* a recipe card: ruled, one red line, soft pencil; snipped off with scissors */
+.rc .sheet { background: var(--card), repeating-linear-gradient(180deg, transparent 0 18.5px, rgba(96,128,170,.42) 18.5px 19.2px), #ece5d2; clip-path: polygon(0 0, 100% 0, 98.6% 46%, 100% 100%, 0 100%); }
+.rc .sheet::before { content: ""; position: absolute; left: 0; right: 0; top: 17px; border-top: .8px solid rgba(180,70,62,.6); }
+.rc .print { padding: 2px 12px 0; font-family: "Reenie Beanie", cursive; font-size: 15.5px; line-height: 19.2px; color: #4a4744; white-space: nowrap; filter: url(#graphite); }
+.rc .ttl { font-size: 17px; padding-top: 1px; height: 17px; line-height: 17px; }
+
+/* a flour sack: heavy kraft, stencilled, torn deep */
+.fs .sheet { background: var(--kraft), #b78f61; }
+.fs .print { padding: 8px 11px 2px; color: #3e2a1c; filter: url(#rough); font-family: "Stardos Stencil", sans-serif; }
+.fs .mill { font-weight: 700; font-size: 15px; letter-spacing: .14em; color: #7d2a1e; }
+.fs .sm { font-weight: 400; font-size: 8px; letter-spacing: .12em; line-height: 1.5; }
+.fs .last { font-weight: 700; font-size: 15px; letter-spacing: .2em; line-height: 1.75; }
+
+/* the notice from the door: thin bond paper, a tired ribbon */
+.nt .sheet { background: var(--grain), radial-gradient(ellipse 70% 120% at 100% 100%, rgba(190,160,100,.25), transparent 60%), #e2d7bd; }
+.nt .print { padding: 9px 12px 1px; font-family: "Special Elite", monospace; font-size: 9.8px; line-height: 1.55; color: #2b2724; white-space: nowrap; filter: url(#ribbon); }
+.nt .print .last { font-size: 12.6px; line-height: 2; }
+
+/* a paper bag: thin, crumpled, one ink */
+.bg .sheet { background: #d9cbb0; }
+.bg .sheet::after { content: ""; position: absolute; inset: 0; background: var(--crumple); background-size: 300px 160px; mix-blend-mode: multiply; opacity: .26; pointer-events: none; }
+.bg .print { padding: 8px 12px 1px; color: #8a3b25; filter: url(#ink2); }
+.bg .nm { font-weight: 700; font-size: 8px; letter-spacing: .3em; }
+.bg .sm { font-style: italic; font-size: 8px; margin-top: 1px; }
+.bg .last { font-style: italic; font-size: 17px; line-height: 1.7; }
+
+/* baking paper: unbleached, see-through, snapped rather than torn */
+.gp .sheet { background: linear-gradient(100deg, rgba(255,255,255,0) 20%, rgba(255,250,236,.22) 42%, rgba(255,255,255,0) 64%), rgba(206,178,132,var(--gp,.55)); }
+.gp .print { padding: 8px 12px 1px; color: #3f5a3f; filter: url(#ink2); }
+.gp .sm { font-size: 7.6px; letter-spacing: .2em; }
+.gp .last { font-size: 14px; letter-spacing: .06em; line-height: 2; }
+.p3.tidy { --gp: .7; }
+
+/* ========== 4 · the letter: everything cut from the middle of something, words running past the edge ========== */
+
+.p4 .print { white-space: nowrap; }
+
+/* the date label from the back of a library book: yellowed, a purple stamp run off the edge */
+.lb .sheet { background: var(--card), radial-gradient(ellipse 80% 120% at 0% 100%, rgba(176,140,80,.3), transparent 60%), #e0d3b1; }
+.lb .print { padding: 5px 12px 1px; color: #3a3126; }
+.lb .sm { font-size: 7.2px; line-height: 1.45; letter-spacing: .02em; margin-left: -30px; }
+.lb .last { font-style: italic; font-size: 13.5px; line-height: 2; }
+.lb .stamp { position: absolute; right: -22px; top: 4px; font-family: "Special Elite", monospace; font-size: 13px; letter-spacing: .06em; color: rgba(92,62,128,.78); transform: rotate(-7deg); filter: url(#ribbon); }
+
+/* airmail: onion skin gone grey, folded in three, the pen running past the tear */
+.am .sheet { background: var(--grain), rgba(200,207,204,var(--am,.62)); }
+.am .print { padding: 4px 12px 2px; font-family: "La Belle Aurore", cursive; font-size: 11px; line-height: 1.95; color: #1f2a52; filter: url(#pen); }
+.am .cut { margin-left: -18px; }
+.am .last { font-size: 13.5px; line-height: 2; }
+.am .crease { position: absolute; left: 0; right: 0; height: 5px; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(70,50,20,.09) 45%, rgba(255,255,255,.4) 56%, rgba(255,255,255,0)); }
+
+/* a torn bit of printed score: staves cut off above, the marking under them */
+.ms .sheet { background: var(--card), #e4d9be; }
+.ms .print { padding: 0 11px 2px; color: #262019; filter: url(#ink2); }
+.ms svg { display: block; margin: -6px 0 -1px -14px; }
+.ms .last { font-style: italic; font-size: 13px; line-height: 2; }
+
+/* a telegram form, faded, a pasted strip that runs past the edge */
+.tg .sheet { background: var(--grain), #d9caa6; }
+.tg .print { padding: 3px 11px 3px; color: rgba(140,64,48,.75); }
+.tg .fm { font-size: 6.4px; letter-spacing: .16em; margin-left: -40px; border-bottom: .6px solid rgba(140,64,48,.6); padding-bottom: 2px; margin-bottom: 5px; }
+.tg .tape, .st .sheet { background: var(--grain), linear-gradient(180deg, rgba(200,170,110,.18), transparent 40%), #e8dfc9; }
+.tg .tape { display: inline-block; padding: 2px 30px 1px 6px; margin-right: -60px; font-family: "Cutive Mono", monospace; font-size: 10.4px; letter-spacing: .06em; color: #24211d; box-shadow: 0 .4px .5px rgba(0,0,0,.16); transform: rotate(-.8deg); filter: url(#ribbon); }
+
+/* one more cut of the same strip: the scissors went through the word before */
+.st .sheet { clip-path: polygon(6% 0, 100% 0, 96% 100%, 0 100%); }
+.st .print { filter: url(#ribbon); padding: 3px 10px 1px 0; font-family: "Cutive Mono", monospace; font-size: 12px; letter-spacing: .08em; color: #24211d; line-height: 1.7; text-indent: -7px; }
+.p4.tidy { --am: .84; }
+
+/* calm: no lift, and an opened pile is shown squared at once */
+@media (prefers-reduced-motion: reduce) {
+  .pile { transition: none; }
+  .slip { transition: none !important; }
+}

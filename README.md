@@ -44,6 +44,10 @@ Things made for places that do not exist: a label, a station, an office.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#press-cuttings"><img src="components/press-cuttings/assets/thumb.webp" alt="press-cuttings" width="96"></a></td>
+<td><b>10 · <a href="https://tinyconsoles.vercel.app/#press-cuttings"><code>&lt;press-cuttings&gt;</code></a></b><br>Four piles of torn and cut paper from one town's last night; opened, each squares up and its edges read as one sentence.<br><sub>collage · found poem · torn paper · <a href="components/press-cuttings/assets/preview.webp">preview</a> · <a href="components/press-cuttings/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#claim-check"><img src="components/claim-check/assets/thumb.webp" alt="claim-check" width="96"></a></td>
 <td><b>09 · <a href="https://tinyconsoles.vercel.app/#claim-check"><code>&lt;claim-check&gt;</code></a></b><br>A stack of tickets for things left to mend or clean; open one and it fills itself in until the day is circled by hand.<br><sub>receipts · carbon copy · typewriter · hand drawn · <a href="components/claim-check/assets/preview.webp">preview</a> · <a href="components/claim-check/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -63,11 +67,11 @@ Things made for places that do not exist: a label, a station, an office.
 
 ## Use a piece
 
-Two lines: the script, then the tag. Swap `claim-check` for any piece above.
+Two lines: the script, then the tag. Swap `press-cuttings` for any piece above.
 
 ```html
-<script type="module" src="https://nonsenseblue.github.io/tiny-consoles/components/claim-check/src/claim-check.js"></script>
-<claim-check></claim-check>
+<script type="module" src="https://tinyconsoles.vercel.app/components/press-cuttings/src/press-cuttings.js"></script>
+<press-cuttings></press-cuttings>
 ```
 
 ### With React
@@ -79,10 +83,10 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings } from 'tiny-consoles/react';
 
 export default function Page() {
-  return <ClaimCheck style={{ maxWidth: 1080 }} />;
+  return <PressCuttings style={{ maxWidth: 1080 }} />;
 }
 ```
 

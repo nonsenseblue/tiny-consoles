@@ -125,7 +125,7 @@ The day is circled last, in one stroke: pen on the ticket, carbon on the slip, c
 
 ### The stack
 
-All of it lies finished. Click the ticket, the slip or the two tags, which lie together and open together, and it opens and is filled in again from the start. Everything opens at one real scale, the one at which the laundry slip fits the screen, so the tags stay small against the ticket as they are in the hand. Prev and Next go to the others, each filled in as it opens; Replay starts it again; closing puts it back finished. A slip lifts a little when the cursor is over it. With reduced motion, an opened slip is shown finished.
+All of it lies finished. Click the ticket, the slip or the two tags, which lie together and open together, and it opens and is filled in again from the start. Everything opens at one real scale, the one at which the laundry slip fits the screen, so the tags stay small against the ticket as they are in the hand. Prev and Next go to the others, each filled in as it opens; Replay starts it again; closing puts it back finished. A slip lifts a little when the cursor is over it, and its day is circled again, in one stroke; the ticket is stamped again too. With reduced motion, an opened slip is shown finished.
 
 ## Do's and Don'ts
 
