@@ -33,8 +33,8 @@ const ZOOM_CSS = `
   .zoom .znext:hover svg { transform: translateX(4px); }
   .zoom .zrp:hover svg { transform: rotate(-120deg); }
 }
-.zoom button:focus-visible { opacity: 1; outline: 1px solid rgba(243, 242, 239, .5); outline-offset: 5px; border-radius: 2px; }
-.zoom .zclose:focus-visible { border-radius: 50%; outline-offset: 3px; }
+/* no focus ring anywhere in the view, on the dialog or its controls */
+.zoom, .zoom:focus, .zoom:focus-visible, .zoom button:focus, .zoom button:focus-visible { outline: none !important; }
 .zhold { visibility: hidden; }
 /* with notes: the sheet on the left, what it is about on the right */
 .zoom.notes[open] { display: grid; grid-template-columns: auto 340px; column-gap: 56px; align-items: center; padding-bottom: 40px; }

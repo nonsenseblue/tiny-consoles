@@ -65,6 +65,8 @@ dialog.book-view[open]::backdrop { animation: bfade .3s ease; }
   .bbar .brp:hover svg { transform: rotate(-120deg); }
 }
 @media (max-width: 720px) { .bbar { bottom: 20px; gap: 22px; } }
+/* no focus ring on the controls */
+.bbar button:focus, .bbar button:focus-visible, .bclose:focus, .bclose:focus-visible, dialog.book-view, dialog.book-view:focus, dialog.book-view:focus-visible { outline: none !important; }
 .bclose { position: fixed; top: 20px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(243, 242, 239, .32); color: #f3f2ef; display: grid; place-items: center; opacity: .8; }
 .bclose:hover { opacity: 1; }
 .bclose svg { width: 14px; height: 14px; }

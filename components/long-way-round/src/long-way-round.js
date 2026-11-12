@@ -80,7 +80,7 @@ const MARKUP = `<div class="wrap"><svg width="0" height="0" style="position:abso
 <div class="title">From the orchard,<br>the long way round.</div>
 <div class="info"><b>Apple</b><span>330 ml · can and bottle</span></div>
 <div class="band"><span>New Zealand</span><i class="route"></i><svg viewBox="-30 -30 60 60" class="bs"><g fill="none" stroke="#D9B13F" stroke-width="4" stroke-linecap="round"><path d="M1 0 C1 -3 -3 -3 -4 0 C-5 5 3 7 6 2 C9 -4 4 -10 -2 -10 C-10 -9 -13 0 -10 7 C-6 13 6 14 11 6"/><path d="M0 -18 L0 -25 M18 -2 L25 -3 M-1 19 L0 26 M-18 1 L-25 2 M13 -13 L17 -18 M-13 13 L-17 18"/></g></svg><i class="route"></i><span>your table</span></div></button></div></div>
-<dialog class="book-view" aria-label="Long Way Round, brand book"><div class="desk"><div class="stage"><div class="book">${PAGES}</div></div></div>
+<dialog class="book-view" tabindex="-1" aria-label="Long Way Round, brand book"><div class="desk"><div class="stage"><div class="book">${PAGES}</div></div></div>
 <div class="bbar"><button class="bprev" type="button" aria-label="Previous page"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg><span aria-hidden="true">Prev</span></button><button class="brp" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6"/><path d="M12 1.8v3h-3"/></svg><span>Replay</span></button><button class="bnext" type="button" aria-label="Next page"><span aria-hidden="true">Next</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button></div><button class="bclose" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button></dialog></div>`;
 
 /* the packaging page: tap a small box and it changes places with the large one */
@@ -234,7 +234,7 @@ function run(root, host) {
   onScreen(host, v => { if (v) wall.classList.add('on'); }, { threshold: .25 });
   root.querySelectorAll('.po').forEach(p => p.addEventListener('click', () => {
     if (typeof view.showModal !== 'function') return;
-    view.showModal(); show(0);
+    view.showModal(); view.focus(); show(0);
   }));
   const close = () => { timers.forEach(clearTimeout); timers = []; view.close(); };
   root.querySelector('.bclose').addEventListener('click', close);

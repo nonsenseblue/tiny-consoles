@@ -2,7 +2,7 @@
  * A small dot that follows the pointer and swells into an inverting lens over anything clickable.
  * Over a thumbnail it becomes a real magnifier: the picture under it, shown larger.
  * Inside a piece (its shadow root) it takes over too: the piece's own cursor is hidden, and anything that opens
- * full size swells the lens the same way. In an open dialog the system cursor comes back, since the dot sits under it.
+ * full size swells the lens the same way. An open dialog sits in the top layer, so the dot moves into it while it is open.
  * Only on devices with a fine pointer, and never when reduced motion is asked for.
  */
 
@@ -18,8 +18,10 @@ export function cursor() {
   const HOT = 'a, button';
   /* what opens full size inside the pieces: posters, piles, tickets, sheets */
   const OPEN = '.po, .pile, .sheet';
-  /* each piece's shadow root gets one rule: no cursor of its own, except inside an open dialog */
-  const HIDE = '*:not(dialog[open], dialog[open] *) { cursor: none !important; }';
+  /* each piece's shadow root gets no cursor of its own, and the dot's look, for when the dot sits in one of its dialogs */
+  const DOT = [...document.styleSheets].flatMap(sh => { try { return [...sh.cssRules]; } catch { return []; } })
+    .filter(r => r.cssText.includes('.cursor')).map(r => r.cssText).join('\n');
+  const HIDE = '* { cursor: none !important; }\n' + DOT.replace(/html\.has-cursor,\s*html\.has-cursor \*\s*\{[^}]*\}/g, '');
   const seen = new WeakSet();
   const adopt = node => {
     const root = node && node.getRootNode && node.getRootNode();
@@ -28,7 +30,6 @@ export function cursor() {
     root.append(Object.assign(document.createElement('style'), { textContent: HIDE }));
   };
   const hot = path => {
-    if (path.some(el => el instanceof Element && el.matches('dialog[open]'))) return -1;
     for (const el of path) {
       if (!(el instanceof Element)) continue;
       if (el.matches('.thumb')) return LOUPE;
@@ -75,11 +76,12 @@ export function cursor() {
     tx = e.clientX; ty = e.clientY;
     const path = e.composedPath();
     adopt(path[0]);
-    const t = hot(path);
-    /* an open dialog sits above the dot, so let the system cursor show there */
-    if (t < 0) { dot.classList.add('hidden'); return; }
+    /* an open dialog is drawn in the top layer, above everything else: the dot goes inside it while it is open */
+    const dlg = path.find(el => el instanceof Element && el.matches('dialog[open]'));
+    const home = dlg || document.body;
+    if (dot.parentNode !== home) { if (dlg) adopt(dlg); home.append(dot); }
     if (dot.classList.contains('hidden')) { x = tx; y = ty; dot.classList.remove('hidden'); }
-    ts = t;
+    ts = hot(path);
     const next = e.target.closest('.thumb')?.querySelector('img') || null;
     if (next !== img) {
       img = next;
@@ -90,5 +92,5 @@ export function cursor() {
   }, { passive: true });
   document.addEventListener('pointerleave', () => dot.classList.add('hidden'));
   addEventListener('pointerdown', () => { ts *= 0.8; kick(); });
-  addEventListener('pointerup', e => { const t = target(e); if (t > 0) ts = t; kick(); });
+  addEventListener('pointerup', e => { ts = target(e); kick(); });
 }

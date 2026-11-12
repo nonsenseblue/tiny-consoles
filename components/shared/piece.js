@@ -13,8 +13,8 @@
 
 /* style is the piece's stylesheet URL, built in the piece's own file so bundlers can see the asset.
    faces is a list of font specs, or [spec, text] when only some letters are needed. */
-/* the same for every piece: no tap highlight, and no ring left after a click or a tap; the keyboard still gets one */
-const BASE = ':host { -webkit-tap-highlight-color: transparent; } :focus:not(:focus-visible) { outline: none; } @media (hover: none) { :focus { outline: none; } }';
+/* the same for every piece: no tap highlight, and no focus ring, from a click, a tap or the keyboard */
+const BASE = ':host { -webkit-tap-highlight-color: transparent; } :focus, :focus-visible, dialog { outline: none !important; }';
 
 export function definePiece(tag, { style, font = null, markup = '', hide = null, faces = [], run }) {
   if (customElements.get(tag)) return;
