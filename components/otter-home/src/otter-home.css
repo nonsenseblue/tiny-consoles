@@ -1,0 +1,137 @@
+/* <otter-home> · the product sheet on the page and the interface in its view are both drawn at 1600 × 900 and scaled */
+:host { display: block; color: #fff; font-family: Inter, system-ui, sans-serif; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
+
+.board { position: relative; width: 100%; aspect-ratio: 1760 / 720; border-radius: 18px; overflow: hidden; background: #e2e3df; }
+.stage { position: absolute; left: 0; top: 0; width: 1760px; height: 720px; transform-origin: 0 0; transform: scale(var(--k, 1)); }
+
+/* ---------- three sheets of a launch page; any one opens the interface ---------- */
+.sheet { position: absolute; border-radius: 20px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 24px 40px -22px rgba(40,50,45,.4); transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s; }
+.sheet img { display: block; width: 100%; height: 100%; }
+.sheet.hero { left: 48px; top: 48px; width: 1108px; height: 623px; }
+.sheet.steps { left: 1180px; top: 48px; width: 532px; height: 299px; }
+.sheet.anatomy { left: 1180px; top: 372px; width: 532px; height: 299px; }
+@media (hover: hover) { .sheet:hover { transform: translateY(-4px); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 34px 50px -24px rgba(40,50,45,.45); } }
+.still .sheet { transition: none !important; }
+/* the badge on the first sheet: frosted, a thin ring in the ground's own colours, lettering that turns slowly */
+.badge { position: absolute; left: 782px; top: 491px; width: 92px; height: 92px; border-radius: 50%; z-index: 2;
+  background: radial-gradient(circle, rgba(255,255,255,.3), rgba(255,255,255,.1) 70%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+.badge::before { content: ""; position: absolute; inset: 0; border-radius: 50%; padding: 1.2px; background: conic-gradient(from 200deg, #cfe0bf, #cfe1e4, #efdcbc, #cfe0bf);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.badge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.badge text { font: 600 10.5px Barlow, sans-serif; letter-spacing: .2em; fill: rgba(28,31,29,.72); }
+.badge .turn { transform-origin: 70px 70px; animation: turn 22s linear infinite; animation-play-state: paused; }
+.board.on .badge .turn { animation-play-state: running; }
+@keyframes turn { to { transform: rotate(360deg); } }
+.badge .arr { fill: none; stroke: rgba(28,31,29,.8); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+@media (hover: hover) { .badge:hover { transform: scale(1.06); } .badge:hover .arr { transform: translate(2px, -2px); } }
+.still .badge .turn { animation: none; }
+.board button:focus, .board button:focus-visible { outline: none !important; }
+
+/* ---------- the interface, in its view ---------- */
+dialog.space { margin: auto; padding: 0; border: 0; background: none; overflow: visible; max-width: none; max-height: none; color: #fff; font-family: Inter, system-ui, sans-serif; }
+dialog.space::backdrop { background: rgba(14, 16, 15, .84); backdrop-filter: blur(4px); }
+dialog.space[open]::backdrop { animation: vfade .3s ease; }
+dialog.space[open] .vrhost { animation: vin .5s cubic-bezier(.2,.7,.2,1) both; }
+.vrhost { position: relative; width: min(calc(100vw - 180px), calc((100vh - 140px) * 16 / 9)); aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; box-shadow: 0 40px 100px -30px rgba(0,0,0,.7); }
+.vr { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; transform: scale(var(--k, 1)); --px: 0; --py: 0; --on: #D7E2DC; --onink: #1f2a26; }
+/* Close sits in the dark outside the interface, which leaves room for it on every side */
+.sclose { position: fixed; top: 20px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(243, 242, 239, .32); color: #f3f2ef; display: grid; place-items: center; opacity: .8; }
+.sclose:hover { opacity: 1; }
+.sclose svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+@media (max-width: 720px) { .vrhost { border-radius: 12px; } }
+.sclose:focus, .sclose:focus-visible, dialog.space, dialog.space:focus, dialog.space:focus-visible { outline: none !important; }
+.bg { position: absolute; inset: -40px; background-size: cover; background-position: center; transform: translate(calc(var(--px) * -6px), calc(var(--py) * -4px)); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+
+/* the frosted glass every panel is made of; what is chosen is a soft mist green rather than pure white */
+.glass { background: rgba(128, 132, 130, .28); backdrop-filter: blur(30px) saturate(1.4); -webkit-backdrop-filter: blur(30px) saturate(1.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.42), inset 0 0 0 1px rgba(255,255,255,.16), 0 30px 60px -20px rgba(0,0,0,.35); }
+
+/* ---------- the big window, bent round you ---------- */
+.win { position: absolute; left: 330px; top: 130px; width: calc(var(--ww) * 1px); height: calc(var(--wh) * 1px); perspective-origin: 50% 50%;
+  transform: translate(calc(var(--px) * 10px), calc(var(--py) * 6px)); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.cyl { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; }
+/* opacity on the cylinder would flatten it, so each strip fades on its own */
+.cyl i { transition: opacity .18s ease; }
+.cyl.out i { opacity: 0; }
+.cyl i { position: absolute; top: calc(var(--wh) * -.5px); height: calc(var(--wh) * 1px); background-image: var(--img); background-repeat: no-repeat;
+  background-size: calc(var(--ww) * 1px) calc(var(--wh) * 1px); backface-visibility: hidden; }
+.cyl i:first-child { border-radius: 30px 0 0 30px; }
+.cyl i:last-child { border-radius: 0 30px 30px 0; }
+/* a filter on the cylinder would flatten it, so each strip brightens on its own */
+@media (hover: hover) { .win:hover .cyl i { filter: brightness(1.05); } }
+
+/* ---------- the two panels either side ---------- */
+.pan { position: absolute; padding: 16px; border-radius: 30px; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.pan h4 { font-weight: 500; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; opacity: .6; margin: 0 0 10px 6px; }
+.floors { left: 56px; top: 130px; width: 260px; display: flex; flex-direction: column; gap: 4px;
+  transform: translate(calc(var(--px) * 18px), calc(var(--py) * 10px)) perspective(1200px) rotateY(22deg); }
+.floors button { height: 54px; border-radius: 27px; display: flex; align-items: center; padding: 0 20px; font-weight: 500; font-size: 21px; color: rgba(255,255,255,.85); text-align: left; transition: background .25s, color .25s; }
+.floors button.on { background: var(--on); color: var(--onink); }
+@media (hover: hover) { .floors button:not(.on):hover { background: rgba(255,255,255,.14); } }
+
+.views { left: 1252px; top: 130px; width: 260px; transform: translate(calc(var(--px) * 18px), calc(var(--py) * 10px)) perspective(1200px) rotateY(-22deg); }
+.vw { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 278px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 3px; margin: -3px; }
+.vw::-webkit-scrollbar { display: none; }
+.vw button { height: 84px; border-radius: 14px; overflow: hidden; transition: box-shadow .25s; }
+.vw button.on { box-shadow: 0 0 0 3px var(--on); }
+.vw img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.go { margin-top: 16px; width: 100%; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 20px; background: var(--on); color: var(--onink); }
+.go svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s; }
+@media (hover: hover) { .go:hover svg { transform: translateX(3px); } }
+
+/* ---------- the desk close at hand, with the whole house on it ---------- */
+.desk { position: absolute; left: 560px; top: 590px; width: 480px; border-radius: 36px; padding: 18px 22px; transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  transform: translate(calc(var(--px) * 30px), calc(var(--py) * 14px)) perspective(900px) rotateX(28deg); }
+.mini { position: relative; height: 210px; border-radius: 22px; overflow: hidden; }
+.mini img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.here { position: absolute; border: 2px solid var(--on); border-radius: 10px; box-shadow: 0 0 0 999px rgba(0,0,0,.16); transition: all .5s cubic-bezier(.2,.7,.2,1); }
+.lab { position: absolute; left: 14px; top: 14px; font-weight: 500; font-size: 16px; background: var(--on); color: var(--onink); border-radius: 999px; padding: 4px 10px; }
+
+.vr.still .bg, .vr.still .win, .vr.still .pan, .vr.still .desk, .vr.still .here, .vr.still .cyl { transition: none !important; }
+
+/* ---------- stepping inside: the picture fills the space, glass controls round it ---------- */
+.imm { position: absolute; inset: 0; z-index: 6; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility 0s .4s; }
+.vr.deep .imm { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+.vr.deep > :not(.imm):not(.bg):not(.sclose) { opacity: .0; transition: opacity .4s ease; }
+.iimg { position: absolute; left: 120px; top: 70px; width: 1360px; height: 765px; object-fit: cover; border-radius: 34px; box-shadow: 0 0 0 1px rgba(255,255,255,.25), 0 40px 80px -24px rgba(0,0,0,.45); }
+.iimg.in { animation: vin .9s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes vin { from { opacity: 0; transform: scale(1.02); } }
+@keyframes vfade { from { opacity: 0; } }
+.ib { position: absolute; display: grid; place-items: center; color: #fff; border-radius: 50%; }
+.ib svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s; }
+.iprev, .inext { top: 412px; width: 76px; height: 76px; }
+.iprev { left: 22px; } .inext { right: 22px; }
+.iback { left: 140px; top: 90px; width: auto; height: 52px; padding: 0 22px 0 16px; border-radius: 26px; display: flex; gap: 8px; font-weight: 500; font-size: 18px; }
+.icap { position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%); margin: 0; padding: 12px 22px; border-radius: 999px; font-weight: 500; font-size: 17px; white-space: nowrap; }
+@media (hover: hover) { .iprev:hover svg { transform: translateX(-3px); } .inext:hover svg { transform: translateX(3px); } .iback:hover svg { transform: translateX(-3px); } }
+.vr.still .imm, .vr.still .iimg { transition: none !important; animation: none !important; }
+.vr button:focus, .vr button:focus-visible { outline: none !important; }
+
+/* ---------- the start screen, first thing in the interface ---------- */
+.launch { position: absolute; inset: 0; z-index: 5; transition: opacity .45s ease, visibility 0s; }
+.launch::before { content: ""; position: absolute; inset: -40px; background: inherit; }
+.vr .launch ~ * { transition: opacity .45s ease; }
+.vr:not(.in) > :not(.launch):not(.bg):not(.sclose) { opacity: 0; pointer-events: none; }
+.vr.in .launch { opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s .45s; }
+.lp { position: absolute; left: 50%; top: 50%; width: 900px; height: 520px; transform: translate(-50%, -52%); border-radius: 40px; padding: 48px 56px; }
+.lk { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.lp h3 { margin: 14px 0 0; font: 300 52px/1.08 Barlow, sans-serif; letter-spacing: -.02em; }
+.opts { position: absolute; left: 120px; right: 120px; bottom: 120px; display: flex; justify-content: space-between; }
+.opts button { width: 170px; text-align: center; }
+.opts span { display: block; width: 118px; height: 118px; border-radius: 50%; margin: 0 auto; background-size: cover; background-position: center; box-shadow: 0 0 0 1px rgba(255,255,255,.5), 0 16px 30px -14px rgba(0,0,0,.45); transition: box-shadow .25s; }
+.opts button.on span { box-shadow: 0 0 0 4px var(--on), 0 16px 30px -14px rgba(0,0,0,.45); }
+.opts b { display: block; margin-top: 14px; font-weight: 500; font-size: 17px; }
+.opts i { display: block; font-style: normal; font-size: 13px; opacity: .65; margin-top: 3px; }
+.enter { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); height: 52px; padding: 0 34px; border-radius: 26px; background: var(--on); color: var(--onink); display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 18px; }
+.enter svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.lhint { position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%); margin: 0; font-size: 14px; opacity: .6; }
+.vr.still .launch, .vr.still > * { transition: none !important; }
+
+/* ---------- a phone held upright: the interface turns a quarter and fills the screen ---------- */
+@media (max-width: 720px) and (orientation: portrait) {
+  dialog.space[open] { position: fixed; inset: 0; width: 100vw; height: 100dvh; margin: 0; }
+  .vrhost { position: absolute; left: 50%; top: 50%; width: min(calc(100dvh - 140px), calc(94vw * 16 / 9)); border-radius: 14px; transform: translate(-50%, -50%) rotate(90deg); }
+  .sclose { top: auto; bottom: 16px; right: 50%; margin-right: -20px; transform: rotate(90deg); }
+  dialog.space[open] .vrhost { animation: none; }
+}

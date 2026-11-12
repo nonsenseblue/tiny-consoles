@@ -3,7 +3,7 @@
  * One component per piece. Each renders the matching Web Component,
  * so React and plain HTML share a single implementation.
  *
- *   import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings, LongWayRound } from 'tiny-consoles/react';
+ *   import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings, LongWayRound, OtterHome } from 'tiny-consoles/react';
  */
 
 export { SoftGrain, type SoftGrainProps } from './SoftGrain.js';
@@ -17,3 +17,4 @@ export { PlioceneCoast, type PlioceneCoastProps } from './PlioceneCoast.js';
 export { ClaimCheck, type ClaimCheckProps } from './ClaimCheck.js';
 export { PressCuttings, type PressCuttingsProps } from './PressCuttings.js';
 export { LongWayRound, type LongWayRoundProps } from './LongWayRound.js';
+export { OtterHome, type OtterHomeProps } from './OtterHome.js';

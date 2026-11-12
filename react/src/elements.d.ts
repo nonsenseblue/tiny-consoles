@@ -17,6 +17,7 @@ declare module 'react' {
       'claim-check': PieceElement;
       'press-cuttings': PieceElement;
       'long-way-round': PieceElement;
+      'otter-home': PieceElement;
     }
   }
 }

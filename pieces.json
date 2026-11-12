@@ -149,5 +149,19 @@
     "hint": "Click a poster to open the brand book, then turn its pages.",
     "ratio": 0.48,
     "max": 700
+  },
+  {
+    "tag": "otter-home",
+    "text": "A four-level house on a hillside by the sea, built in Blender and rendered in Cycles, presented like a headset launch. Open it and the interface comes up: one wide window bent round you, floors on one side, views on the other, the whole house on a small desk close at hand.",
+    "about": "A house by the sea, as a headset sees it.",
+    "chips": [
+      "blender",
+      "cycles",
+      "spatial ui",
+      "architecture"
+    ],
+    "hint": "Open any sheet to step into the house: choose where to begin, then walk it floor by floor.",
+    "ratio": 0.41,
+    "max": 820
   }
 ]
