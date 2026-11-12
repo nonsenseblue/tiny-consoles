@@ -146,7 +146,7 @@
       "halftone",
       "letterpress"
     ],
-    "hint": "Click a poster to open the brand book; turn its pages with the dots.",
+    "hint": "Click a poster to open the brand book, then turn its pages.",
     "ratio": 0.48,
     "max": 700
   }

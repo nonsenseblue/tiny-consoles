@@ -2,7 +2,7 @@
  * <long-way-round> · tiny-consoles
  * A brand book for an imagined New Zealand drinks house, Long Way Round, that sends its drinks and wine out like post.
  * Three posters hang on the board; open any one and the book comes up over the page, twelve landscape pages turned
- * with the dots underneath. Each page sets itself as it opens, and a few pages answer the pointer.
+ * with Prev and Next, the arrow keys or a swipe. Each page sets itself as it opens, and a few pages answer the pointer.
  *
  * Usage:
  *   <script type="module" src="components/long-way-round/src/long-way-round.js"></script>
@@ -81,7 +81,7 @@ const MARKUP = `<div class="wrap"><svg width="0" height="0" style="position:abso
 <div class="info"><b>Apple</b><span>330 ml · can and bottle</span></div>
 <div class="band"><span>New Zealand</span><i class="route"></i><svg viewBox="-30 -30 60 60" class="bs"><g fill="none" stroke="#D9B13F" stroke-width="4" stroke-linecap="round"><path d="M1 0 C1 -3 -3 -3 -4 0 C-5 5 3 7 6 2 C9 -4 4 -10 -2 -10 C-10 -9 -13 0 -10 7 C-6 13 6 14 11 6"/><path d="M0 -18 L0 -25 M18 -2 L25 -3 M-1 19 L0 26 M-18 1 L-25 2 M13 -13 L17 -18 M-13 13 L-17 18"/></g></svg><i class="route"></i><span>your table</span></div></button></div></div>
 <dialog class="book-view" aria-label="Long Way Round, brand book"><div class="desk"><div class="stage"><div class="book">${PAGES}</div></div></div>
-<nav class="dots" aria-label="Pages"><button class="dot" aria-label="1 · Cover"></button><button class="dot" aria-label="2 · Story"></button><button class="dot" aria-label="3 · Logo"></button><button class="dot" aria-label="4 · Drawings"></button><button class="dot" aria-label="5 · Wines"></button><button class="dot" aria-label="6 · Cans"></button><button class="dot" aria-label="7 · Bottles"></button><button class="dot" aria-label="8 · Wine box"></button><button class="dot" aria-label="9 · Packaging"></button><button class="dot" aria-label="10 · Small things"></button><button class="dot" aria-label="11 · At the table"></button><button class="dot" aria-label="12 · Back"></button><button class="reload" aria-label="Replay this page"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.6-3.7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M11.6 1.8v2.8h-2.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></nav><button class="bclose" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button></dialog></div>`;
+<div class="bbar"><button class="bprev" type="button" aria-label="Previous page"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg><span aria-hidden="true">Prev</span></button><button class="brp" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6"/><path d="M12 1.8v3h-3"/></svg><span>Replay</span></button><button class="bnext" type="button" aria-label="Next page"><span aria-hidden="true">Next</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button></div><button class="bclose" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button></dialog></div>`;
 
 /* the packaging page: tap a small box and it changes places with the large one */
 function swapBoxes(root){
@@ -170,7 +170,6 @@ function run(root, host) {
   fitBoard(desk, desk, stage, () => ({ w: 1123, h: 794 }), () => {});
   if (still) { desk.classList.add('still'); board.classList.add('still'); }
   const pages = [...root.querySelectorAll('.page')];
-  const dots = [...root.querySelectorAll('.dot')];
   let idx = 0, timers = [];
 
   /* a page before it sets: drawn lines rolled back, typed fields empty */
@@ -211,12 +210,22 @@ function run(root, host) {
   const show = k => {
     idx = Math.min(Math.max(k, 0), pages.length - 1);
     pages.forEach((p, i) => { p.classList.toggle('cur', i === idx); if (i !== idx) reset(p); });
-    dots.forEach((d, i) => d.setAttribute('aria-current', String(i === idx)));
+    root.querySelector('.bprev').disabled = idx === 0;
+    root.querySelector('.bnext').disabled = idx === pages.length - 1;
     if (view.open) play(pages[idx]);
   };
 
-  dots.forEach((d, i) => d.addEventListener('click', () => show(i)));
-  root.querySelector('.reload').addEventListener('click', () => play(pages[idx]));
+  root.querySelector('.bprev').addEventListener('click', () => show(idx - 1));
+  root.querySelector('.bnext').addEventListener('click', () => show(idx + 1));
+  root.querySelector('.brp').addEventListener('click', () => play(pages[idx]));
+  /* a sideways swipe on the open book turns its pages */
+  let sx = null, sy = 0;
+  view.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  view.addEventListener('touchend', e => {
+    if (sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(idx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
   swapBoxes(root);
   interact(root);
   show(0);

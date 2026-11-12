@@ -1,6 +1,8 @@
 /* tiny-consoles · cursor
  * A small dot that follows the pointer and swells into an inverting lens over anything clickable.
  * Over a thumbnail it becomes a real magnifier: the picture under it, shown larger.
+ * Inside a piece (its shadow root) it takes over too: the piece's own cursor is hidden, and anything that opens
+ * full size swells the lens the same way. In an open dialog the system cursor comes back, since the dot sits under it.
  * Only on devices with a fine pointer, and never when reduced motion is asked for.
  */
 
@@ -14,10 +16,30 @@ export function cursor() {
   document.documentElement.classList.add('has-cursor');
 
   const HOT = 'a, button';
+  /* what opens full size inside the pieces: posters, piles, tickets, sheets */
+  const OPEN = '.po, .pile, .sheet';
+  /* each piece's shadow root gets one rule: no cursor of its own, except inside an open dialog */
+  const HIDE = '*:not(dialog[open], dialog[open] *) { cursor: none !important; }';
+  const seen = new WeakSet();
+  const adopt = node => {
+    const root = node && node.getRootNode && node.getRootNode();
+    if (!(root instanceof ShadowRoot) || seen.has(root)) return;
+    seen.add(root);
+    root.append(Object.assign(document.createElement('style'), { textContent: HIDE }));
+  };
+  const hot = path => {
+    if (path.some(el => el instanceof Element && el.matches('dialog[open]'))) return -1;
+    for (const el of path) {
+      if (!(el instanceof Element)) continue;
+      if (el.matches('.thumb')) return LOUPE;
+      if (el.matches(HOT) || el.matches(OPEN)) return 1;
+    }
+    return 0.24;
+  };
   const SIZE = 34;          /* the lens at scale 1, as set in gallery.css */
   const LOUPE = 1;          /* the same size as the lens over links */
   const ZOOM = 2;           /* how much the picture is enlarged inside it */
-  const target = el => el.closest('.thumb') ? LOUPE : el.closest(HOT) ? 1 : 0.24;
+  const target = e => hot(e.composedPath());
 
   /* the dot follows closely; its size eases on a spring so it swells and settles */
   let tx = -100, ty = -100, x = tx, y = ty, s = 0.24, ts = 0.24, v = 0, raf = 0, last = 0, img = null;
@@ -51,8 +73,13 @@ export function cursor() {
 
   addEventListener('pointermove', e => {
     tx = e.clientX; ty = e.clientY;
+    const path = e.composedPath();
+    adopt(path[0]);
+    const t = hot(path);
+    /* an open dialog sits above the dot, so let the system cursor show there */
+    if (t < 0) { dot.classList.add('hidden'); return; }
     if (dot.classList.contains('hidden')) { x = tx; y = ty; dot.classList.remove('hidden'); }
-    ts = target(e.target);
+    ts = t;
     const next = e.target.closest('.thumb')?.querySelector('img') || null;
     if (next !== img) {
       img = next;
@@ -63,5 +90,5 @@ export function cursor() {
   }, { passive: true });
   document.addEventListener('pointerleave', () => dot.classList.add('hidden'));
   addEventListener('pointerdown', () => { ts *= 0.8; kick(); });
-  addEventListener('pointerup', e => { ts = target(e.target); kick(); });
+  addEventListener('pointerup', e => { const t = target(e); if (t > 0) ts = t; kick(); });
 }

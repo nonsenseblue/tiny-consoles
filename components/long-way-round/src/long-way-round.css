@@ -10,14 +10,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .book { position: absolute; inset: 0; }
 .page { font-family: "Cormorant Garamond", Georgia, serif; color: #1D1C1A; }
 
-/* below the page: one dot per page, and replay */
-.dots { display: flex; justify-content: center; align-items: center; gap: 2px; padding-top: 18px; }
-.dot { width: 15px; height: 15px; display: grid; place-items: center; }
-.dot::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #c9c4b9; transition: background .3s, transform .3s; }
-.dot:hover::before { background: #8a867d; }
-.dot[aria-current="true"]::before { background: #1D1C1A; transform: scale(1.3); }
-.reload { margin-left: 12px; width: 22px; height: 22px; display: grid; place-items: center; color: #8a867d; border-radius: 50%; transition: color .3s, transform .5s; }
-.reload:hover { color: #1D1C1A; transform: rotate(-180deg); }
 
 
 /* ---------- the wall: three posters; any one opens the book ---------- */
@@ -59,11 +51,20 @@ dialog.book-view::backdrop { background: rgba(18, 17, 16, .8); backdrop-filter: 
 dialog.book-view[open]::backdrop { animation: bfade .3s ease; }
 @keyframes bfade { from { opacity: 0; } }
 .book-view .desk { width: min(86vw, calc(76vh * 1123 / 794)); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .7); }
-.book-view .dots .dot::before { background: rgba(243, 242, 239, .35); }
-.book-view .dots .dot:hover::before { background: rgba(243, 242, 239, .7); }
-.book-view .dots .dot[aria-current="true"]::before { background: #f3f2ef; }
-.book-view .reload { color: rgba(243, 242, 239, .7); }
-.book-view .reload:hover { color: #f3f2ef; }
+/* Prev, Replay and Next at the foot, as on every other piece that opens full size */
+.bbar { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; align-items: center; gap: 30px; }
+.bbar button { font: 500 11px/1 Inter, system-ui, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: #f3f2ef; height: 44px; padding: 0 6px;
+  display: inline-flex; align-items: center; gap: 8px; opacity: .72; transition: opacity .2s; }
+.bbar .brp { opacity: 1; }
+.bbar button:disabled { opacity: .25; cursor: default; }
+.bbar svg { width: 12px; height: 12px; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+@media (hover: hover) {
+  .bbar button:not(:disabled):hover { opacity: 1; }
+  .bbar .bprev:not(:disabled):hover svg { transform: translateX(-4px); }
+  .bbar .bnext:not(:disabled):hover svg { transform: translateX(4px); }
+  .bbar .brp:hover svg { transform: rotate(-120deg); }
+}
+@media (max-width: 720px) { .bbar { bottom: 20px; gap: 22px; } }
 .bclose { position: fixed; top: 20px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(243, 242, 239, .32); color: #f3f2ef; display: grid; place-items: center; opacity: .8; }
 .bclose:hover { opacity: 1; }
 .bclose svg { width: 14px; height: 14px; }

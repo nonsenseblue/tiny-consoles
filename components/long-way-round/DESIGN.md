@@ -98,7 +98,7 @@ typography:
 
 Every page is 1123 × 794 with a 64px margin. The head sits at the top between the wordmark and a dotted rule; the foot is a dotted rule over three columns, 470, 290 and 235 wide, split by short dotted uprights. Pictures sit between the two, never across the rules.
 
-The page is scaled as one object to the width it is given. The dots and the replay arrow sit centred under it.
+The page is scaled as one object to the width it is given; Prev, Replay and Next sit at the foot of the screen.
 
 <details><summary>Tokens</summary>
 
@@ -132,7 +132,7 @@ Any poster opens the book in a dialog over a dimmed, blurred page, at its first 
 
 ### Turning
 
-Twelve dots under the open book, one per page; the current one is light, the rest are dim. The arrow after them plays the current page again. Inside the book the arrow keys turn its pages and do not reach the gallery.
+Prev, Replay and Next sit at the foot of the screen, as on every other piece that opens full size; Prev fades on the first page and Next on the last. The arrow keys and a sideways swipe also turn the pages, and do not reach the gallery.
 
 ### A page setting itself
 
@@ -144,7 +144,7 @@ The sun on the cover and the back turns toward the pointer and spins once when t
 
 ### Reduced motion
 
-With `prefers-reduced-motion`, the posters and every page show finished; nothing rises, draws, types or drifts. The dots still turn the pages.
+With `prefers-reduced-motion`, the posters and every page show finished; nothing rises, draws, types or drifts. Prev and Next still turn the pages.
 
 ## Do's and Don'ts
 
