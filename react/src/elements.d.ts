@@ -16,6 +16,7 @@ declare module 'react' {
       'pliocene-coast': PieceElement;
       'claim-check': PieceElement;
       'press-cuttings': PieceElement;
+      'long-way-round': PieceElement;
     }
   }
 }

@@ -44,6 +44,10 @@ Things made for places that do not exist: a label, a station, an office.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#long-way-round"><img src="components/long-way-round/assets/thumb.webp" alt="long-way-round" width="96"></a></td>
+<td><b>11 · <a href="https://tinyconsoles.vercel.app/#long-way-round"><code>&lt;long-way-round&gt;</code></a></b><br>The brand book of an imagined drinks house that sends its bottles out like post, turned one page at a time.<br><sub>brand book · packaging · halftone · letterpress · <a href="components/long-way-round/assets/preview.webp">preview</a> · <a href="components/long-way-round/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#press-cuttings"><img src="components/press-cuttings/assets/thumb.webp" alt="press-cuttings" width="96"></a></td>
 <td><b>10 · <a href="https://tinyconsoles.vercel.app/#press-cuttings"><code>&lt;press-cuttings&gt;</code></a></b><br>Four piles of torn and cut paper from one town's last night; opened, each squares up and its edges read as one sentence.<br><sub>collage · found poem · torn paper · <a href="components/press-cuttings/assets/preview.webp">preview</a> · <a href="components/press-cuttings/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -67,11 +71,11 @@ Things made for places that do not exist: a label, a station, an office.
 
 ## Use a piece
 
-Two lines: the script, then the tag. Swap `press-cuttings` for any piece above.
+Two lines: the script, then the tag. Swap `long-way-round` for any piece above.
 
 ```html
-<script type="module" src="https://tinyconsoles.vercel.app/components/press-cuttings/src/press-cuttings.js"></script>
-<press-cuttings></press-cuttings>
+<script type="module" src="https://tinyconsoles.vercel.app/components/long-way-round/src/long-way-round.js"></script>
+<long-way-round></long-way-round>
 ```
 
 ### With React
@@ -83,10 +87,10 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings, LongWayRound } from 'tiny-consoles/react';
 
 export default function Page() {
-  return <PressCuttings style={{ maxWidth: 1080 }} />;
+  return <LongWayRound style={{ maxWidth: 960 }} />;
 }
 ```
 

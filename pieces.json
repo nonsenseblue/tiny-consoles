@@ -135,5 +135,19 @@
     "hint": "Click a pile to open it and watch it square up; read down the edges.",
     "ratio": 0.6,
     "max": 840
+  },
+  {
+    "tag": "long-way-round",
+    "text": "Three posters for an imagined New Zealand drinks house that sends its drinks and wine out like post. Open any one and its brand book comes up: twelve landscape pages, each setting itself as it opens.",
+    "about": "A brand book for drinks that take the long way.",
+    "chips": [
+      "brand book",
+      "packaging",
+      "halftone",
+      "letterpress"
+    ],
+    "hint": "Click a poster to open the brand book; turn its pages with the dots.",
+    "ratio": 0.48,
+    "max": 700
   }
 ]
