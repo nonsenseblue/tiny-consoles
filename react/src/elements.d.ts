@@ -18,6 +18,7 @@ declare module 'react' {
       'press-cuttings': PieceElement;
       'long-way-round': PieceElement;
       'otter-home': PieceElement;
+      'rendered-identity': PieceElement;
     }
   }
 }

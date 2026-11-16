@@ -17,6 +17,10 @@ Pieces that start from a film, a book or a record.
 
 <table>
 <tr>
+<td width="112"><a href="https://tinyconsoles.vercel.app/#rendered-identity"><img src="components/rendered-identity/assets/thumb.webp" alt="rendered-identity" width="96"></a></td>
+<td><b>13 · <a href="https://tinyconsoles.vercel.app/#rendered-identity"><code>&lt;rendered-identity&gt;</code></a></b><br>A generative collage for four papers on long conversations with a language model; its cards keep moving together.<br><sub>generative · collage · svg · research · <a href="components/rendered-identity/assets/preview.webp">preview</a> · <a href="components/rendered-identity/DESIGN.md">design notes</a></sub></td>
+</tr>
+<tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#pliocene-coast"><img src="components/pliocene-coast/assets/thumb.webp" alt="pliocene-coast" width="96"></a></td>
 <td><b>08 · <a href="https://tinyconsoles.vercel.app/#pliocene-coast"><code>&lt;pliocene-coast&gt;</code></a></b><br>A torn paper collage of what the Galactic Railroad left in the ground; touched bone chips crumble and wash into the river.<br><sub>collage · torn paper · fossil · <a href="components/pliocene-coast/assets/preview.webp">preview</a> · <a href="components/pliocene-coast/DESIGN.md">design notes</a></sub></td>
 </tr>
@@ -91,7 +95,7 @@ npm install github:nonsenseblue/tiny-consoles
 ```
 
 ```jsx
-import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings, LongWayRound, OtterHome } from 'tiny-consoles/react';
+import { SoftGrain, DeepSpace, SoundingsBoard, RerunBoard, LostAndFound, DayForNight, MaKasuri, PlioceneCoast, ClaimCheck, PressCuttings, LongWayRound, OtterHome, RenderedIdentity } from 'tiny-consoles/react';
 
 export default function Page() {
   return <LongWayRound style={{ maxWidth: 960 }} />;

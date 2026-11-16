@@ -163,5 +163,19 @@
     "hint": "Open any sheet to step into the house: choose where to begin, then walk it floor by floor.",
     "ratio": 0.41,
     "max": 820
+  },
+  {
+    "tag": "rendered-identity",
+    "text": "A collage for four papers on long conversations with a language model. Two sets of rings, a word branching three ways from one point, the contours of a memory before and after it was compacted, and the same sky and leaves as a blurred photograph and as a halftone.",
+    "about": "Four papers, as one collage.",
+    "chips": [
+      "generative",
+      "collage",
+      "svg",
+      "research"
+    ],
+    "hint": "The cards keep moving together, slowly; scroll away and they rest.",
+    "ratio": 0.65,
+    "max": 720
   }
 ]
