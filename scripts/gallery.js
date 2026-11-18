@@ -24,10 +24,12 @@ const COMPONENTS = new URL('components/', ROOT).href;
 const load = name => import(new URL(`${name}.js${V}`, import.meta.url).href);
 
 const json = name => fetch(new URL(`${name}.json${V}`, ROOT)).then(r => r.json());
-const [{ setup }, { pager }, { field }, { cursor }, { menu }, { swell }, pieces, shelves] = await Promise.all([
+const [{ setup }, { pager }, { field }, { cursor }, { menu }, { swell }, every, shelves] = await Promise.all([
   load('pages'), load('pager'), load('field'), load('cursor'), load('menu'), load('swell'),
   json('pieces'), json('home').catch(() => ({})),
 ]);
+/* a piece marked "hidden": true in pieces.json is left off every page for now, and the rest are numbered without it */
+const pieces = every.filter(piece => !piece.hidden);
 const { renderIndexItem, renderPiece, copyEmbed } = setup({ components: COMPONENTS, version: V });
 
 const area = document.getElementById('pager');

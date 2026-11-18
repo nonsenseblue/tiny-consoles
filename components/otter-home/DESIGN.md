@@ -8,7 +8,7 @@ description: A four-level house on a hillside by the sea, built in Blender, pres
 
 ## Overview
 
-A house that exists only as a Blender scene: four levels stepped into a slope above the sea, white walls, a dark mono-pitch roof, glass rails, timber where hands touch it, a pool on the lowest terrace. Every view of it is rendered in Cycles, forty-four in all, and thirty-nine of them also as a panorama taken from the same spot, one full turn round.
+A house that exists only as a Blender scene: four levels stepped into a slope above the sea, white walls, a dark mono-pitch roof, glass rails, timber where hands touch it, a pool on the lowest terrace. Every view of it is rendered in Cycles, forty-four in all, and thirty-eight of them also as a panorama taken from the same spot, one full turn round.
 
 On the page it is three sheets of a launch page on a pale grey board, the way a headset is announced. The large one carries small labels across the top, a headline set light and bold, a short paragraph and two screens of the interface, the main view behind and the start screen laid over it, with a frosted badge whose lettering turns slowly. Beside it, How it works shows the three steps, each a small screen, a name and two lines; What you see labels the parts of the interface with thin lines. All three sit on soft colour under a fine grain.
 
@@ -105,7 +105,7 @@ Rounded everywhere: 24px for the picture on the sheet, 30px for panels, 36px for
 - **Floors.** Outside, Garden, 3F, 2F, 1F, B1. Choosing one fills the views and shows its first picture.
 - **Views.** Every render of the chosen floor in two columns, scrolling inside the panel.
 - **Desk.** The house from above, a frame moving to the floor you are on.
-- **Panoramas.** 39 of the 44 views. Drag sideways on the window to turn it; a press that hardly moves is still a click. A new view starts looking where its photo looks.
+- **Panoramas.** 38 of the 44 views (the bench above the sea is left out: its spot is inside a tree). Drag sideways on the window to turn it; a press that hardly moves is still a click. A new view starts looking where its photo looks.
 - **Stepping inside.** Step inside, or a click on the big window, opens a larger bent window with the panorama, turned the same way, or the photo where there is none. Glass round buttons either side for the previous and next view, a glass Back at the top left and a caption below, all 48px in from the edges. Drag turns the panorama; the arrow keys turn the views, and so does a swipe on a photo; Escape steps back to the interface, then closes it.
 - **Reduced motion.** Nothing moves on its own: no parallax, no fades, no turning badge. Dragging a panorama still turns it.
 

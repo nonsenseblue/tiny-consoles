@@ -18,7 +18,7 @@ Pieces that start from a film, a book or a record.
 <table>
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#rendered-identity"><img src="components/rendered-identity/assets/thumb.webp" alt="rendered-identity" width="96"></a></td>
-<td><b>13 · <a href="https://tinyconsoles.vercel.app/#rendered-identity"><code>&lt;rendered-identity&gt;</code></a></b><br>A generative collage for four papers on long conversations with a language model; its cards keep moving together.<br><sub>generative · collage · svg · research · <a href="components/rendered-identity/assets/preview.webp">preview</a> · <a href="components/rendered-identity/DESIGN.md">design notes</a></sub></td>
+<td><b>12 · <a href="https://tinyconsoles.vercel.app/#rendered-identity"><code>&lt;rendered-identity&gt;</code></a></b><br>A generative collage for four papers on long conversations with a language model; its cards keep moving together.<br><sub>generative · collage · svg · research · <a href="components/rendered-identity/assets/preview.webp">preview</a> · <a href="components/rendered-identity/DESIGN.md">design notes</a></sub></td>
 </tr>
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#pliocene-coast"><img src="components/pliocene-coast/assets/thumb.webp" alt="pliocene-coast" width="96"></a></td>
@@ -47,10 +47,12 @@ Pieces that start from a film, a book or a record.
 Things made for places that do not exist: a label, a station, an office.
 
 <table>
+<!-- hidden for now: otter-home
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#otter-home"><img src="components/otter-home/assets/thumb.webp" alt="otter-home" width="96"></a></td>
 <td><b>12 · <a href="https://tinyconsoles.vercel.app/#otter-home"><code>&lt;otter-home&gt;</code></a></b><br>A house by the sea built in Blender, presented like a headset launch; open it and step inside, floor by floor.<br><sub>blender · cycles · spatial ui · architecture · <a href="components/otter-home/assets/preview.webp">preview</a> · <a href="components/otter-home/DESIGN.md">design notes</a></sub></td>
 </tr>
+-->
 <tr>
 <td width="112"><a href="https://tinyconsoles.vercel.app/#long-way-round"><img src="components/long-way-round/assets/thumb.webp" alt="long-way-round" width="96"></a></td>
 <td><b>11 · <a href="https://tinyconsoles.vercel.app/#long-way-round"><code>&lt;long-way-round&gt;</code></a></b><br>The brand book of an imagined drinks house that sends its bottles out like post, turned one page at a time.<br><sub>brand book · packaging · halftone · letterpress · <a href="components/long-way-round/assets/preview.webp">preview</a> · <a href="components/long-way-round/DESIGN.md">design notes</a></sub></td>

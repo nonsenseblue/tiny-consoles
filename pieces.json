@@ -152,6 +152,7 @@
   },
   {
     "tag": "otter-home",
+    "hidden": true,
     "text": "A four-level house on a hillside by the sea, built in Blender and rendered in Cycles, presented like a headset launch. Open it and the interface comes up: one wide window bent round you, floors on one side, views on the other, the whole house on a small desk close at hand.",
     "about": "A house by the sea, as a headset sees it.",
     "chips": [

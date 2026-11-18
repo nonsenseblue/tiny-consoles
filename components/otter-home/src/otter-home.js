@@ -85,7 +85,8 @@ const P = {
   ext_road: new URL('../assets/pano-ext-road.webp', import.meta.url).href,
   ext_cars: new URL('../assets/pano-ext-cars.webp', import.meta.url).href,
   yard_west: new URL('../assets/pano-yard-west.webp', import.meta.url).href,
-  yard_bench: new URL('../assets/pano-yard-bench.webp', import.meta.url).href,
+  /* yard_bench: left out for now; its panorama is taken from inside a tree's crown, so turning round shows leaves at arm's length.
+  yard_bench: new URL('../assets/pano-yard-bench.webp', import.meta.url).href, */
   sea_far: new URL('../assets/pano-sea-far.webp', import.meta.url).href,
   f3_screen: new URL('../assets/pano-f3-screen.webp', import.meta.url).href,
   f3_sofa: new URL('../assets/pano-f3-sofa.webp', import.meta.url).href,
