@@ -73,6 +73,51 @@ const I = {
   b1_storage: new URL('../assets/b1-storage.webp', import.meta.url).href,
 };
 
+/* the panoramas, one full turn each, taken from the same spot as the photo; the middle of each looks where the photo looks */
+const P = {
+  ext_sea: new URL('../assets/pano-ext-sea.webp', import.meta.url).href,
+  ext_south: new URL('../assets/pano-ext-south.webp', import.meta.url).href,
+  ext_west: new URL('../assets/pano-ext-west.webp', import.meta.url).href,
+  ext_iso: new URL('../assets/pano-ext-iso.webp', import.meta.url).href,
+  ext_pool: new URL('../assets/pano-ext-pool.webp', import.meta.url).href,
+  ext_pergola: new URL('../assets/pano-ext-pergola.webp', import.meta.url).href,
+  ext_onsen: new URL('../assets/pano-ext-onsen.webp', import.meta.url).href,
+  ext_road: new URL('../assets/pano-ext-road.webp', import.meta.url).href,
+  ext_cars: new URL('../assets/pano-ext-cars.webp', import.meta.url).href,
+  yard_west: new URL('../assets/pano-yard-west.webp', import.meta.url).href,
+  yard_bench: new URL('../assets/pano-yard-bench.webp', import.meta.url).href,
+  sea_far: new URL('../assets/pano-sea-far.webp', import.meta.url).href,
+  f3_screen: new URL('../assets/pano-f3-screen.webp', import.meta.url).href,
+  f3_sofa: new URL('../assets/pano-f3-sofa.webp', import.meta.url).href,
+  f2_bed: new URL('../assets/pano-f2-bed.webp', import.meta.url).href,
+  f2_nightstand: new URL('../assets/pano-f2-nightstand.webp', import.meta.url).href,
+  f2_dressing: new URL('../assets/pano-f2-dressing.webp', import.meta.url).href,
+  f2_makeup: new URL('../assets/pano-f2-makeup.webp', import.meta.url).href,
+  f2_study: new URL('../assets/pano-f2-study.webp', import.meta.url).href,
+  f2_reading: new URL('../assets/pano-f2-reading.webp', import.meta.url).href,
+  f2_bath: new URL('../assets/pano-f2-bath.webp', import.meta.url).href,
+  f2_vanity: new URL('../assets/pano-f2-vanity.webp', import.meta.url).href,
+  f2_washer: new URL('../assets/pano-f2-washer.webp', import.meta.url).href,
+  f2_toilet: new URL('../assets/pano-f2-toilet.webp', import.meta.url).href,
+  f2_balcony: new URL('../assets/pano-f2-balcony.webp', import.meta.url).href,
+  f1_living: new URL('../assets/pano-f1-living.webp', import.meta.url).href,
+  f1_console: new URL('../assets/pano-f1-console.webp', import.meta.url).href,
+  f1_dining: new URL('../assets/pano-f1-dining.webp', import.meta.url).href,
+  f1_kitchen: new URL('../assets/pano-f1-kitchen.webp', import.meta.url).href,
+  f1_cafe: new URL('../assets/pano-f1-cafe.webp', import.meta.url).href,
+  f1_toilet: new URL('../assets/pano-f1-toilet.webp', import.meta.url).href,
+  f1_genkan: new URL('../assets/pano-f1-genkan.webp', import.meta.url).href,
+  b1_cellar: new URL('../assets/pano-b1-cellar.webp', import.meta.url).href,
+  b1_lounge: new URL('../assets/pano-b1-lounge.webp', import.meta.url).href,
+  b1_listen: new URL('../assets/pano-b1-listen.webp', import.meta.url).href,
+  b1_shower: new URL('../assets/pano-b1-shower.webp', import.meta.url).href,
+  b1_closet: new URL('../assets/pano-b1-closet.webp', import.meta.url).href,
+  b1_pool: new URL('../assets/pano-b1-pool.webp', import.meta.url).href,
+  b1_storage: new URL('../assets/pano-b1-storage.webp', import.meta.url).href,
+};
+/* how far each photo looks up or down, in degrees: the panorama is hung so that this sits in the middle of the window */
+const PITCH = { ext_sea: -6.2, ext_south: -2.4, ext_west: -5.1, ext_iso: -24.0, ext_pool: -16.2, ext_pergola: -9.3, ext_onsen: -19.5, ext_road: 4.0, ext_cars: -8.4, yard_west: -2.2, yard_bench: -15.2, sea_far: -15.9, f3_screen: 0.0, f3_sofa: -6.2, f2_bed: -7.1, f2_nightstand: -24.4, f2_dressing: -8.2, f2_makeup: -9.8, f2_study: -11.1, f2_reading: -9.0, f2_bath: -11.5, f2_vanity: -9.5, f2_washer: -13.7, f2_toilet: -25.0, f2_balcony: -4.6, f1_living: -3.9, f1_console: -4.8, f1_dining: -4.9, f1_kitchen: -6.5, f1_cafe: -6.4, f1_toilet: -20.3, f1_genkan: -20.3, b1_cellar: -4.6, b1_lounge: -9.7, b1_listen: -6.9, b1_shower: -11.1, b1_closet: -7.1, b1_pool: -5.4, b1_storage: -8.7 };
+
 const LEVELS = [
   { name: 'Outside', shots: [['ext_sea', 'From the sea'], ['ext_south', 'The front'], ['ext_west', 'From the west'], ['ext_iso', 'From above'], ['ext_pool', 'Pool'], ['ext_pergola', 'Shade'], ['ext_onsen', 'Onsen balcony'], ['ext_road', 'From the road'], ['ext_cars', 'Carport']] },
   { name: 'Garden', shots: [['yard_west', 'West garden'], ['yard_bench', 'Bench above the sea'], ['yard_overview', 'The whole garden'], ['sea_far', 'Sea and house']] },
@@ -94,6 +139,7 @@ const ICON = {
 };
 
 const STRIPS = 24;
+const DEEP = 60;   /* strips in the view you step into: 100° of arc, under 2° each, so straight lines stay straight */
 /* the badge's lettering runs once round its circle, evenly spaced; the ring turns slowly while it is on screen */
 const RING = `<svg viewBox="0 0 140 140" aria-hidden="true"><defs><path id="ring" d="M70,70 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/>
 <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9d2a5"/><stop offset="1" stop-color="#e3c99e"/></linearGradient></defs>
@@ -114,7 +160,7 @@ const MARKUP = `<div class="board"><div class="stage">
 <button class="win" type="button" aria-label="Open full size"><span class="cyl">${'<i></i>'.repeat(STRIPS)}</span></button>
 <nav class="glass pan floors" aria-label="Floors"><h4>Floors</h4>${LEVELS.map((L, l) => `<button type="button" data-l="${l}">${L.name}</button>`).join('')}</nav>
 <div class="glass pan views"><h4>Views</h4><div class="vw"></div><button class="go" type="button">Step inside${ICON.go}</button></div>
-<div class="imm" aria-hidden="true"><img class="iimg" alt="" draggable="false">
+<div class="imm" aria-hidden="true"><img class="iimg" alt="" draggable="false"><div class="iwin"><span class="cyl">${'<i></i>'.repeat(DEEP)}</span></div>
 <button class="glass ib iback" type="button">${ICON.prev}<span>Back</span></button>
 <button class="glass ib iprev" type="button" aria-label="Previous">${ICON.prev}</button><button class="glass ib inext" type="button" aria-label="Next">${ICON.next}</button>
 <p class="glass icap"></p></div>
@@ -136,13 +182,33 @@ function run(root) {
   const fitVr = () => { if (host.offsetWidth) vr.style.setProperty('--k', host.offsetWidth / 1600); };
   new ResizeObserver(fitVr).observe(host);
   if (still) vr.classList.add('still');
-  const W = 940, H = 400, R = 760, ang = W / R, sw = W / STRIPS;
+  /* two bent windows: the big one in the space, and the larger one you step into; both are strips on a cylinder seen from inside */
+  const W = 940, H = 400;
   vr.style.setProperty('--ww', W); vr.style.setProperty('--wh', H);
-  root.querySelectorAll('.cyl i').forEach((s, i) => {
-    const a = -ang / 2 + (i + .5) * ang / STRIPS;
-    s.style.cssText = `left:${(-sw / 2 - .5).toFixed(1)}px;width:${(sw + 1).toFixed(1)}px;background-position:${-(i * sw).toFixed(1)}px 0;transform:translateZ(${R}px) rotateY(${(-a * 180 / Math.PI).toFixed(3)}deg) translateZ(${-R}px)`;
-  });
-  root.querySelector('.win').style.perspective = `${Math.round(R * 1.15)}px`;
+  const bend = (frame, w, h, r, eye = 1.15) => {
+    const el = frame.querySelector('.cyl'), strips = [...el.children], n = strips.length, ang = w / r, sw = w / n;
+    strips.forEach((s, i) => {
+      const a = -ang / 2 + (i + .5) * ang / n;
+      s.style.cssText = `left:${(-sw / 2 - .5).toFixed(1)}px;width:${(sw + 1).toFixed(1)}px;top:${-h / 2}px;height:${h}px;transform:translateZ(${r}px) rotateY(${(-a * 180 / Math.PI).toFixed(3)}deg) translateZ(${-r}px)`;
+    });
+    frame.style.perspective = `${Math.round(r * eye)}px`;
+    return { el, strips, w, h, r, sw };
+  };
+  const bigC = bend(root.querySelector('.win'), W, H, 760), deepC = bend(root.querySelector('.iwin'), 1142, 642, 924);
+  /* the ends of a bent window come toward you and look about 1.19 times taller than its middle (perspective 1.15 r, 71° of arc),
+     so the larger one is sized for its ends to fill the photo's own frame, 1360 × 765; the controls sit 48 in from the space's edge, clear of it */
+  /* a panorama wraps the whole cylinder once round, so a pixel of arc is a pixel of picture; turn is how far it has been dragged, in radians */
+  let turn = 0;
+  const hang = (c, k) => {
+    if (P[k]) {
+      const pw = 2 * Math.PI * c.r, ph = pw / 2, y = c.h / 2 - (90 - PITCH[k]) / 180 * ph, x = c.w / 2 - pw / 2 + turn * c.r;
+      c.el.style.setProperty('--img', `url(${P[k]})`); c.el.classList.add('pano');
+      c.strips.forEach((s, i) => { s.style.backgroundSize = `${pw.toFixed(1)}px ${ph.toFixed(1)}px`; s.style.backgroundPosition = `${(x - i * c.sw).toFixed(1)}px ${y.toFixed(1)}px`; });
+    } else {
+      c.el.style.setProperty('--img', `url(${I[k]})`); c.el.classList.remove('pano');
+      c.strips.forEach((s, i) => { s.style.backgroundSize = `${c.w}px ${c.h}px`; s.style.backgroundPosition = `${-(i * c.sw).toFixed(1)}px 0`; });
+    }
+  };
   /* the start screen comes first each time: choose where to begin, then Enter */
   const launch = root.querySelector('.launch'), picks = [...launch.querySelectorAll('.opts button')];
   let pick = 0;
@@ -166,7 +232,8 @@ function run(root) {
     lv = l; at = j;
     tabs.forEach((b, i) => { b.classList.toggle('on', i === l); b.setAttribute('aria-pressed', i === l); });
     const [k] = LEVELS[l].shots[j];
-    const paint = () => { cyl.style.setProperty('--img', `url(${I[k]})`); cyl.classList.remove('out'); };
+    if (changed) turn = 0;   /* a new view starts looking where its photo looks */
+    const paint = () => { hang(bigC, k); cyl.classList.remove('out'); };
     if (fade && changed && !still) { cyl.classList.add('out'); setTimeout(paint, 180); } else paint();
     vw.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === j));
     const [x, y, w, h] = HERE[LEVELS[l].name];
@@ -194,20 +261,40 @@ function run(root) {
   }
 
   /* stepping inside: the chosen picture grows to fill the space, with glass controls of the interface's own */
-  const imm = root.querySelector('.imm'), img = imm.querySelector('.iimg'), cap = imm.querySelector('.icap');
+  const imm = root.querySelector('.imm'), img = imm.querySelector('.iimg'), cap = imm.querySelector('.icap'), iwin = imm.querySelector('.iwin');
   const deep = () => vr.classList.contains('deep');
   const open = j => {
     const S = LEVELS[lv].shots, n = S.length;
     j = (j + n) % n;
     const [k, label] = S[j];
-    img.src = I[k];
     cap.textContent = `${j + 1} / ${n} · ${LEVELS[lv].name} · ${label}`;
     show(lv, j, false);
-    if (!still) { img.classList.remove('in'); void img.offsetWidth; img.classList.add('in'); }
+    /* with a panorama the space is the larger bent window you can turn; without one, the photo itself */
+    imm.classList.toggle('pano', !!P[k]);
+    const face = P[k] ? iwin : img;
+    if (P[k]) hang(deepC, k); else img.src = I[k];
+    if (!still) { face.classList.remove('in'); void face.offsetWidth; face.classList.add('in'); }
     vr.classList.add('deep'); imm.setAttribute('aria-hidden', 'false');
   };
   const back = () => { vr.classList.remove('deep'); imm.setAttribute('aria-hidden', 'true'); };
-  win.addEventListener('click', () => open(at));
+  /* drag sideways on a panorama to look round; a press that hardly moves is still a click. The space is drawn at 1600 wide and
+     scaled, and on a phone held upright it is turned a quarter, so the drag is measured in the space's own pixels along its width */
+  let moved = false;
+  const turnable = (frame, c) => {
+    let from = null;
+    const along = e => (upright.matches ? e.clientY : e.clientX) / (host.offsetWidth / 1600);
+    frame.addEventListener('pointerdown', e => { moved = false; if (!c.el.classList.contains('pano')) return; from = { x: along(e), turn }; frame.setPointerCapture(e.pointerId); });
+    frame.addEventListener('pointermove', e => {
+      if (!from) return;
+      const d = along(e) - from.x;
+      if (Math.abs(d) > 4) moved = true;
+      turn = from.turn + d / c.r; hang(c, LEVELS[lv].shots[at][0]);
+    });
+    const end = () => { from = null; };
+    frame.addEventListener('pointerup', end); frame.addEventListener('pointercancel', end);
+  };
+  turnable(win, bigC); turnable(iwin, deepC);
+  win.addEventListener('click', () => { if (moved) { moved = false; return; } open(at); });
   root.querySelector('.go').addEventListener('click', () => open(at));
   imm.querySelector('.iprev').addEventListener('click', () => open(at - 1));
   imm.querySelector('.inext').addEventListener('click', () => open(at + 1));
@@ -222,7 +309,8 @@ function run(root) {
   space.addEventListener('cancel', e => { if (deep()) { e.preventDefault(); back(); } });
   space.addEventListener('close', back);
   let sx = null, sy = 0;
-  imm.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  /* a sideways swipe turns to the next photo; on a panorama the same gesture turns the view instead */
+  imm.addEventListener('touchstart', e => { sx = imm.classList.contains('pano') ? null : e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
   imm.addEventListener('touchend', e => {
     if (sx === null) return;
     let dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;

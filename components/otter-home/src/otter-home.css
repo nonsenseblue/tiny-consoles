@@ -56,6 +56,10 @@ dialog.space[open] .vrhost { animation: vin .5s cubic-bezier(.2,.7,.2,1) both; }
 .cyl.out i { opacity: 0; }
 .cyl i { position: absolute; top: calc(var(--wh) * -.5px); height: calc(var(--wh) * 1px); background-image: var(--img); background-repeat: no-repeat;
   background-size: calc(var(--ww) * 1px) calc(var(--wh) * 1px); backface-visibility: hidden; }
+/* a panorama goes once round the cylinder and joins up with itself; you can take hold of it and turn it */
+.cyl.pano i { background-repeat: repeat-x; }
+.win:has(.cyl.pano), .iwin { cursor: grab; touch-action: none; }
+.win:has(.cyl.pano):active, .iwin:active { cursor: grabbing; }
 .cyl i:first-child { border-radius: 30px 0 0 30px; }
 .cyl i:last-child { border-radius: 0 30px 30px 0; }
 /* a filter on the cylinder would flatten it, so each strip brightens on its own */
@@ -95,17 +99,21 @@ dialog.space[open] .vrhost { animation: vin .5s cubic-bezier(.2,.7,.2,1) both; }
 .vr.deep .imm { opacity: 1; visibility: visible; transition: opacity .4s ease; }
 .vr.deep > :not(.imm):not(.bg):not(.sclose) { opacity: .0; transition: opacity .4s ease; }
 .iimg { position: absolute; left: 120px; top: 70px; width: 1360px; height: 765px; object-fit: cover; border-radius: 34px; box-shadow: 0 0 0 1px rgba(255,255,255,.25), 0 40px 80px -24px rgba(0,0,0,.45); }
-.iimg.in { animation: vin .9s cubic-bezier(.2,.7,.2,1) both; }
+.iimg.in, .iwin.in { animation: vin .9s cubic-bezier(.2,.7,.2,1) both; }
+/* the larger bent window you step into, in the photo's place; the photo shows only where there is no panorama */
+.iwin { position: absolute; inset: 0; overflow: hidden; perspective-origin: 50% 50%; }
+.imm.pano .iimg, .imm:not(.pano) .iwin { display: none; }
 @keyframes vin { from { opacity: 0; transform: scale(1.02); } }
 @keyframes vfade { from { opacity: 0; } }
 .ib { position: absolute; display: grid; place-items: center; color: #fff; border-radius: 50%; }
 .ib svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s; }
+/* the controls float over the picture, 48 in from every edge of the space */
 .iprev, .inext { top: 412px; width: 76px; height: 76px; }
-.iprev { left: 22px; } .inext { right: 22px; }
-.iback { left: 140px; top: 90px; width: auto; height: 52px; padding: 0 22px 0 16px; border-radius: 26px; display: flex; gap: 8px; font-weight: 500; font-size: 18px; }
-.icap { position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%); margin: 0; padding: 12px 22px; border-radius: 999px; font-weight: 500; font-size: 17px; white-space: nowrap; }
+.iprev { left: 48px; } .inext { right: 48px; }
+.iback { left: 48px; top: 48px; width: auto; height: 52px; padding: 0 22px 0 16px; border-radius: 26px; display: flex; gap: 8px; font-weight: 500; font-size: 18px; }
+.icap { position: absolute; left: 50%; bottom: 48px; transform: translateX(-50%); margin: 0; padding: 12px 22px; border-radius: 999px; font-weight: 500; font-size: 17px; white-space: nowrap; }
 @media (hover: hover) { .iprev:hover svg { transform: translateX(-3px); } .inext:hover svg { transform: translateX(3px); } .iback:hover svg { transform: translateX(-3px); } }
-.vr.still .imm, .vr.still .iimg { transition: none !important; animation: none !important; }
+.vr.still .imm, .vr.still .iimg, .vr.still .iwin { transition: none !important; animation: none !important; }
 .vr button:focus, .vr button:focus-visible { outline: none !important; }
 
 /* ---------- the start screen, first thing in the interface ---------- */
