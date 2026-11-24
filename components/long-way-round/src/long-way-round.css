@@ -102,6 +102,7 @@ svg.layer{position:absolute;left:0;top:0;width:1123px;height:794px;overflow:visi
 :host{--e:cubic-bezier(.22,.7,.18,1)}
 .a{transition:opacity .9s var(--e) var(--d,0s),transform 1.2s var(--e) var(--d,0s),clip-path 1.5s var(--e) var(--d,0s)}
 svg .a{transform-box:fill-box;transform-origin:center}
+.page.snap,.page.snap *{transition:none!important;animation:none!important}
 .page:not(.on) .k-fade{opacity:0}
 .page:not(.on) .k-rise{opacity:0;transform:translateY(16px)}
 .page:not(.on) .k-pop{opacity:0;transform:scale(.92)}

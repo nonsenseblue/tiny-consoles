@@ -174,6 +174,8 @@ function run(root, host) {
 
   /* a page before it sets: drawn lines rolled back, typed fields empty */
   const reset = p => {
+    /* snap back at once: with transitions left on, the page would fade out slowly and Replay would seem to do nothing */
+    p.classList.add('snap');
     p.classList.remove('on');
     p.querySelectorAll('.dm').forEach(m => {
       const L = m.getTotalLength();
@@ -192,6 +194,7 @@ function run(root, host) {
     timers.forEach(clearTimeout); timers = [];
     reset(p);
     void p.offsetWidth;
+    p.classList.remove('snap');
     p.classList.add('on');
     if (still) return;
     p.querySelectorAll('.dm').forEach(m => {
